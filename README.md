@@ -10,10 +10,15 @@ Also understand that because we are using an old version of DXVK, game performan
 
 # Credits:
 This this project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
+
 Valve: https://github.com/ValveSoftware/Proton
+
 GloriousEggroll: https://github.com/GloriousEggroll/proton-ge-custom && https://www.patreon.com/gloriouseggroll
+
 doitsujin/ドイツ人 (Philip Rebohle): https://github.com/doitsujin/dxvk
+
 TKG (Etienne Juvigny): https://github.com/Frogging-Family/wine-tkg-git && https://www.patreon.com/tkglitch
+
 HansKristian/themaister (Hans-Kristian Arntzen): https://github.com/HansKristian-Work/vkd3d-proton
 
 # How to install:
