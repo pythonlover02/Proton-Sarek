@@ -1,4 +1,4 @@
-## Proton-For-Old-Vulkan "Sarek"
+# Proton-For-Old-Vulkan "Sarek"
 Lasted Proton Versions patched to work with DXVK v1.10.3
 
 *Why does this repository exist?*
