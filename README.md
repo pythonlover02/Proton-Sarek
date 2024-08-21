@@ -218,7 +218,8 @@ TKG (Etienne Juvigny): https://github.com/Frogging-Family/wine-tkg-git && https:
 HansKristian/themaister (Hans-Kristian Arntzen): https://github.com/HansKristian-Work/vkd3d-proton
 
 Also i want to thanks all of those reddit users that help me make the Supported GPU List:
-wolfegothmog
+
+	wolfegothmog
 
 mrvictorywin
 
