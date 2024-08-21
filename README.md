@@ -14,7 +14,8 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [Installation](#Installation)
 	- [Native](#Native)
 	- [Flatpak](#Flatpak)
-
+- [GPU-List](#GPU-List)
+- [Credits](#Credits)
 
 ## Installation:
 1. Download a release from the release page
@@ -39,6 +40,10 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
   5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
 
   6. Restart and thats it!!! Enjoy :P
+
+## GPU-List
+
+	//Working on it//
 
 ## Credits:
 This this project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
