@@ -48,6 +48,7 @@ This List still very much work in progress, if you know about a GPU that have Vu
 
 ## Nvidia
 GeForce 700 Series:
+    
     GeForce GTX 780 Ti
     GeForce GTX 780
     GeForce GTX 770
