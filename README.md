@@ -24,24 +24,24 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 2. Now follow the instruction of the installation for Flatpak Steam or Native Steam
 
 ##  *Native*
- 
-  3. Create a ~/.local/share/Steam/compatibilitytools.d/ directory if it does not exist.
 
-  4. Extract the release inside
- 
-  5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+3. Create a ~/.local/share/Steam/compatibilitytools.d/ directory if it does not exist.
 
-  6. Restart and thats it!!! Enjoy :P
+4. Extract the release inside
+ 
+5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+
+6. Restart and thats it!!! Enjoy :P
  
 ## *Flatpak*
  
-  3. Create a ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/ directory if it does not exist.
+3. Create a ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/ directory if it does not exist.
 
-  4. Extract the release inside
+4. Extract the release inside
  
-  5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
 
-  6. Restart and thats it!!! Enjoy :P
+6. Restart and thats it!!! Enjoy :P
 
 ## GPU-List
 This List still very much work in progress, if you know about a GPU that have Vulkan 1.1+ support that its not listed here pls write a gmail at pythonloverv2@gmail.com with the gpu name and the source. And thank you!!
