@@ -221,16 +221,16 @@ Also i want to thanks all of those reddit users that help me make the Supported 
 
 	wolfegothmog
 
-mrvictorywin
+	mrvictorywin
 
-Alternative-Pie345
+	Alternative-Pie345
 
-Cool-Arrival-2617
+	Cool-Arrival-2617
 
-oln
+	oln
 
-Informal-Clock
+	Informal-Clock
 
-turdas
+	turdas
 
 AlienOverlordXenu 
