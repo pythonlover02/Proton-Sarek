@@ -63,6 +63,7 @@ GeForce 700 Series:
     GeForce GT 710
 
 GeForce 600 Series:
+
     GeForce GTX 690
     GeForce GTX 680
     GeForce GTX 670
@@ -75,17 +76,20 @@ GeForce 600 Series:
     GeForce GT 640
     GeForce GT 635
     GeForce GT 630
-
+    
 GeForce 600M Series (Notebooks):
+
     GeForce GT 640M LE
 
 NVIDIA TITAN Series:
+
     GeForce GTX TITAN X
     GeForce GTX TITAN
     GeForce GTX TITAN Black
     GeForce GTX TITAN Z
 
 Quadro Series:
+
     Quadro M6000 24GB
     Quadro M6000
     Quadro M5000
@@ -106,29 +110,36 @@ Quadro Series:
     Quadro 410
 
 Quadro NVS Series:
-NVS 510
+
+	NVS 510
 
 GRID Series:
-GRID K520
+
+	GRID K520
 
 ## AMD:
 Southern Islands (HD 7300)
+
     Radeon HD 7350 OEM PCI
     Radeon HD 7350 OEM
 
 Southern Islands (HD 7400)
+
     Radeon HD 7450 OEM
     Radeon HD 7470 OEM
 
 Southern Islands (HD 7500)
+
     Radeon HD 7510 OEM
     Radeon HD 7570 OEM
     Radeon HD 7570
-
+    
 Southern Islands (HD 7600)
+
     Radeon HD 7670 OEM
 
 Southern Islands (HD 7700)
+
     Radeon HD 7720 OEM
     Radeon HD 7730
     Radeon HD 7750
@@ -136,11 +147,13 @@ Southern Islands (HD 7700)
     Radeon HD 7790
 
 Southern Islands (HD 7800)
+
     Radeon HD 7850
     Radeon HD 7870 GHz Edition
     Radeon HD 7870 XT
 
 Southern Islands (HD 7900)
+
     Radeon HD 7950 Monica BIOS 1
     Radeon HD 7950 Monica BIOS 2
     Radeon HD 7950 Mac Edition
@@ -152,14 +165,17 @@ Southern Islands (HD 7900)
     Radeon HD 7990
 
 Sea Islands (HD 8300)
+
     Radeon HD 8350 OEM
 
 Sea Islands (HD 8400)
+
     Radeon HD 8450 OEM
     Radeon HD 8470 OEM
     Radeon HD 8490 OEM
 
 Sea Islands (HD 8500)
+
     Radeon HD 8510 OEM
     Radeon HD 8510 OEM
     Radeon HD 8550 OEM
@@ -167,19 +183,23 @@ Sea Islands (HD 8500)
     Radeon HD 8570 OEM
 
 Sea Islands (HD 8600)
+
     Radeon HD 8670 OEM
 
 Sea Islands (HD 8700)
+
     Radeon HD 8730 OEM
     Radeon HD 8740 OEM
     Radeon HD 8760 OEM
     Radeon HD 8770 OEM
 
 Sea Islands (HD 8800)
+
     Radeon HD 8860 OEM
     Radeon HD 8870 OEM
 
 Sea Islands (HD 8900)
+
     Radeon HD 8950 OEM
     Radeon HD 8970 OEM
     Radeon HD 8990 OEM
