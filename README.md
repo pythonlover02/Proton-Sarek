@@ -207,13 +207,15 @@ Sea Islands (HD 8900)
     Radeon HD 8970 OEM
     Radeon HD 8990 OEM
 ## Testing:
+#### ULTRAKILL
+There are no issues so far; my experience with DXVK 1.10.3 is the same as with DXVK 2.4.0.
 ![Screenshot_20240830_150446](https://github.com/user-attachments/assets/e9ab1204-b95b-4b4d-9405-cf8de0cb4537)
 
-#### There are no issues so far; my experience with DXVK 1.10.3 is the same as with DXVK 2.4.0.
 
+### Dark Souls III
+The GPU usage is almost the same as in version 2.4.0, but higher. There are no graphical glitches, but occasional stutters do occur from time to time. 
 ![Screenshot_20240830_150705](https://github.com/user-attachments/assets/d9aed291-588a-4ada-9846-e2ab60d1beb3)
 
-### The GPU usage is almost the same as in version 2.4.0, but higher. There are no graphical glitches, but occasional stutters do occur from time to time. 
 
 ## Credits:
 This this project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
