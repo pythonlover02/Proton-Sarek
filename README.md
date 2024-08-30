@@ -19,7 +19,8 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [GPU-List](#GPU-List)
 	- [Nvidia](#Nvidia)
 	- [AMD](#AMD)
-- [Testing](#Testing) 
+- [Testing](#Testing)
+	- [ULTRAKILL](#ULTRAKILL)
 - [Credits](#Credits)
 
 ## Installation:
