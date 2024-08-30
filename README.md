@@ -49,7 +49,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 6. Restart and thats it!!! Enjoy :P
 
 ## GPU-List
-This List still very much work in progress, if you know about a GPU that have Vulkan 1.1+ support that its not listed here pls write a gmail at pythonloverv2@gmail.com with the gpu name and the source. And thank you!!
+This List still very much work in progress, if you know about a GPU that have Vulkan 1.1+ support but less than 1.3, that its not listed here pls write a gmail at pythonloverv2@gmail.com with the gpu name and the source. And thank you!!
 
 ## Nvidia
 GeForce 700 Series:
