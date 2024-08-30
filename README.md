@@ -21,6 +21,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 	- [AMD](#AMD)
 - [Testing](#Testing)
 	- [ULTRAKILL](#ULTRAKILL)
+   	- [Dark Souls III](#DarkSoulsIII)
 - [Credits](#Credits)
 
 ## Installation:
