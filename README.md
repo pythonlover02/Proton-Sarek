@@ -211,13 +211,13 @@ Sea Islands (HD 8900)
 ## Testing:
 Games that i have tested so far
 
-#### ULTRAKILL
+#### ULTRAKILL:
 There are no issues so far; my experience with DXVK 1.10.3 is the same as with DXVK 2.4.0.
 ![Screenshot_20240830_150446](https://github.com/user-attachments/assets/e9ab1204-b95b-4b4d-9405-cf8de0cb4537)
 
 
-### Dark Souls III
-The GPU usage is almost the same as in version 2.4.0, but higher. There are no graphical glitches, but occasional stutters do occur from time to time. 
+### Dark Souls III:
+The GPU usage is almost the same as in version 2.4.0, but a little higher. There are no graphical glitches, but occasional stutters do occur from time to time. 
 ![Screenshot_20240830_150705](https://github.com/user-attachments/assets/d9aed291-588a-4ada-9846-e2ab60d1beb3)
 
 
