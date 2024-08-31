@@ -23,6 +23,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 	- [ULTRAKILL](#ULTRAKILL)
    	- [Dark Souls III](#dark-souls-iii)
    	- [Project Wingman](#project-wingman)
+   	- [Red Orchestra 2](#red-orchestra-2)
 - [Credits](#Credits)
 
 ## Installation:
@@ -227,8 +228,17 @@ The GPU usage is almost the same as in version 2.4.0, but a little higher. There
 ![Screenshot_20240830_150705](https://github.com/user-attachments/assets/d9aed291-588a-4ada-9846-e2ab60d1beb3)
 
 ### Project Wingman:
-#### Status: Unplayable with DXVK 1.10.3 and WineD3D, needs a patch
+#### Status: Unplayable with DXVK 1.10.3 or WineD3D, needs a patch
+
+It does work with DXVK 2.4.0
 ![Screenshot_20240830_224017](https://github.com/user-attachments/assets/52ac464c-0ee7-408d-8031-27bf3361842a)
+
+### Red Orchestra 2:
+#### Status: Playable with DXVK 1.10.3 and WineD3D
+
+There are some graphical glitches on the sky, and little stutters on the start of the game.
+![Screenshot_20240831_021739](https://github.com/user-attachments/assets/0b13b35e-ffef-4899-be2a-7097ae691303)
+
 
 ## Credits:
 This this project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
