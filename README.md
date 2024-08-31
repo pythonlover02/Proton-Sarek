@@ -227,7 +227,7 @@ The GPU usage is almost the same as in version 2.4.0, but a little higher. There
 ![Screenshot_20240830_150705](https://github.com/user-attachments/assets/d9aed291-588a-4ada-9846-e2ab60d1beb3)
 
 ### Project Wingman:
-####Status: Unplayable with DXVK 1.10.3 and WineD3D, needs a patch
+#### Status: Unplayable with DXVK 1.10.3 and WineD3D, needs a patch
 ![Screenshot_20240830_224017](https://github.com/user-attachments/assets/52ac464c-0ee7-408d-8031-27bf3361842a)
 
 ## Credits:
