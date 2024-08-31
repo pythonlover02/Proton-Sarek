@@ -228,6 +228,8 @@ Valve: https://github.com/ValveSoftware/Proton
 
 GloriousEggroll: https://github.com/GloriousEggroll/proton-ge-custom && https://www.patreon.com/gloriouseggroll
 
+Kron4ek: https://github.com/Kron4ek/Wine-Builds/releases
+
 doitsujin/ドイツ人 (Philip Rebohle): https://github.com/doitsujin/dxvk
 
 TKG (Etienne Juvigny): https://github.com/Frogging-Family/wine-tkg-git && https://www.patreon.com/tkglitch
