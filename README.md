@@ -213,7 +213,7 @@ Sea Islands (HD 8900)
 ## Testing:
 Games that i have tested so far
 
-#### ULTRAKILL:
+### ULTRAKILL:
 #### Status: Playable with DXVK 1.10.3 and WineD3D
 
 There are no issues so far; my experience with DXVK 1.10.3 is the same as with DXVK 2.4.0.
