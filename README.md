@@ -200,6 +200,7 @@ Sea Islands (HD 8700)
 
 Sea Islands (HD 8800)
 
+
     Radeon HD 8860 OEM
     Radeon HD 8870 OEM
 
@@ -212,14 +213,19 @@ Sea Islands (HD 8900)
 Games that i have tested so far
 
 #### ULTRAKILL:
+Status: Playable with DXVK 1.10.3 and WineD3D
 There are no issues so far; my experience with DXVK 1.10.3 is the same as with DXVK 2.4.0.
 ![Screenshot_20240830_150446](https://github.com/user-attachments/assets/e9ab1204-b95b-4b4d-9405-cf8de0cb4537)
 
 
 ### Dark Souls III:
+Status: Playable with DXVK 1.10.3 and WineD3D(second option its not recommended)
 The GPU usage is almost the same as in version 2.4.0, but a little higher. There are no graphical glitches, but occasional stutters do occur from time to time. 
 ![Screenshot_20240830_150705](https://github.com/user-attachments/assets/d9aed291-588a-4ada-9846-e2ab60d1beb3)
 
+### Project Wingman:
+Status: Unplayable with DXVK 1.10.3 and WineD3D, needs a patch
+![Screenshot_20240830_224017](https://github.com/user-attachments/assets/52ac464c-0ee7-408d-8031-27bf3361842a)
 
 ## Credits:
 This this project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
