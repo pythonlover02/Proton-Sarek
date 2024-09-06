@@ -241,7 +241,7 @@ There are some graphical glitches on the sky, and little stutters on the start o
 
 
 ## Credits:
-This this project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
+This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
 
 Valve: https://github.com/ValveSoftware/Proton
 
