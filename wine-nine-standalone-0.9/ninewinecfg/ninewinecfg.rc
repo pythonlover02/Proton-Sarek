@@ -1,0 +1,97 @@
+/* SPDX-License-Identifier: LGPL-2.1-or-later */
+/*
+ * WineCfg resources
+ *
+ * Copyright 2002 Jaco Greeff
+ * Copyright 2003 Dimitrie O. Paun
+ */
+
+#include <windef.h>
+#include <winuser.h>
+#include <verrsrc.h>
+#include <commctrl.h>
+
+#include "resource.h"
+
+/* filenames are in ISO 639-2 */
+#include "nls/eng.rc"
+#include "nls/cze.rc"
+#include "nls/deu.rc"
+#include "nls/fra.rc"
+#include "nls/hun.rc"
+#include "nls/jpn.rc"
+#include "nls/por.rc"
+
+IDD_ABOUT DIALOG  0, 0, 260, 196
+STYLE WS_CHILD | WS_DISABLED
+FONT 8, "MS Shell Dlg"
+BEGIN
+    CTEXT       NINE_PROJECT,IDC_STATIC,16,8,228,8
+    CTEXT       NINE_VERSION,IDC_STATIC,16,20,228,8
+    CONTROL     "",IDC_NINE_URL,"SysLink",WS_TABSTOP | LWS_TRANSPARENT,54,32,160,8
+
+    GROUPBOX    "",IDC_GB_LICENSE,8,52,244,40
+    CTEXT       "GNU Lesser General Public License, version 2.1",IDC_STATIC,16,64,228,8
+    CTEXT       "MESA: MIT License",IDC_STATIC,16,76,228,8
+
+    GROUPBOX    "",IDC_GB_AUTHORS,8,100,244,86
+    CTEXT       "Joakim Sindholt\nChristoph Bumiller\nTiziano Bacocco\nDavid Heidelberg\nAxel Davy\nNick Sarnie\nPatrick Rudolph\nAndre Heider",IDC_STATIC,16,112,228,64
+END
+
+IDD_NINE DIALOG  0, 0, 260, 196
+STYLE WS_CHILD | WS_DISABLED
+FONT 8, "MS Shell Dlg"
+BEGIN
+    GROUPBOX    "",IDC_GB_NINE_SETTINGS,8,8,244,52
+    LTEXT       "",IDC_TEXT_MESA_DEP,16,24,230,16, SS_LEFT | WS_GROUP | BS_VCENTER
+    CONTROL     "",IDC_ENABLE_NATIVE_D3D9,"Button",BS_CHECKBOX | WS_TABSTOP,16,44,230,8
+
+    GROUPBOX    "",IDC_GB_INSTALL_STATE,8,66,248,120
+
+    CONTROL     "",IDC_NINE_STATE_SO,"Button",BS_CHECKBOX | WS_DISABLED,16,86,10,8
+    LTEXT       "",IDC_TEXT_LOAD_D3DADAPTER,26,86,220,8
+    LTEXT       "Tip",IDC_NINE_STATE_TIP_SO,32,98,210,16
+
+    CONTROL     "",IDC_NINE_STATE_DLL,"Button",BS_CHECKBOX | WS_DISABLED,16,118,10,8
+    LTEXT       "",IDC_TEXT_D3D9_NINE_LOAD,26,118,220,8
+    LTEXT       "Tip",IDC_NINE_STATE_TIP_DLL,32,130,210,16
+
+    CONTROL     "",IDC_NINE_STATE_CREATE,"Button",BS_CHECKBOX | WS_DISABLED,16,150,10,8
+    LTEXT       "",IDC_TEXT_CREATE_D3D9_DEV,26,150,220,8
+    LTEXT       "Tip",IDC_NINE_STATE_TIP_CREATE,32,162,210,16
+END
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION    NINE_MAJOR,NINE_MINOR,NINE_BUILD,NINE_REVISION
+PRODUCTVERSION NINE_MAJOR,NINE_MINOR,NINE_BUILD,NINE_REVISION
+FILEFLAGSMASK  63
+FILEFLAGS      0
+FILEOS         VOS_UNKNOWN
+FILETYPE       VFT_APP
+FILESUBTYPE    VFT2_UNKNOWN
+{
+    BLOCK "StringFileInfo"
+    {
+        /* LANG_ENGLISH/SUBLANG_DEFAULT, CP1200 (Unicode) */
+        BLOCK "0409" "04B0"
+        {
+            VALUE "CompanyName", ""
+            VALUE "FileDescription", "Wine Gallium Nine Configuration"
+            VALUE "FileVersion", NINE_VERSION
+            VALUE "InternalName", ""
+            VALUE "LegalCopyright", ""
+            VALUE "OriginalFilename", "ninewinecfg.exe"
+            VALUE "ProductName", "Wine"
+            VALUE "ProductVersion", NINE_VERSION
+        }
+    }
+    BLOCK "VarFileInfo"
+    {
+        /* LANG_ENGLISH/SUBLANG_DEFAULT, CP1200 (Unicode) */
+        VALUE "Translation", 0x0409, 0x04B0
+    }
+}
+
+1 RT_MANIFEST ninewinecfg.manifest

@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: LGPL-2.1-or-later
+
+option(
+  'dri2',
+  type : 'combo',
+  value : 'auto',
+  choices : ['auto', 'true', 'false'],
+  description : 'enable DRI2 support',
+)
+
+option(
+  'distro-independent',
+  type : 'boolean',
+  value : 'false',
+  description : 'find d3dadapter9.so.1 at runtime at known distro library directories',
+)

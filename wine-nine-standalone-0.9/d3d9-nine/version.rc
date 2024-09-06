@@ -1,0 +1,37 @@
+/* SPDX-License-Identifier: LGPL-2.1-or-later */
+/*
+ * Copyright 2015 Patrick Rudolph
+ */
+
+#include <verrsrc.h>
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION    NINE_MAJOR,NINE_MINOR,NINE_BUILD,NINE_REVISION
+PRODUCTVERSION NINE_MAJOR,NINE_MINOR,NINE_BUILD,NINE_REVISION
+FILEFLAGSMASK  63
+FILEFLAGS      0
+FILEOS         VOS_UNKNOWN
+FILETYPE       VFT_DLL
+FILESUBTYPE    VFT2_UNKNOWN
+{
+    BLOCK "StringFileInfo"
+    {
+        /* LANG_ENGLISH/SUBLANG_DEFAULT, CP1200 (Unicode) */
+        BLOCK "0409" "04B0"
+        {
+            VALUE "CompanyName", ""
+            VALUE "FileDescription", "Wine Gallium Nine Direct3D"
+            VALUE "FileVersion", NINE_VERSION
+            VALUE "InternalName", ""
+            VALUE "LegalCopyright", ""
+            VALUE "OriginalFilename", "d3d9-nine.dll"
+            VALUE "ProductName", "Wine"
+            VALUE "ProductVersion", NINE_VERSION
+        }
+    }
+    BLOCK "VarFileInfo"
+    {
+        /* LANG_ENGLISH/SUBLANG_DEFAULT, CP1200 (Unicode) */
+        VALUE "Translation", 0x0409, 0x04B0
+    }
+}
