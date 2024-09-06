@@ -24,6 +24,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
    	- [Dark Souls III](#dark-souls-iii)
    	- [Project Wingman](#project-wingman)
    	- [Red Orchestra 2](#red-orchestra-2)
+   	- [S.T.A.L.K.E.R Call Of The Zone](#s.t.a.l.k.e.r-call-of-the-zone)
 - [Credits](#Credits)
 
 ## Installation:
@@ -239,6 +240,11 @@ It does work with DXVK 2.4.0
 There are some graphical glitches on the sky, and little stutters on the start of the game.
 ![Screenshot_20240831_021739](https://github.com/user-attachments/assets/0b13b35e-ffef-4899-be2a-7097ae691303)
 
+### S.T.A.L.K.E.R Call Of The Zone:
+#### Status: Playable with DXVK 1.10.3 and WineD3D
+
+No Issues So far 
+![Screenshot_20240831_161216](https://github.com/user-attachments/assets/c86f8e09-4e35-4bfd-af12-ff2531e52ab8)
 
 ## Credits:
 This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
