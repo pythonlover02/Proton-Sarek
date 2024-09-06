@@ -2842,7 +2842,6 @@ HKLM,Software\NVIDIA Corporation\Global\NGXCore,"FullPath",,"C:\Windows\System32
 [ProtonOverrides]
 HKLM,Software\Khronos\OpenXR\1,"ActiveRuntime",,"C:\openxr\wineopenxr64.json"
 ;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
-HKCU,Software\Wine\Direct3D,"MaxVersionGL",0x10001,"460"
 HKCU,Software\Wine\Direct3D,"csmt",0x10001,"3"
 HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
 HKCU,Software\Wine\DllOverrides,"msvcp100",0x2,"native,builtin"
