@@ -257,6 +257,8 @@ Kron4ek: https://github.com/Kron4ek/Wine-Builds/releases
 
 doitsujin/ドイツ人 (Philip Rebohle): https://github.com/doitsujin/dxvk
 
+Sporif: https://github.com/Sporif/dxvk-async
+
 TKG (Etienne Juvigny): https://github.com/Frogging-Family/wine-tkg-git && https://www.patreon.com/tkglitch
 
 HansKristian/themaister (Hans-Kristian Arntzen): https://github.com/HansKristian-Work/vkd3d-proton
