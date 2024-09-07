@@ -22,6 +22,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [Parameters](#Parameters)
 	- [Proton](#Proton)
    	- [Optimization](#Optimization)
+   	  	- [Systeml](#System)
    		- [Mesa](#Mesa)
    		- [Nvidia](#Nvidia)
    	   	- [Software Rendering](#software-rendering)
@@ -241,6 +242,16 @@ Sea Islands (HD 8900)
 
 ## Optimization:
 
+## System:
+First of all lets start with the must have, Gamemode and Zram.
+
+| Tool/Library          | Description                                                                                                      | Link                                                 |
+|-----------------------|------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
+| GameMode               | GameMode is a daemon/lib combo for Linux that allows games to request a set of optimizations to be temporarily applied to the host OS and/or a game process. | [GitHub - GameMode](https://github.com/FeralInteractive/gamemode) |
+| Zram-Generator        | Zram, formerly called compcache, is a Linux kernel module for creating a compressed block device in RAM.        | [GitHub - Zram-Generator](https://github.com/systemd/zram-generator) |
+
+My personal recomendation its to search a tutorial for the installation of both in your favorite Linux Distro *;P*
+
 ## Mesa:
 For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
 
@@ -265,7 +276,7 @@ No GPU Driver its used to render the game here, just the CPU, so it doesnt matte
 | Environment Variable                          | Description                                                                                                                                     |
 |-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
 | `LIBGL_ALWAYS_SOFTWARE=1`                     | Enables software rendering for the OpenGL API (4.5 is the maximum version supported). Not recommended for performance, but can be useful if no compatible GPU is available; uses CPU for rendering, which is slow. |
-| `__GLX_VENDOR_LIBRARY_NAME=mesa`              | Specifies the use of the Mesa GLX vendor library for OpenGL rendering.                                                                         |
+| `__GLX_VENDOR_LIBRARY_NAME=mesa`              | Specifies the use of the Mesa GLX vendor library for OpenGL rendering, use it when you are using the Nvidia Propietary Driver.               |
 | `MESA_GLTHREAD=[false/true]`                 | Active or disable threaded optimizations for the OpenGL API.                                                                                  |
 | `MESA_SHADER_CACHE_DISABLE=[false/true]`     | Disable or enable the GPU shader cache on the disk.                                                                                            |
 | `MESA_SHADER_CACHE_DIR=/path/to/location`     | Path for the shader cache.                                                                                                                    |
