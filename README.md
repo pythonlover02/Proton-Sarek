@@ -242,6 +242,7 @@ Sea Islands (HD 8900)
 ## Optimization:
 
 ## Mesa:
+For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
 
 | Environment Variable                    | Description                                                                                         |
 |-----------------------------------------|-----------------------------------------------------------------------------------------------------|
@@ -250,6 +251,7 @@ Sea Islands (HD 8900)
 | `MESA_SHADER_CACHE_DIR=/path/to/location` | Path for the shader cache.                                                                         |
 
 ## Nvidia:
+Nvidia GPUs with the Propietary Driver
 
 | Environment Variable                       | Description                                                                                                                                    |
 |--------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -258,6 +260,7 @@ Sea Islands (HD 8900)
 | `__GL_SHADER_DISK_CACHE_PATH=/path/to/location` | Path for the shader cache.                                                                                                                    |
 
 ## Software Rendering:
+No GPU Driver its used to render the game here, just the CPU, so it doesnt matter if you have the Nvidia Propietary Driver installed. But remember that you should have Mesa on your system
 
 | Environment Variable                          | Description                                                                                                                                     |
 |-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
