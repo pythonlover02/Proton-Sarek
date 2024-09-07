@@ -22,7 +22,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [Parameters](#Parameters)
 	- [Proton](#Proton)
    	- [Optimization](#Optimization)
-   	  	- [Systeml](#System)
+   	  	- [System](#System)
    		- [Mesa](#Mesa)
    		- [Nvidia](#Nvidia)
    	   	- [Software Rendering](#software-rendering)
