@@ -16,6 +16,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [Installation](#Installation)
 	- [Native](#Native)
 	- [Flatpak](#Flatpak)
+- [Roadmap](#Roadmap)
 - [GPU-List](#GPU-List)
 	- [Nvidia](#Nvidia)
 	- [AMD](#AMD)
@@ -57,6 +58,23 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
 
 6. Restart and thats it!!! Enjoy :P
+
+## Roadmap:
+Current status and upcoming changes for the Build. The following features are categorized based on their current development status:
+
+| Feature Description                                         | Status             |
+|-----------------------------------------------------------|--------------------|
+| **DXVK 1.10.3 on Proton**                                 | <span style="color: green;">**Ready**</span>✅               |
+| **Global Patches for the Proton Prefix**                  | <span style="color: green;">**Ready**</span>✅               |
+| **OpenGL uses 4.6**                                       | <span style="color: lightblue;">**Testing**</span>🔵         |
+| **WineD3D with command stream and command serialization** | <span style="color: lightblue;">**Testing**</span>🔵         |
+| **DXVK Async modification and implementation**            | <span style="color: red;">**Work in Progress**</span>🔴      |
+| **Gallium Nine implementation**                           | <span style="color: red;">**Work in Progress**</span>🔴      |
+
+## Status Definitions
+- **Ready**: The change is included in both the Stable and Testing Builds.
+- **Testing**: The change is only available in the Testing build.
+- **Work in Progress**: Currently being worked on, might be included in the next Testing Release.
 
 ## GPU-List
 This List still very much work in progress, if you know about a GPU that have Vulkan 1.1+ support but less than 1.3, that its not listed here pls write a gmail at pythonloverv2@gmail.com with the gpu name and the source. And thank you!!
