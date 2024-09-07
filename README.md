@@ -16,7 +16,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [Installation](#Installation)
 	- [Native](#Native)
 	- [Flatpak](#Flatpak)
-- [GPU-List](#GPU-List)
+- [Roadmap](#Roadmap)
 - [GPU-List](#GPU-List)
 	- [Nvidia](#Nvidia)
 	- [AMD](#AMD)
