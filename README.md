@@ -257,7 +257,7 @@ For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
 
 | Environment Variable                    | Description                                                                                         |
 |-----------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `MESA_GLTHREAD=[false/true]`           | Active or disable threaded optimizations for the OpenGL API.                                      |
+| `mesa_glthread=[false/true]`           | Active or disable threaded optimizations for the OpenGL API.                                      |
 | `MESA_SHADER_CACHE_DISABLE=[false/true]` | Disable or enable the GPU shader cache on the disk.                                              |
 | `MESA_SHADER_CACHE_DIR=/path/to/location` | Path for the shader cache.                                                                         |
 
@@ -277,7 +277,7 @@ No GPU Driver its used to render the game here, just the CPU, so it doesnt matte
 |-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
 | `LIBGL_ALWAYS_SOFTWARE=1`                     | Enables software rendering for the OpenGL API (4.5 is the maximum version supported). Not recommended for performance, but can be useful if no compatible GPU is available; uses CPU for rendering, which is slow. |
 | `__GLX_VENDOR_LIBRARY_NAME=mesa`              | Specifies the use of the Mesa GLX vendor library for OpenGL rendering, use it when you are using the Nvidia Propietary Driver.               |
-| `MESA_GLTHREAD=[false/true]`                 | Active or disable threaded optimizations for the OpenGL API.                                                                                  |
+| `mesa_glthread=[false/true]`                 | Active or disable threaded optimizations for the OpenGL API.                                                                                  |
 | `MESA_SHADER_CACHE_DISABLE=[false/true]`     | Disable or enable the GPU shader cache on the disk.                                                                                            |
 | `MESA_SHADER_CACHE_DIR=/path/to/location`     | Path for the shader cache.                                                                                                                    |
 
