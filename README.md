@@ -243,29 +243,29 @@ Sea Islands (HD 8900)
 
 ## Mesa:
 
-MESA_GLTHREAD=[false/true] // Active or disable threaded optimizations for the OpenGL API
-
-MESA_SHADER_CACHE_DISABLE=[false/true] // Disable or Enable the GPU make shader cache on the disk
-
-MESA_SHADER_CACHE_DIR=/path/to/location // Path for the shader cache
+| Environment Variable                    | Description                                                                                         |
+|-----------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `MESA_GLTHREAD=[false/true]`           | Active or disable threaded optimizations for the OpenGL API.                                      |
+| `MESA_SHADER_CACHE_DISABLE=[false/true]` | Disable or enable the GPU shader cache on the disk.                                              |
+| `MESA_SHADER_CACHE_DIR=/path/to/location` | Path for the shader cache.                                                                         |
 
 ## Nvidia:
 
-__GL_THREADED_OPTIMIZATIONS=[0/1] // Active or disable threaded optimizations for the OpenGL API, while it does help to get more fps, in some games it actually make the performance worst
-
-__GL_SHADER_DISK_CACHE=[0/1] // Enable or Disable the GPU make shader cache on the disk
-
-__GL_SHADER_DISK_CACHE_PATH=/path/to/location // Path for the shader cache
+| Environment Variable                       | Description                                                                                                                                    |
+|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `__GL_THREADED_OPTIMIZATIONS=[0/1]`       | Active or disable threaded optimizations for the OpenGL API; while it can help to increase FPS, in some games it may worsen performance.       |
+| `__GL_SHADER_DISK_CACHE=[0/1]`            | Enable or disable the GPU shader cache on the disk.                                                                                          |
+| `__GL_SHADER_DISK_CACHE_PATH=/path/to/location` | Path for the shader cache.                                                                                                                    |
 
 ## Software Rendering:
 
-LIBGL_ALWAYS_SOFTWARE=1 __GLX_VENDOR_LIBRARY_NAME=mesa // Enables Software rendering for the Opengl API(4.5 its the max version supported), not recommended but it can save you if you dont have a gpu that support Opengl. It is slow because it uses the CPU to render
-
-MESA_GLTHREAD=[false/true] // Active or disable threaded optimizations for the OpenGL API
-
-MESA_SHADER_CACHE_DISABLE=[false/true] // Disable or Enable the GPU make shader cache on the disk
-
-MESA_SHADER_CACHE_DIR=/path/to/location // Path for the shader cache
+| Environment Variable                          | Description                                                                                                                                     |
+|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `LIBGL_ALWAYS_SOFTWARE=1`                     | Enables software rendering for the OpenGL API (4.5 is the maximum version supported). Not recommended for performance, but can be useful if no compatible GPU is available; uses CPU for rendering, which is slow. |
+| `__GLX_VENDOR_LIBRARY_NAME=mesa`              | Specifies the use of the Mesa GLX vendor library for OpenGL rendering.                                                                         |
+| `MESA_GLTHREAD=[false/true]`                 | Active or disable threaded optimizations for the OpenGL API.                                                                                  |
+| `MESA_SHADER_CACHE_DISABLE=[false/true]`     | Disable or enable the GPU shader cache on the disk.                                                                                            |
+| `MESA_SHADER_CACHE_DIR=/path/to/location`     | Path for the shader cache.                                                                                                                    |
 
 ## Testing:
 Games that i have tested so far
