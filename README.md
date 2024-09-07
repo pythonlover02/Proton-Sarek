@@ -19,6 +19,12 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [GPU-List](#GPU-List)
 	- [Nvidia](#Nvidia)
 	- [AMD](#AMD)
+- [Parameters](#Parameters)
+	- [Proton](#Proton)
+   	- [Optimization](#Optimization)
+   		- [Mesa](#Mesa)
+   		- [Nvidia](#Nvidia)
+   	   	- [Software Rendering](#software-rendering)
 - [Testing](#Testing)
 	- [ULTRAKILL](#ULTRAKILL)
    	- [Dark Souls III](#dark-souls-iii)
@@ -212,6 +218,65 @@ Sea Islands (HD 8900)
     Radeon HD 8950 OEM
     Radeon HD 8970 OEM
     Radeon HD 8990 OEM
+
+## Parameters:
+
+## Proton:
+
+PROTON_USE_WINED3D=[0/1] // Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d9 to d3d11
+
+PROTON_NO_D3D12[0/1] // Disables DX12
+
+PROTON_NO_D3D11[0/1] // Disables DX11
+
+PROTON_NO_D3D10[0/1] // Disables DX10
+
+PROTON_NO_D3D9=[0/1] // Disables DX9
+
+PROTON_NO_ESYNC=[0/1] // Do not use eventfd-based in-process synchronization primitives.
+
+PROTON_NO_FSYNC=[0/1] // Do not use futex-based in-process synchronization primitives.
+
+PROTON_FORCE_LARGE_ADDRESS_AWARE=[0/1] // Force Wine to enable the LARGE_ADDRESS_AWARE flag for all executables
+
+PROTON_HEAP_DELAY_FREE=[0/1] // Delay freeing some memory, to work around application use-after-free bugs.
+
+PROTON_ENABLE_NVAPI=[0/1] // Enable NVIDIA's NVAPI GPU support library.
+
+PROTON_OLD_GL_STRING=[0/1] // Set some driver overrides to limit the length of the GL extension string, for old games that crash on very long extension strings.
+
+PROTON_USE_XALIA=[0/1] // Enable Xalia, a program that can add a gamepad UI for some keyboard/mouse interfaces.
+
+MESA_GL_VERSION_OVERRIDE=4.6 MESA_GLSL_VERSION_OVERRIDE=460 // Only for Mesa, it changes the default string of the OpenGL version to OpenGL 4.6, faking it and making the game believe that you GPU supports that versions, the game may open or not, if it dont open your only solution its [Software Rendering](#software-rendering)
+
+## Optimization:
+
+## Mesa:
+
+MESA_GLTHREAD=[false/true] // Active or disable threaded optimizations for the OpenGL API
+
+MESA_SHADER_CACHE_DISABLE=[false/true] // Disable or Enable the GPU make shader cache on the disk
+
+MESA_SHADER_CACHE_DIR=/path/to/location // Path for the shader cache
+
+## Nvidia:
+
+__GL_THREADED_OPTIMIZATIONS=[0/1] // Active or disable threaded optimizations for the OpenGL API, while it does help to get more fps, in some games it actually make the performance worst
+
+__GL_SHADER_DISK_CACHE=[0/1] // Enable or Disable the GPU make shader cache on the disk
+
+__GL_SHADER_DISK_CACHE_PATH=/path/to/location // Path for the shader cache
+
+## Software Rendering:
+
+LIBGL_ALWAYS_SOFTWARE=1 __GLX_VENDOR_LIBRARY_NAME=mesa // Enables Software rendering for the Opengl API(4.5 its the max version supported), not recommended but it can save you if you dont have a gpu that support Opengl. It is slow because it uses the CPU to render
+
+MESA_GLTHREAD=[false/true] // Active or disable threaded optimizations for the OpenGL API
+
+MESA_SHADER_CACHE_DISABLE=[false/true] // Disable or Enable the GPU make shader cache on the disk
+
+MESA_SHADER_CACHE_DIR=/path/to/location // Path for the shader cache
+
 ## Testing:
 Games that i have tested so far
 
