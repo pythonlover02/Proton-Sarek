@@ -22,11 +22,11 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 	- [AMD](#AMD)
 - [Parameters](#Parameters)
 	- [Proton](#Proton)
-   	- [Optimization](#Optimization)
-   	  	- [System](#System)
-   		- [Mesa](#Mesa)
-   		- [Nvidia](#Nvidia)
-   	   	- [Software Rendering](#software-rendering)
+- [Optimization](#Optimization)
+	- [System](#System)
+   	- [Mesa](#Mesa)
+	- [Nvidia](#Nvidia)
+      	- [Software Rendering](#software-rendering)
 - [Testing](#Testing)
 - [Building](#Building)
 - [Credits](#Credits)
@@ -108,6 +108,11 @@ This List still very much work in progress, if you know about a GPU that have Vu
 ## Parameters:
 
 ## Proton:
+This are set on the Launch Options of a game, example:
+
+	PROTON_USE_WINED3D=1 PROTON_NO_ESYNC=1 mesa_glthread=true %command%
+
+The Optimzation variables are set on the same way on the launch options
 
 | Environment Variable                          | Description                                                                                                                                     |
 |-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
