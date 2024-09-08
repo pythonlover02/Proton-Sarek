@@ -77,163 +77,33 @@ Current status and upcoming changes for the Builds. The following features are c
 This List still very much work in progress, if you know about a GPU that have Vulkan 1.1+ support but less than 1.3, that its not listed here pls write a gmail at pythonloverv2@gmail.com with the gpu name and the source. And thank you!!
 
 ## Nvidia
-GeForce 700 Series:
-    
-    GeForce GTX 780 Ti
-    GeForce GTX 780
-    GeForce GTX 770
-    GeForce GTX 760
-    GeForce GTX 760 Ti (OEM)
-    GeForce GTX 750 Ti
-    GeForce GTX 750
-    GeForce GTX 745
-    GeForce GT 740
-    GeForce GT 730
-    GeForce GT 720
-    GeForce GT 710
-
-GeForce 600 Series:
-
-    GeForce GTX 690
-    GeForce GTX 680
-    GeForce GTX 670
-    GeForce GTX 660 Ti
-    GeForce GTX 660
-    GeForce GTX 650 Ti BOOST
-    GeForce GTX 650 Ti
-    GeForce GTX 650
-    GeForce GTX 645
-    GeForce GT 640
-    GeForce GT 635
-    GeForce GT 630
-    
-GeForce 600M Series (Notebooks):
-
-    GeForce GT 640M LE
-
-NVIDIA TITAN Series:
-
-    GeForce GTX TITAN X
-    GeForce GTX TITAN
-    GeForce GTX TITAN Black
-    GeForce GTX TITAN Z
-
-Quadro Series:
-
-    Quadro M6000 24GB
-    Quadro M6000
-    Quadro M5000
-    Quadro M4000
-    Quadro M2000
-    Quadro K6000
-    Quadro K5200
-    Quadro K5000
-    Quadro K4000
-    Quadro K4200
-    Quadro K2200
-    Quadro K2000
-    Quadro K2000D
-    Quadro K1200
-    Quadro K620
-    Quadro K600
-    Quadro K420
-    Quadro 410
-
-Quadro NVS Series:
-
-	NVS 510
-
-GRID Series:
-
-	GRID K520
+| Series                   | Graphics Cards                                                                                                                |
+|--------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| **GeForce 700 Series**   | GeForce GTX 780 Ti, GeForce GTX 780, GeForce GTX 770, GeForce GTX 760, GeForce GTX 760 Ti (OEM), GeForce GTX 750 Ti, GeForce GTX 750, GeForce GTX 745, GeForce GT 740, GeForce GT 730, GeForce GT 720, GeForce GT 710 |
+| **GeForce 600 Series**   | GeForce GTX 690, GeForce GTX 680, GeForce GTX 670, GeForce GTX 660 Ti, GeForce GTX 660, GeForce GTX 650 Ti BOOST, GeForce GTX 650 Ti, GeForce GTX 650, GeForce GTX 645, GeForce GT 640, GeForce GT 635, GeForce GT 630 |
+| **GeForce 600M Series**  | GeForce GT 640M LE                                                                                                         |
+| **NVIDIA TITAN Series**  | GeForce GTX TITAN X, GeForce GTX TITAN, GeForce GTX TITAN Black, GeForce GTX TITAN Z                                         |
+| **Quadro Series**        | Quadro M6000 24GB, Quadro M6000, Quadro M5000, Quadro M4000, Quadro M2000, Quadro K6000, Quadro K5200, Quadro K5000, Quadro K4000, Quadro K4200, Quadro K2200, Quadro K2000, Quadro K2000D, Quadro K1200, Quadro K620, Quadro K600, Quadro K420, Quadro 410 |
+| **Quadro NVS Series**    | NVS 510                                                                                                                     |
+| **GRID Series**          | GRID K520                                                                                                                  |
 
 ## AMD:
-Southern Islands (HD 7300)
-
-    Radeon HD 7350 OEM PCI
-    Radeon HD 7350 OEM
-
-Southern Islands (HD 7400)
-
-    Radeon HD 7450 OEM
-    Radeon HD 7470 OEM
-
-Southern Islands (HD 7500)
-
-    Radeon HD 7510 OEM
-    Radeon HD 7570 OEM
-    Radeon HD 7570
-    
-Southern Islands (HD 7600)
-
-    Radeon HD 7670 OEM
-
-Southern Islands (HD 7700)
-
-    Radeon HD 7720 OEM
-    Radeon HD 7730
-    Radeon HD 7750
-    Radeon HD 7770 GHz Edition
-    Radeon HD 7790
-
-Southern Islands (HD 7800)
-
-    Radeon HD 7850
-    Radeon HD 7870 GHz Edition
-    Radeon HD 7870 XT
-
-Southern Islands (HD 7900)
-
-    Radeon HD 7950 Monica BIOS 1
-    Radeon HD 7950 Monica BIOS 2
-    Radeon HD 7950 Mac Edition
-    Radeon HD 7950
-    Radeon HD 7950 Boost
-    Radeon HD 7970
-    Radeon HD 7970 GHz Edition
-    Radeon HD 7970 X2
-    Radeon HD 7990
-
-Sea Islands (HD 8300)
-
-    Radeon HD 8350 OEM
-
-Sea Islands (HD 8400)
-
-    Radeon HD 8450 OEM
-    Radeon HD 8470 OEM
-    Radeon HD 8490 OEM
-
-Sea Islands (HD 8500)
-
-    Radeon HD 8510 OEM
-    Radeon HD 8510 OEM
-    Radeon HD 8550 OEM
-    Radeon HD 8570 OEM Rebrand
-    Radeon HD 8570 OEM
-
-Sea Islands (HD 8600)
-
-    Radeon HD 8670 OEM
-
-Sea Islands (HD 8700)
-
-    Radeon HD 8730 OEM
-    Radeon HD 8740 OEM
-    Radeon HD 8760 OEM
-    Radeon HD 8770 OEM
-
-Sea Islands (HD 8800)
-
-
-    Radeon HD 8860 OEM
-    Radeon HD 8870 OEM
-
-Sea Islands (HD 8900)
-
-    Radeon HD 8950 OEM
-    Radeon HD 8970 OEM
-    Radeon HD 8990 OEM
+| Series                     | Graphics Cards                                                                                                                  |
+|----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| **Southern Islands (HD 7300)**  | Radeon HD 7350 OEM PCI, Radeon HD 7350 OEM                                                                                      |
+| **Southern Islands (HD 7400)**  | Radeon HD 7450 OEM, Radeon HD 7470 OEM                                                                                      |
+| **Southern Islands (HD 7500)**  | Radeon HD 7510 OEM, Radeon HD 7570 OEM, Radeon HD 7570                                                                          |
+| **Southern Islands (HD 7600)**  | Radeon HD 7670 OEM                                                                                                           |
+| **Southern Islands (HD 7700)**  | Radeon HD 7720 OEM, Radeon HD 7730, Radeon HD 7750, Radeon HD 7770 GHz Edition, Radeon HD 7790                                 |
+| **Southern Islands (HD 7800)**  | Radeon HD 7850, Radeon HD 7870 GHz Edition, Radeon HD 7870 XT                                                                  |
+| **Southern Islands (HD 7900)**  | Radeon HD 7950 Monica BIOS 1, Radeon HD 7950 Monica BIOS 2, Radeon HD 7950 Mac Edition, Radeon HD 7950, Radeon HD 7950 Boost, Radeon HD 7970, Radeon HD 7970 GHz Edition, Radeon HD 7970 X2, Radeon HD 7990 |
+| **Sea Islands (HD 8300)**       | Radeon HD 8350 OEM                                                                                                           |
+| **Sea Islands (HD 8400)**       | Radeon HD 8450 OEM, Radeon HD 8470 OEM, Radeon HD 8490 OEM                                                                   |
+| **Sea Islands (HD 8500)**       | Radeon HD 8510 OEM (multiple variants), Radeon HD 8550 OEM, Radeon HD 8570 OEM Rebrand, Radeon HD 8570 OEM                   |
+| **Sea Islands (HD 8600)**       | Radeon HD 8670 OEM                                                                                                           |
+| **Sea Islands (HD 8700)**       | Radeon HD 8730 OEM, Radeon HD 8740 OEM, Radeon HD 8760 OEM, Radeon HD 8770 OEM                                                |
+| **Sea Islands (HD 8800)**       | Radeon HD 8860 OEM, Radeon HD 8870 OEM                                                                                        |
+| **Sea Islands (HD 8900)**       | Radeon HD 8950 OEM, Radeon HD 8970 OEM, Radeon HD 8990 OEM                                                                    |
 
 ## Parameters:
 
