@@ -1,0 +1,143 @@
+From b020348b843b6ed4fff718877913103d9c27ce49 Mon Sep 17 00:00:00 2001
+From: Etaash Mathamsetty <etaash.mathamsetty@gmail.com>
+Date: Tue, 14 May 2024 19:48:18 -0400
+Subject: [PATCH 1/4] shell32: Fake success file_operation_SetOperationFlags.
+
+---
+ dlls/shell32/shlfileop.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/shell32/shlfileop.c b/dlls/shell32/shlfileop.c
+index a7e88c813d2..63779600ced 100644
+--- a/dlls/shell32/shlfileop.c
++++ b/dlls/shell32/shlfileop.c
+@@ -1874,7 +1874,7 @@ static HRESULT WINAPI file_operation_SetOperationFlags(IFileOperation *iface, DW
+ {
+     FIXME("(%p, %lx): stub.\n", iface, flags);
+ 
+-    return E_NOTIMPL;
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI file_operation_SetProgressMessage(IFileOperation *iface, LPCWSTR message)
+-- 
+GitLab
+
+
+From 8201fd2217ed72858141f376468b0c1f56eff8ce Mon Sep 17 00:00:00 2001
+From: Etaash Mathamsetty <etaash.mathamsetty@gmail.com>
+Date: Tue, 14 May 2024 19:50:29 -0400
+Subject: [PATCH 2/4] shell32: Add semi-stub for file_operation_MoveItem.
+
+---
+ dlls/shell32/shlfileop.c | 37 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 35 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/shell32/shlfileop.c b/dlls/shell32/shlfileop.c
+index 63779600ced..c3602a46928 100644
+--- a/dlls/shell32/shlfileop.c
++++ b/dlls/shell32/shlfileop.c
+@@ -1937,9 +1937,42 @@ static HRESULT WINAPI file_operation_RenameItems(IFileOperation *iface, IUnknown
+ static HRESULT WINAPI file_operation_MoveItem(IFileOperation *iface, IShellItem *item, IShellItem *folder,
+         LPCWSTR name, IFileOperationProgressSink *sink)
+ {
+-    FIXME("(%p, %p, %p, %s, %p): stub.\n", iface, item, folder, debugstr_w(name), sink);
++    LPWSTR source;
++    LPWSTR dest;
++    HRESULT hr;
++    BOOL ret;
++    FIXME("(%p, %p, %p, %s, %p): semi-stub.\n", iface, item, folder, debugstr_w(name), sink);
+ 
+-    return E_NOTIMPL;
++    hr = IShellItem_GetDisplayName(item, SIGDN_FILESYSPATH, &source);
++
++    if (FAILED(hr))
++        return hr;
++
++    hr = IShellItem_GetDisplayName(folder, SIGDN_FILESYSPATH, &dest);
++
++    if (FAILED(hr))
++    {
++        CoTaskMemFree(source);
++        return hr;
++    }
++
++    dest = CoTaskMemRealloc(dest, (lstrlenW(dest) + lstrlenW(name) + 2) * sizeof(WCHAR));
++
++    if (!dest)
++    {
++        CoTaskMemFree(source);
++        return E_OUTOFMEMORY;
++    }
++
++    wcscat(dest, L"\\");
++    wcscat(dest, name);
++
++    ret = MoveFileW(source, dest);
++
++    CoTaskMemFree(source);
++    CoTaskMemFree(dest);
++
++    return ret ? S_OK : E_FAIL;
+ }
+ 
+ static HRESULT WINAPI file_operation_MoveItems(IFileOperation *iface, IUnknown *items, IShellItem *folder)
+-- 
+GitLab
+
+
+From cc808a4a2e2cf1fb577642f88468983c77592e44 Mon Sep 17 00:00:00 2001
+From: Etaash Mathamsetty <etaash.mathamsetty@gmail.com>
+Date: Tue, 14 May 2024 19:52:15 -0400
+Subject: [PATCH 3/4] shell32: Fake success for
+ file_operation_PerformOperations.
+
+---
+ dlls/shell32/shlfileop.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/shell32/shlfileop.c b/dlls/shell32/shlfileop.c
+index c3602a46928..4ed9c64a3ce 100644
+--- a/dlls/shell32/shlfileop.c
++++ b/dlls/shell32/shlfileop.c
+@@ -2025,7 +2025,7 @@ static HRESULT WINAPI file_operation_PerformOperations(IFileOperation *iface)
+ {
+     FIXME("(%p): stub.\n", iface);
+ 
+-    return E_NOTIMPL;
++    return S_OK;
+ }
+ 
+ static HRESULT WINAPI file_operation_GetAnyOperationsAborted(IFileOperation *iface, BOOL *aborted)
+-- 
+GitLab
+
+
+From 71f2f49ab41aeb9ff9acab744bfbb1e5e0c2cd93 Mon Sep 17 00:00:00 2001
+From: Etaash Mathamsetty <etaash.mathamsetty@gmail.com>
+Date: Tue, 14 May 2024 19:52:58 -0400
+Subject: [PATCH 4/4] shell32: Fake success for
+ file_operation_GetAnyOperationsAborted.
+
+---
+ dlls/shell32/shlfileop.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/shell32/shlfileop.c b/dlls/shell32/shlfileop.c
+index 4ed9c64a3ce..f4b3ae1c25b 100644
+--- a/dlls/shell32/shlfileop.c
++++ b/dlls/shell32/shlfileop.c
+@@ -2032,7 +2032,9 @@ static HRESULT WINAPI file_operation_GetAnyOperationsAborted(IFileOperation *ifa
+ {
+     FIXME("(%p, %p): stub.\n", iface, aborted);
+ 
+-    return E_NOTIMPL;
++    *aborted = FALSE;
++
++    return S_OK;
+ }
+ 
+ static const IFileOperationVtbl file_operation_vtbl =
+-- 
+GitLab
+
