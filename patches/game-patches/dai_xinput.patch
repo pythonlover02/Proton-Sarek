@@ -1,0 +1,92 @@
+From 98744d243b9ef173ab0c82a9b3e13e675175589b Mon Sep 17 00:00:00 2001
+From: GloriousEggroll <gloriouseggroll@gmail.com>
+Date: Sat, 27 Jul 2024 18:59:05 -0600
+Subject: [PATCH] dai_xinput_fix
+
+---
+ dlls/user32/input.c | 15 ++++++++++++++-
+ dlls/win32u/input.c | 32 ++++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/user32/input.c b/dlls/user32/input.c
+index f91b65a5f56..02241110eae 100644
+--- a/dlls/user32/input.c
++++ b/dlls/user32/input.c
+@@ -814,8 +814,21 @@ HWND WINAPI GetActiveWindow(void)
+ HWND WINAPI GetFocus(void)
+ {
+     GUITHREADINFO info;
++    HWND retValueWindow;
++    static HWND prev = 0;
++    const char *sgi;
+     info.cbSize = sizeof(info);
+-    return NtUserGetGUIThreadInfo( GetCurrentThreadId(), &info ) ? info.hwndFocus : 0;
++
++    retValueWindow = NtUserGetGUIThreadInfo( GetCurrentThreadId(), &info ) ? info.hwndFocus : 0;
++
++    if ((sgi = getenv("SteamGameId")) && !strcmp(sgi, "1222690")) {
++        if (retValueWindow == 0 && prev != 0)
++            NtUserAttachThreadInput(0, 0, 1);
++        else
++            prev = retValueWindow;
++    }
++
++    return retValueWindow;
+ }
+ 
+ 
+diff --git a/dlls/win32u/input.c b/dlls/win32u/input.c
+index d67f462359c..dee6c5acf57 100644
+--- a/dlls/win32u/input.c
++++ b/dlls/win32u/input.c
+@@ -30,6 +30,8 @@
+ #pragma makedep unix
+ #endif
+ 
++#include <sys/prctl.h>
++#include <string.h>
+ #include "ntstatus.h"
+ #define WIN32_NO_STATUS
+ #include "win32u_private.h"
+@@ -596,6 +598,38 @@ HWND get_focus(void)
+ BOOL WINAPI NtUserAttachThreadInput( DWORD from, DWORD to, BOOL attach )
+ {
+     BOOL ret;
++    static int visited = 0;
++    static DWORD fromThreadForHack = 0;
++    static DWORD toThreadForHack = 0;
++    static char processNameForHack[16];
++    static const char* DAIprocessName = "DragonAgeInquis";
++    static const char* DAIGameLoopName = "GameLoop";
++    const char *sgi;
++
++    prctl(PR_GET_NAME, processNameForHack);
++
++    TRACE("Process Name: %s\n", processNameForHack); 
++    
++    if ((sgi = getenv("SteamGameId")) && !strcmp(sgi, "1222690"))
++    {
++        if (strncmp(DAIprocessName, processNameForHack, 15) == 0 || strncmp(DAIGameLoopName, processNameForHack, 8) == 0)
++        {
++            if (!visited)
++            {
++                TRACE("First Visit Process Name: %s\n", processNameForHack);
++                fromThreadForHack = from;
++                toThreadForHack = to;
++                visited = 1;
++            }
++
++            if (from == 0 && to == 0 && visited)
++            {
++                TRACE("00 Process Name: %s\n", processNameForHack);
++                from = fromThreadForHack;
++                to = toThreadForHack;
++            }
++        }
++    }
+ 
+     SERVER_START_REQ( attach_thread_input )
+     {
+-- 
+2.45.2
+

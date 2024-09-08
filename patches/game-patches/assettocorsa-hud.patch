@@ -1,0 +1,37 @@
+From 0b242db6d63ec466c09d47020596ba941ce7cdf2 Mon Sep 17 00:00:00 2001
+From: GloriousEggroll <gloriouseggroll@gmail.com>
+Date: Sat, 16 May 2020 20:05:38 -0600
+Subject: [PATCH] Revert "dwrite: Release file streams when building
+ collections."
+
+This reverts commit d19e34d8f072514cb903bda89767996ba078bae4.
+---
+ dlls/dwrite/font.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/dlls/dwrite/font.c b/dlls/dwrite/font.c
+index c473a306720..dbf6c611f86 100644
+--- a/dlls/dwrite/font.c
++++ b/dlls/dwrite/font.c
+@@ -4659,6 +4659,7 @@ HRESULT create_font_collection(IDWriteFactory7 *factory, IDWriteFontFileEnumerat
+     BOOL current = FALSE;
+     HRESULT hr = S_OK;
+     size_t i;
++    const char *sgi = getenv("SteamGameId");
+ 
+     *ret = NULL;
+ 
+@@ -4785,7 +4786,9 @@ HRESULT create_font_collection(IDWriteFactory7 *factory, IDWriteFontFileEnumerat
+             }
+         }
+ 
+-        IDWriteFontFileStream_Release(stream);
++        if ((!sgi) | (sgi && strcmp(sgi, "244210"))) {
++            IDWriteFontFileStream_Release(stream);
++        }
+     }
+ 
+     LIST_FOR_EACH_ENTRY_SAFE(fileenum, fileenum2, &scannedfiles, struct fontfile_enum, entry)
+-- 
+2.26.2
+

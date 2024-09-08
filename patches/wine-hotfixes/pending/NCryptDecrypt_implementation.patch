@@ -1,0 +1,29 @@
+diff --git a/dlls/ncrypt/main.c b/dlls/ncrypt/main.c
+index 3511f8f2d3f..656c80a5cb9 100644
+--- a/dlls/ncrypt/main.c
++++ b/dlls/ncrypt/main.c
+@@ -212,9 +212,22 @@ SECURITY_STATUS WINAPI NCryptCreatePersistedKey(NCRYPT_PROV_HANDLE provider, NCR
+ SECURITY_STATUS WINAPI NCryptDecrypt(NCRYPT_KEY_HANDLE key, BYTE *input, DWORD insize, void *padding,
+                                      BYTE *output, DWORD outsize, DWORD *result, DWORD flags)
+ {
+-    FIXME("(%#Ix, %p, %lu, %p, %p, %lu, %p, %#lx): stub\n", key, input, insize, padding,
++    struct object *key_object = (struct object *)key;
++
++    FIXME("(%#Ix, %p, %lu, %p, %p, %lu, %p, %#lx):\n", key, input, insize, padding,
+           output, outsize, result, flags);
+-    return NTE_NOT_SUPPORTED;
++
++    if (flags & ~(NCRYPT_NO_PADDING_FLAG | NCRYPT_PAD_OAEP_FLAG
++        | NCRYPT_PAD_PKCS1_FLAG | NCRYPT_SILENT_FLAG))
++    {
++        FIXME("Flags %lx not supported\n", flags);
++        return NTE_BAD_FLAGS;
++    }
++
++    if (key_object->type != KEY) return NTE_INVALID_HANDLE;
++
++    return map_ntstatus(BCryptDecrypt(key_object->key.bcrypt_key, input, insize, padding,
++                                      NULL, 0, output, outsize, result, flags));
+ }
+ 
+ SECURITY_STATUS WINAPI NCryptDeleteKey(NCRYPT_KEY_HANDLE key, DWORD flags)
