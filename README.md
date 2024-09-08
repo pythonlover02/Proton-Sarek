@@ -33,7 +33,9 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
    	- [Project Wingman](#project-wingman)
    	- [Red Orchestra 2](#red-orchestra-2)
    	- [S.T.A.L.K.E.R Call Of The Zone](#stalker-call-of-the-zone)
+- [Building](#Building)
 - [Credits](#Credits)
+
 
 ## Installation:
 1. Download a release from the release page
@@ -332,6 +334,32 @@ There are some graphical glitches on the sky, and little stutters on the start o
 
 No Issues So far 
 ![Screenshot_20240831_161216](https://github.com/user-attachments/assets/c86f8e09-4e35-4bfd-af12-ff2531e52ab8)
+
+## Building:
+
+Heres the neat part, you dont :), now out of jokes, i manually assemble the next release based on the already compiled Proton or Proton GE version.
+
+Why do I assemble it this way? Because I find it easier. I know that easier doesn't mean it's the right approach, but I try to do my best. Also, if we keep out the overwrite of the DXVK version, the only changes are in the wine.inf file, which contains the Proton/Wine prefix configuration. Features like using OpenGL 4.6 with WineD3D with command stream and command serialization were achieved there.
+
+I’m not a great coder like most of the people out there on the Linux community; I just want to share the builds I've modified for my friends (both of them have GT 710s). So yeah, I am an amateur trying his best.
+
+So How i replicate the releases here?
+
+Simple just follow this steps:
+
+1. Download the DXVK version that you want to use
+
+2. Download the wine.inf file of the GitHub (If you want to use my patches and custom prefix)
+
+3. Copy the contents of the DXVK/x32/ to ProtonBuild/files/lib/wine/dxvk/
+
+4. Copy the contents of the DXVK/x64/ to ProtonBuild/files/lib64/wine/dxvk/
+
+5. Copy the wine.inf file to ProtonBuild/files/share/wine/
+
+6. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
+
+7. Enjoy :P 
 
 ## Credits:
 This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
