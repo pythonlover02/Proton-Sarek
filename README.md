@@ -26,7 +26,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 		- [System](#System)
    		- [Mesa](#Mesa)
 		- [Nvidia](#Nvidia)
-      		- [Software Rendering](#software-rendering)
+		- [Software Rendering](#software-rendering)
 - [Testing](#Testing)
 - [Building](#Building)
 - [Credits](#Credits)
