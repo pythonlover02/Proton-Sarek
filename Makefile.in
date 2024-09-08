@@ -96,6 +96,7 @@ include $(SRC)/make/rules-cmake.mk
 include $(SRC)/make/rules-autoconf.mk
 include $(SRC)/make/rules-configure.mk
 include $(SRC)/make/rules-winemaker.mk
+include $(SRC)/make/rules-wine-requests.mk
 include $(SRC)/make/rules-cargo.mk
 
 
@@ -117,6 +118,9 @@ $(eval $(call rules-meson,dav1d,64))
 ##
 
 GST_ORC_MESON_ARGS := \
+	-Dexamples=disabled \
+	-Dtests=disabled \
+	-Dbenchmarks=disabled \
 	-Dorc-test=disabled
 
 $(eval $(call rules-source,gst_orc,$(SRCDIR)/gst-orc))
@@ -130,6 +134,14 @@ $(eval $(call rules-meson,gst_orc,64))
 
 GSTREAMER_MESON_ARGS := \
 	-Dgst_parse=false \
+	-Dintrospection=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled \
+	-Dexamples=disabled \
+	-Dtests=disabled \
+	-Ddoc=disabled \
 	-Dbenchmarks=disabled \
 	-Dtools=disabled \
 	-Dbash-completion=disabled
@@ -156,6 +168,14 @@ $(eval $(call rules-meson,graphene,64))
 
 GST_BASE_MESON_ARGS := \
 	-Dauto_features=disabled \
+	-Dintrospection=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled \
+	-Dexamples=disabled \
+	-Dtests=disabled \
+	-Ddoc=disabled \
 	-Dadder=enabled \
 	-Dapp=enabled \
 	-Daudioconvert=enabled \
@@ -168,10 +188,12 @@ GST_BASE_MESON_ARGS := \
 	-Dtypefind=enabled \
 	-Dvideoconvertscale=enabled \
 	-Dvorbis=enabled \
+	-Drawparse=enabled \
 	-Dorc=enabled \
 	-Dx11=enabled \
 	-Dgl=enabled \
 	-Dgl-graphene=enabled \
+	-Dgl_winsys=surfaceless,x11,wayland,egl \
 	-Dgl_platform=glx,egl \
 	--wrap-mode nodownload \
 
@@ -187,7 +209,15 @@ $(eval $(call rules-meson,gst_base,64))
 ##
 
 GST_GOOD_MESON_ARGS := \
+	-Dapetag=enabled \
 	-Dauto_features=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled \
+	-Dexamples=disabled \
+	-Dtests=disabled \
+	-Ddoc=disabled \
 	-Daudioparsers=enabled \
 	-Dautodetect=enabled \
 	-Davi=enabled \
@@ -203,6 +233,15 @@ GST_GOOD_MESON_ARGS := \
 	-Did3demux=enabled \
 	-Dmpg123=enabled \
 	-Dsoup=enabled \
+	-Ddirectsound=enabled \
+	-Dflv=enabled \
+	-Dflx=enabled \
+	-Dxingmux=enabled \
+	-Dy4m=enabled \
+	-Dadaptivedemux2=enabled \
+	-Dflac=enabled \
+	-Djpeg=enabled \
+	-Dspeex=enabled \
 	-Dorc=enabled
 
 GST_GOOD_DEPENDS = gst_orc gstreamer gst_base
@@ -221,17 +260,36 @@ FFMPEG_CONFIGURE_ARGS := \
 	--disable-everything \
 	--disable-programs \
 	--disable-doc \
-	--disable-inline-asm \
+	--enable-decoder=indeo5 \
+	--enable-decoder=adpcm_ms \
+	--enable-decoder=mpegvideo \
+	--enable-decoder=mpeg1video \
+	--enable-decoder=mp2 \
+	--enable-decoder=mpeg4 \
+	--enable-decoder=msmpeg4v1 \
+	--enable-decoder=msmpeg4v2 \
+	--enable-decoder=msmpeg4v3 \
+	--enable-decoder=vc1 \
+	--enable-decoder=vc1image \
+	--enable-decoder=wmav1 \
+	--enable-decoder=wmav2 \
+	--enable-decoder=wmapro \
+	--enable-decoder=wmalossless \
+	--enable-decoder=xma1 \
+	--enable-decoder=xma2 \
+	--enable-decoder=wmv3image \
+	--enable-decoder=wmv3 \
+	--enable-decoder=wmv2 \
+	--enable-decoder=wmv1 \
+	--enable-decoder=h264 \
+	--enable-decoder=aac \
+	--enable-demuxer=xwma \
+	--disable-inline-asm
 
 $(eval $(call rules-source,ffmpeg,$(SRCDIR)/ffmpeg))
 $(eval $(call rules-configure,ffmpeg,32))
 $(eval $(call rules-configure,ffmpeg,64))
 
-## Only use ffmpeg to build gst-libav; we don't ship it.
-$(OBJ)/.ffmpeg-dist32:
-	touch $@
-$(OBJ)/.ffmpeg-dist64:
-	touch $@
 
 ##
 ## gst-libav
@@ -267,6 +325,141 @@ $(OBJ)/.gst_plugins_rs-post-build32:
 	cp -a $(GST_PLUGINS_RS_OBJ32)/i686-unknown-linux-gnu/release/libgstdav1d.so $(GST_PLUGINS_RS_DST32)/lib/gstreamer-1.0/
 	touch $@
 
+##
+## gst-plugins-bad
+##
+
+GST_BAD_MESON_ARGS := \
+	-Dauto_features=disabled \
+	-Dintrospection=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled \
+	-Dexamples=disabled \
+	-Dtests=disabled \
+	-Ddoc=disabled \
+	-Daccurip=enabled \
+	-Dadpcmdec=enabled \
+	-Dadpcmenc=enabled \
+	-Daiff=enabled \
+	-Dasfmux=enabled \
+	-Daudiobuffersplit=enabled \
+	-Daudiofxbad=enabled \
+	-Daudiomixmatrix=enabled \
+	-Daudiolatency=enabled \
+	-Daudiovisualizers=enabled \
+	-Dautoconvert=enabled \
+	-Dbayer=enabled \
+	-Dcamerabin2=enabled \
+	-Dcodecalpha=enabled \
+	-Dcodectimestamper=enabled \
+	-Dcoloreffects=enabled \
+	-Ddebugutils=enabled \
+	-Ddvbsubenc=enabled \
+	-Ddvbsuboverlay=enabled \
+	-Ddvdspu=enabled \
+	-Dfaceoverlay=enabled \
+	-Dfestival=enabled \
+	-Dfieldanalysis=enabled \
+	-Dfreeverb=enabled \
+	-Dfrei0r=enabled \
+	-Dgaudieffects=enabled \
+	-Dgdp=enabled \
+	-Dgeometrictransform=enabled \
+	-Did3tag=enabled \
+	-Dinter=enabled \
+	-Dinterlace=enabled \
+	-Divfparse=enabled \
+	-Divtc=enabled \
+	-Djp2kdecimator=enabled \
+	-Djpegformat=enabled \
+	-Dlibrfb=enabled \
+	-Dmidi=enabled \
+	-Dmpegdemux=enabled \
+	-Dmpegpsmux=enabled \
+	-Dmpegtsdemux=enabled \
+	-Dmpegtsmux=enabled \
+	-Dmxf=enabled \
+	-Dnetsim=enabled \
+	-Donvif=enabled \
+	-Dpcapparse=enabled \
+	-Dpnm=enabled \
+	-Dproxy=enabled \
+	-Drawparse=enabled \
+	-Dremovesilence=enabled \
+	-Drist=enabled \
+	-Drtmp2=enabled \
+	-Drtp=enabled \
+	-Dsdp=enabled \
+	-Dsegmentclip=enabled \
+	-Dsiren=enabled \
+	-Dsmooth=enabled \
+	-Dspeed=enabled \
+	-Dsubenc=enabled \
+	-Dswitchbin=enabled \
+	-Dtimecode=enabled \
+	-Dtranscode=enabled \
+	-Dvideofilters=enabled \
+	-Dvideoframe_audiolevel=enabled \
+	-Dvideoparsers=enabled \
+	-Dvideosignal=enabled \
+	-Dvmnc=enabled \
+	-Dy4m=enabled \
+	-Ddvb=enabled \
+	-Dgtk3=enabled \
+	-Dipcpipeline=enabled \
+	-Dkms=enabled \
+	-Dshm=enabled \
+	-Duvch264=enabled \
+	-Dv4l2codecs=enabled \
+	-Daes=enabled \
+	-Dbz2=enabled \
+	-Dclosedcaption=enabled \
+	-Dcolormanagement=enabled \
+	-Ddash=enabled \
+	-Ddtls=enabled \
+	-Dhls=enabled \
+	-Dopenal=enabled \
+	-Dopus=enabled \
+	-Dsctp=enabled \
+	-Dsmoothstreaming=enabled \
+	-Dsndfile=enabled \
+	-Dttml=enabled \
+	-Dwayland=enabled \
+	-Dx11=enabled \
+	-Dwebp=enabled \
+	-Dorc=enabled
+
+GST_BAD_DEPENDS = gst_orc gstreamer gst_base
+
+$(eval $(call rules-source,gst_bad,$(SRCDIR)/gstreamer/subprojects/gst-plugins-bad))
+$(eval $(call rules-meson,gst_bad,32))
+$(eval $(call rules-meson,gst_bad,64))
+
+##
+## gst-plugins-ugly
+##
+
+GST_UGLY_MESON_ARGS := \
+	-Dauto_features=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled \
+	-Dnls=disabled \
+	-Dtests=disabled \
+	-Ddoc=disabled \
+	-Dasfdemux=enabled \
+	-Ddvdlpcmdec=enabled \
+	-Ddvdsub=enabled \
+	-Drealmedia=enabled \
+	-Dorc=enabled
+
+GST_UGLY_DEPENDS = gst_orc gstreamer gst_base
+
+$(eval $(call rules-source,gst_ugly,$(SRCDIR)/gstreamer/subprojects/gst-plugins-ugly))
+$(eval $(call rules-meson,gst_ugly,32))
+$(eval $(call rules-meson,gst_ugly,64))
 
 ##
 ## Vulkan-Headers
@@ -284,21 +477,6 @@ $(eval $(call rules-cmake,vulkan-headers,64,CROSS))
 $(eval $(call rules-source,spirv-headers,$(SRCDIR)/SPIRV-Headers))
 $(eval $(call rules-cmake,spirv-headers,32,CROSS))
 $(eval $(call rules-cmake,spirv-headers,64,CROSS))
-
-
-##
-## Vulkan-Loader
-##
-
-VULKAN_LOADER_CMAKE_ARGS = -DUSE_MASM=OFF
-VULKAN_LOADER_CMAKE_ARGS64 = -DVULKAN_HEADERS_INSTALL_DIR=$(VULKAN_HEADERS_DST64)
-VULKAN_LOADER_CMAKE_ARGS32 = -DVULKAN_HEADERS_INSTALL_DIR=$(VULKAN_HEADERS_DST32)
-VULKAN_LOADER_CFLAGS = -DWINVER=0x0A00 -D_WIN32_WINNT=0x0A00 # 0x0A00 is _WIN32_WINNT_WIN10
-VULKAN_LOADER_DEPENDS = vulkan-headers spirv-headers
-
-$(eval $(call rules-source,vulkan-loader,$(SRCDIR)/Vulkan-Loader))
-$(eval $(call rules-cmake,vulkan-loader,32,CROSS))
-$(eval $(call rules-cmake,vulkan-loader,64,CROSS))
 
 
 ##
@@ -381,6 +559,83 @@ $(OBJ)/.steamexe-post-build64:
 	cp $(SRC)/steam_helper/64/libsteam_api.so $(DST_LIBDIR64)/
 	touch $@
 
+##
+## openfst
+##
+
+OPENFST_SOURCE_ARGS = \
+  --include src/include/fst/config.h.in \
+  --exclude aclocal.m4 \
+  --exclude ar-lib \
+  --exclude autom4te.cache \
+  --exclude compile \
+  --exclude config.guess \
+  --exclude config.h.in \
+  --exclude config.sub \
+  --exclude configure \
+  --exclude depcomp \
+  --exclude install-sh \
+  --exclude ltmain.sh \
+  --exclude m4/libtool.m4 \
+  --exclude m4/ltoptions.m4 \
+  --exclude m4/ltsugar.m4 \
+  --exclude m4/ltversion.m4 \
+  --exclude m4/lt~obsolete.m4 \
+  --exclude Makefile.in \
+  --exclude missing \
+  --exclude test-driver \
+
+OPENFST_CONFIGURE_ARGS = \
+  --enable-silent-rules \
+  --enable-static \
+  --disable-shared \
+  --enable-far \
+  --enable-ngram-fsts \
+  --enable-lookahead-fsts \
+  --with-pic \
+  --disable-bin \
+
+$(eval $(call rules-source,openfst,$(SRCDIR)/openfst))
+$(eval $(call rules-autoconf,openfst,32))
+$(eval $(call rules-autoconf,openfst,64))
+
+
+##
+## kaldi
+##
+
+KALDI_SOURCE_ARGS = \
+  --exclude src/**/CMakeLists.txt \
+
+KALDI_CMAKE_ARGS = \
+  -DKALDI_VERSION=5.5-proton \
+  -DBLAS_LIBRARIES=-lblas \
+  -DLAPACK_LIBRARIES=-llapack \
+  -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+  -DBUILD_SHARED_LIBS=OFF \
+  -DKALDI_BUILD_TEST=OFF \
+  -DKALDI_BUILD_EXE=OFF \
+
+KALDI_DEPENDS = openfst
+
+$(eval $(call rules-source,kaldi,$(SRCDIR)/kaldi))
+$(eval $(call rules-cmake,kaldi,32))
+$(eval $(call rules-cmake,kaldi,64))
+
+
+##
+## vosk
+##
+
+VOSK_CMAKE_ARGS = \
+  -DBUILD_SHARED_LIBS=ON \
+
+VOSK_DEPENDS = openfst kaldi
+
+$(eval $(call rules-source,vosk,$(SRCDIR)/vosk-api))
+$(eval $(call rules-cmake,vosk,32))
+$(eval $(call rules-cmake,vosk,64))
+
 
 ##
 ## wine
@@ -399,10 +654,14 @@ WINE_SOURCE_ARGS = \
   --exclude dlls/winevulkan/vulkan_thunks.c \
   --exclude dlls/winevulkan/vulkan_thunks.h \
   --exclude dlls/winevulkan/winevulkan.json \
-  --exclude dlls/winevulkan/winevulkan.spec
+  --exclude dlls/winevulkan/winevulkan.spec \
+  --exclude dlls/ntdll/ntsyscalls.h \
+  --exclude dlls/win32u/win32syscalls.h \
+  --exclude include/wine/server_protocol.h \
+  --exclude server/request.h \
+  --exclude server/trace.c \
 
 WINE_CONFIGURE_ARGS = \
-  --enable-werror \
   --with-mingw \
   --disable-tests
 
@@ -414,16 +673,17 @@ WINE_CONFIGURE_ARGS64 = --enable-win64 \
   VKD3D_PE_CFLAGS="-I$(VULKAN_HEADERS_DST64)/include -I$(VKD3D_DST64)/include/vkd3d" \
   VKD3D_PE_LIBS="-L$(VKD3D_DST64)/bin -l:libvkd3d-1.dll -l:libvkd3d-shader-1.dll"
 
-WINE_DEPENDS = gst_orc gstreamer gst_base vkd3d
+WINE_DEPENDS = gst_orc gstreamer gst_base vkd3d openfst kaldi vosk
 
 $(eval $(call rules-source,wine,$(SRCDIR)/wine))
 $(eval $(call rules-autoconf,wine,32))
 $(eval $(call rules-autoconf,wine,64))
+$(eval $(call rules-wine-requests,wine))
 
 $(OBJ)/.wine-post-source:
-	-cd $(WINE_SRC) && tools/make_specfiles
-	cd $(WINE_SRC) && tools/make_requests
 	cd $(WINE_SRC) && dlls/winevulkan/make_vulkan -x vk.xml
+	-cd $(WINE_SRC) && tools/make_specfiles
+	-cd $(WINE_SRC) && tools/make_requests
 	touch $@
 
 $(OBJ)/.wine-post-build64:
@@ -461,6 +721,9 @@ $(eval $(call rules-makedep,vrclient,64))
 # wine builds DLLs with the same names, we need to differentiate the timestamps
 DXVK_SOURCE_DATE_EPOCH32 := $(shell expr $(BASE_SOURCE_DATE_EPOCH32) - 1)
 DXVK_SOURCE_DATE_EPOCH64 := $(shell expr $(BASE_SOURCE_DATE_EPOCH64) - 1)
+
+DXVK_SOURCE_ARGS = \
+  --exclude version.h.in \
 
 DXVK_MESON_ARGS32 = --bindir=$(DXVK_DST32)/lib/wine/dxvk
 DXVK_MESON_ARGS64 = --bindir=$(DXVK_DST64)/lib64/wine/dxvk
@@ -534,7 +797,7 @@ VKD3D_CONFIGURE_ARGS = \
   SONAME_LIBVULKAN=vulkan-1 \
 
 VKD3D_LDFLAGS = -static-libgcc $(CROSSLDFLAGS)
-VKD3D_DEPENDS = vulkan-loader vulkan-headers spirv-headers
+VKD3D_DEPENDS = vulkan-headers spirv-headers
 
 $(eval $(call rules-source,vkd3d,$(SRCDIR)/vkd3d))
 $(eval $(call rules-autoconf,vkd3d,32,CROSS))
@@ -924,11 +1187,11 @@ DIST_GECKO64 := $(OBJ)/.gecko-dist64
 
 $(SRC)/contrib/$(GECKO64_TARBALL):
 	mkdir -p $(dir $@)
-	wget --no-use-server-timestamps -O $@ $(GECKO64_TARBALL_URL)
+	wget --no-use-server-timestamps -O $@ $(GECKO64_TARBALL_URL) || (rm $@; false)
 
 $(SRC)/contrib/$(GECKO32_TARBALL):
 	mkdir -p $(dir $@)
-	wget --no-use-server-timestamps -O $@ $(GECKO32_TARBALL_URL)
+	wget --no-use-server-timestamps -O $@ $(GECKO32_TARBALL_URL) || (rm $@; false)
 
 $(DIST_GECKO32): $(SRC)/contrib/$(GECKO32_TARBALL)
 	mkdir -p $(DIST_GECKO_DIR)
@@ -949,7 +1212,7 @@ all-dist: $(DIST_GECKO32) $(DIST_GECKO64)
 ## wine-mono
 ##
 
-WINEMONO_VER := 9.1.0
+WINEMONO_VER := 9.2.0
 WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
 DIST_WINEMONO_DIR := $(DST_DIR)/share/wine/mono
 DIST_WINEMONO := $(OBJ)/.wine-mono-dist
@@ -957,7 +1220,7 @@ MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/w
 
 $(SRC)/contrib/$(WINEMONO_TARBALL):
 	mkdir -p $(dir $@)
-	wget --no-use-server-timestamps -O $@ $(MONO_TARBALL_URL)
+	wget --no-use-server-timestamps -O $@ $(MONO_TARBALL_URL) || (rm $@; false)
 
 $(DIST_WINEMONO): $(SRC)/contrib/$(WINEMONO_TARBALL)
 	mkdir -p $(DIST_WINEMONO_DIR)
@@ -998,12 +1261,12 @@ all-dist: $(DIST_XALIA)
 DIST_OVR32 := $(DST_LIBDIR32)/wine/dxvk/openvr_api_dxvk.dll
 $(DIST_OVR32): $(SRCDIR)/openvr/bin/win32/openvr_api.dll | $(DST_DIR)
 	mkdir -p $(DST_LIBDIR32)/wine/dxvk
-	cp -a $< $@
+	cp -af $< $@
 
 DIST_OVR64 := $(DST_LIBDIR64)/wine/dxvk/openvr_api_dxvk.dll
 $(DIST_OVR64): $(SRCDIR)/openvr/bin/win64/openvr_api.dll | $(DST_DIR)
 	mkdir -p $(DST_LIBDIR64)/wine/dxvk
-	cp -a $< $@
+	cp -af $< $@
 
 all-dist: $(DIST_OVR32) $(DIST_OVR64)
 
@@ -1066,6 +1329,23 @@ $(DIST_AV1_PATENTS): $(AV1_PATENTS)
 
 all-dist: $(DIST_LICENSE) $(DIST_OFL_LICENSE) $(DIST_AV1_PATENTS)
 
+##
+## protonfixes
+##
+
+PROTONFIXES_TARGET := $(addprefix $(DST_BASE)/,protonfixes)
+$(PROTONFIXES_TARGET): $(addprefix $(SRCDIR)/,protonfixes)
+
+$(OBJ)/.build-protonfixes:
+	cd $(SRCDIR)/protonfixes && make
+	touch $(@)
+
+$(PROTONFIXES_TARGET): $(OBJ)/.build-protonfixes
+	cd $(SRCDIR)/protonfixes && make install
+	cp -a $(SRCDIR)/protonfixes/dist/protonfixes $(PROTONFIXES_TARGET)
+	rm -r $(SRCDIR)/protonfixes/dist
+
+all-dist: $(PROTONFIXES_TARGET)
 
 ##
 ## proton(.py), filelock.py, etc.
@@ -1117,7 +1397,14 @@ deploy: all
 redist: all
 	mkdir -p $(REDIST_DIR)
 	rsync --delete -arx $(DST_BASE)/ $(REDIST_DIR)
-
+	cp $(PROTONFIXES_TARGET)/cabextract $(REDIST_DIR)/files/bin/
+	cp -a $(PROTONFIXES_TARGET)/libmspack.so $(REDIST_DIR)/files/lib64/
+	cp -a $(PROTONFIXES_TARGET)/libmspack.so.0 $(REDIST_DIR)/files/lib64/
+	cp $(PROTONFIXES_TARGET)/libmspack.so.0.1.0 $(REDIST_DIR)/files/lib64/
+	mv $(REDIST_DIR) $(BUILD_NAME)
+	tar -cvzf $(BUILD_NAME).tar.gz $(BUILD_NAME)
+	sha512sum $(BUILD_NAME).tar.gz > $(BUILD_NAME).sha512sum
+	@echo "Proton build available at $(BUILD_NAME).tar.gz"
 
 ##
 ## make module=$dllname module[32,64]
