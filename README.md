@@ -60,7 +60,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 6. Restart and thats it!!! Enjoy :P
 
 ## Roadmap:
-Current status and upcoming changes for the Build. The following features are categorized based on their current development status:
+Current status and upcoming changes for the Builds. The following features are categorized based on their current development status:
 
 | Feature Description                                         | Status             |
 |-----------------------------------------------------------|--------------------|
