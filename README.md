@@ -304,36 +304,13 @@ No GPU Driver its used to render the game here, just the CPU, so it doesnt matte
 ## Testing:
 Games that i have tested so far
 
-### ULTRAKILL:
-#### Status: Playable with DXVK 1.10.3 and WineD3D
-
-There are no issues so far; my experience with DXVK 1.10.3 is the same as with DXVK 2.4.0.
-![Screenshot_20240830_150446](https://github.com/user-attachments/assets/e9ab1204-b95b-4b4d-9405-cf8de0cb4537)
-
-
-### Dark Souls III:
-#### Status: Playable with DXVK 1.10.3 and WineD3D(second option its not recommended)
-
-The GPU usage is almost the same as in version 2.4.0, but a little higher. There are no graphical glitches, but occasional stutters do occur from time to time. 
-![Screenshot_20240830_150705](https://github.com/user-attachments/assets/d9aed291-588a-4ada-9846-e2ab60d1beb3)
-
-### Project Wingman:
-#### Status: Unplayable with DXVK 1.10.3 or WineD3D, needs a patch
-
-It does work with DXVK 2.4.0
-![Screenshot_20240830_224017](https://github.com/user-attachments/assets/52ac464c-0ee7-408d-8031-27bf3361842a)
-
-### Red Orchestra 2:
-#### Status: Playable with DXVK 1.10.3 and WineD3D
-
-There are some graphical glitches on the sky, and little stutters on the start of the game.
-![Screenshot_20240831_021739](https://github.com/user-attachments/assets/0b13b35e-ffef-4899-be2a-7097ae691303)
-
-### S.T.A.L.K.E.R Call Of The Zone:
-#### Status: Playable with DXVK 1.10.3 and WineD3D
-
-No Issues So far 
-![Screenshot_20240831_161216](https://github.com/user-attachments/assets/c86f8e09-4e35-4bfd-af12-ff2531e52ab8)
+| Game                        | Status                                         | Issues/Notes                                                | Screenshot                                                            |
+|-----------------------------|------------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------|
+| **ULTRAKILL**               | Playable with DXVK 1.10.3 and WineD3D       | No issues so far; experience is the same as with DXVK 2.4.0 | ![Screenshot](https://github.com/user-attachments/assets/e9ab1204-b95b-4b4d-9405-cf8de0cb4537) |
+| **Dark Souls III**          | Playable with DXVK 1.10.3 and WineD3D       | Higher GPU usage than v2.4.0; occasional stutters          | ![Screenshot](https://github.com/user-attachments/assets/d9aed291-588a-4ada-9846-e2ab60d1beb3) |
+| **Project Wingman**         | Unplayable with DXVK 1.10.3 or WineD3D      | Needs a patch; works with DXVK 2.4.0                      | ![Screenshot](https://github.com/user-attachments/assets/52ac464c-0ee7-408d-8031-27bf3361842a) |
+| **Red Orchestra 2**         | Playable with DXVK 1.10.3 and WineD3D       | Graphical glitches on sky; stutters at start               | ![Screenshot](https://github.com/user-attachments/assets/0b13b35e-ffef-4899-be2a-7097ae691303) |
+| **S.T.A.L.K.E.R Call Of The Zone** | Playable with DXVK 1.10.3 and WineD3D | No issues so far                                           | ![Screenshot](https://github.com/user-attachments/assets/c86f8e09-4e35-4bfd-af12-ff2531e52ab8) |
 
 ## Building:
 
