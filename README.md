@@ -357,7 +357,9 @@ Simple just follow this steps:
 
 5. Copy the wine.inf file to ProtonBuild/files/share/wine/
 
-6. Enjoy :P 
+6. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
+
+7. Enjoy :P 
 
 ## Credits:
 This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
