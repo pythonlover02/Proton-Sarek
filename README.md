@@ -339,7 +339,7 @@ Heres the neat part, you dont :), now out of jokes, i manually assemble the next
 
 Why do I assemble it this way? Because I find it easier. I know that easier doesn't mean it's the right approach, but I try to do my best. Also, if we keep out the overwrite of the DXVK version, the only changes are in the wine.inf file, which contains the Proton/Wine prefix configuration. Features like using OpenGL 4.6 with WineD3D with command stream and command serialization were achieved there.
 
-I’m not a great coder like most of the people out there; I just want to share the builds I've modified for my friends (both of them have GT 710s). So yeah, I am an amateur trying his best.
+I’m not a great coder like most of the people out there on the Linux community; I just want to share the builds I've modified for my friends (both of them have GT 710s). So yeah, I am an amateur trying his best.
 
 So How i replicate the releases here?
 
