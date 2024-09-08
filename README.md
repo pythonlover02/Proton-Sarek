@@ -33,8 +33,9 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
    	- [Project Wingman](#project-wingman)
    	- [Red Orchestra 2](#red-orchestra-2)
    	- [S.T.A.L.K.E.R Call Of The Zone](#stalker-call-of-the-zone)
-- [Testing](#Testing)
 - [Building](#Building)
+- [Credits](#Credits)
+
 
 ## Installation:
 1. Download a release from the release page
