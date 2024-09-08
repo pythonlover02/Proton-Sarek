@@ -108,7 +108,7 @@ This List still very much work in progress, if you know about a GPU that have Vu
 ## Parameters:
 
 ## Proton:
-This are set on the Launch Options of a game, example:
+This are set on the Launch Options of a game on Steam, example:
 
 	PROTON_USE_WINED3D=1 PROTON_NO_ESYNC=1 mesa_glthread=true %command%
 
