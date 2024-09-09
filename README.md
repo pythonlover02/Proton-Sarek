@@ -5,7 +5,7 @@ Lasted Proton Versions patched to work with DXVK v1.10.3
 
 Because there are still people with Vulkan-compatible GPUs that dont support Vulkan 1.3, but do have support for Vulkan 1.1+. 
 
-Being are forced to use WineD3D while playing on Linux or locally patch each version of Proton if playing on Steam.
+Being forced to use WineD3D while playing on Linux or locally patch each version of Proton if playing on Steam.
 The idea is to patch all the stable versions of proton and put them here.
 
 Also understand that because we are using an old version of DXVK, game performance and compatibility will be worse than the newer ones, but it should be better than WineD3D.
