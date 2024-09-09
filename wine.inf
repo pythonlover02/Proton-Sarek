@@ -2842,7 +2842,6 @@ HKLM,Software\NVIDIA Corporation\Global\NGXCore,"FullPath",,"C:\Windows\System32
 [ProtonOverrides]
 HKLM,Software\Khronos\OpenXR\1,"ActiveRuntime",,"C:\openxr\wineopenxr64.json"
 ;;Likely want *80 and *90 too, but those require removing Wine's manifest files.
-HKCU,Software\Wine\Direct3D,"MaxVersionGL",0x10001,"460"
 HKCU,Software\Wine\Direct3D,"csmt",0x10001,"3"
 HKCU,Software\Wine\DllOverrides,"atl100",0x2,"native,builtin"
 HKCU,Software\Wine\DllOverrides,"msvcp100",0x2,"native,builtin"
@@ -2951,7 +2950,23 @@ HKCU,Software\Wine\AppDefaults\Maine-Win64-Shipping.exe\DllOverrides,"SpeechSynt
 HKCU,Software\Wine\AppDefaults\rayne1.exe\DllOverrides,"d3d8",,"native"
 HKCU,Software\Wine\AppDefaults\rayne2.exe\DllOverrides,"d3d8",,"native"
 HKCU,Software\Wine\AppDefaults\RDR2.exe\DllOverrides,"vulkan-1",,"native"
+;;App-specific overrides for amd_ags_x64.dll.
+HKCU,Software\Wine\AppDefaults\NewColossus_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
+HKCU,Software\Wine\AppDefaults\RDR2.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
+HKCU,Software\Wine\AppDefaults\ForzaHorizon4.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
+HKCU,Software\Wine\AppDefaults\Deathloop.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
+HKCU,Software\Wine\AppDefaults\ForzaHorizon5.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+HKCU,Software\Wine\AppDefaults\GRB.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+HKCU,Software\Wine\AppDefaults\MonsterHunterRise.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+HKCU,Software\Wine\AppDefaults\Sam4.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+HKCU,Software\Wine\AppDefaults\Sam4_Unrestricted.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
 HKCU,Software\Wine\AppDefaults\ShadowOfWar.exe\DllOverrides,"amd_ags_x64",,"disabled"
+HKCU,Software\Wine\AppDefaults\u4.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+HKCU,Software\Wine\AppDefaults\tll.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+HKCU,Software\Wine\AppDefaults\SOPFFO.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+HKCU,Software\Wine\AppDefaults\RiftApart.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+HKCU,Software\Wine\AppDefaults\ACMirage.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
+HKCU,Software\Wine\AppDefaults\ACMirage_plus.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
 ;;App-specific overrides for atiadlxx.dll.
 HKCU,Software\Wine\AppDefaults\s2_sp64_ship.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\s2_mp64_ship.exe\DllOverrides,"atiadlxx",,"builtin"
