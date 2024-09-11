@@ -13,6 +13,12 @@ Also understand that because we are using an old version of DXVK, game performan
 
 Please be aware that this is a custom build of Proton and is **not** affiliated with Valve's Proton. If you encounter any issues specific to my Proton build from this repository that do not occur with Valve's version, kindly refrain from submitting a bug report to Valve's bug github. Instead, please reach out to me directly at my Gmail:pythonloverv2@gmail.com. Thank you for your understanding!
 
+
+[![Badge License](https://img.shields.io/github/license/pythonlover02/Proton-Sarek)](LICENSE)
+![Badge Language](https://img.shields.io/github/languages/top/pythonlover02/Proton-Sarek)
+[![Stars](https://img.shields.io/github/stars/pythonlover02/Proton-Sarek?style=social)](https://github.com/pythonlover02/Proton-Sarek/stargazers)
+
+
 # Table of Contents:
 - [Install](#Install)
 	- [Native](#Native)
