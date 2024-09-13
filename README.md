@@ -150,6 +150,7 @@ First of all lets start with the must have, Gamemode and Zram.
 |-----------------------|------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
 | `GameMode`               | GameMode is a daemon/lib combo for Linux that allows games to request a set of optimizations to be temporarily applied to the host OS and/or a game process. | [GitHub - GameMode](https://github.com/FeralInteractive/gamemode) |
 | `Zram-Generator`       | Zram, formerly called compcache, is a Linux kernel module for creating a compressed block device in RAM.        | [GitHub - Zram-Generator](https://github.com/systemd/zram-generator) |
+| `MangoHud`              | MangoHud is a Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more.              | [GitHub - MangoHud](https://github.com/flightlessmango/MangoHud) |
 
 My personal recomendation its to search a tutorial for the installation of both in your favorite Linux Distro *;P*
 
