@@ -144,7 +144,7 @@ The Optimzation variables are set on the same way on the launch options
 ## Optimization:
 
 ## System:
-First of all lets start with the must have, Gamemode and Zram.
+First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 
 | Tool/Library          | Description                                                                                                      | Link                                                 |
 |-----------------------|------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
