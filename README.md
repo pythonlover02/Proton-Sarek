@@ -37,6 +37,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
    		- [Mesa](#Mesa)
 		- [Nvidia](#Nvidia)
 		- [Software Rendering](#software-rendering)
+		- [Additional Tips](#additional-tips)
 - [Testing](#Testing)
 - [Building](#Building)
 - [Credits](#Credits)
@@ -143,14 +144,15 @@ The Optimzation variables are set on the same way on the launch options
 ## Optimization:
 
 ## System:
-First of all lets start with the must have, Gamemode and Zram.
+First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 
 | Tool/Library          | Description                                                                                                      | Link                                                 |
 |-----------------------|------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| GameMode               | GameMode is a daemon/lib combo for Linux that allows games to request a set of optimizations to be temporarily applied to the host OS and/or a game process. | [GitHub - GameMode](https://github.com/FeralInteractive/gamemode) |
-| Zram-Generator        | Zram, formerly called compcache, is a Linux kernel module for creating a compressed block device in RAM.        | [GitHub - Zram-Generator](https://github.com/systemd/zram-generator) |
+| `GameMode`               | GameMode is a daemon/lib combo for Linux that allows games to request a set of optimizations to be temporarily applied to the host OS and/or a game process. | [GitHub - GameMode](https://github.com/FeralInteractive/gamemode) |
+| `Zram-Generator`       | Zram, formerly called compcache, is a Linux kernel module for creating a compressed block device in RAM.        | [GitHub - Zram-Generator](https://github.com/systemd/zram-generator) |
+| `MangoHud`              | MangoHud is a Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more.              | [GitHub - MangoHud](https://github.com/flightlessmango/MangoHud) |
 
-My personal recomendation its to search a tutorial for the installation of both in your favorite Linux Distro *;P*
+My personal recomendation its to search a tutorial for the installation of the three in your favorite Linux Distro *;P*
 
 ## Mesa:
 For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
@@ -180,6 +182,37 @@ No GPU Driver its used to render the game here, just the CPU, so it doesnt matte
 | `mesa_glthread=[false/true]`                 | Active or disable threaded optimizations for the OpenGL API.                                                                                  |
 | `MESA_SHADER_CACHE_DISABLE=[false/true]`     | Disable or enable the GPU shader cache on the disk.                                                                                            |
 | `MESA_SHADER_CACHE_DIR=/path/to/location`     | Path for the shader cache.                                                                                                                    |
+
+## Additional Tips 
+
+1. If that of a above its not enought, you might want to check newer kernel versions or patched/customiced kernels(zen, liquorix, xanmod, cachyoskernel, clearkernel, etc), i personally recomend the vanilla kernel tought
+
+2. You might want to use the drop shader cache command of the linux kernel before playing a game, you should do:
+
+   ```
+   sudo su
+   echo 3 > /proc/sys/vm/drop_caches
+   ```
+
+3. You might want to use Mangohud to cap your fps and set the fps cap mode, this its an example:
+
+   ```
+   MANGOHUD_CONFIG=fps_limit=60,fps_limit_method=early,no_display mangohud %command%
+   ```
+
+   What does this do? `MANGOHUD_CONFIG=parameters,parameters` overwrites the current MangoHud config. Another option is to add the following to the MangoHud config file:
+
+   ```
+   fps_limit=60
+   fps_limit_method=early
+   no_display
+   ```
+
+   Also, remember that for MangoHud to work with OpenGL games, you should use `mangohud --dlsym` instead of just `mangohud` in the Steam Launch Parameters.
+
+   You can remove the `no_display` option (which hides the MangoHud HUD), change the `fps_limit` value to any number you like, and change the `fps_limit_method` to `early` (for smoother frametimes) or `late` (for the lowest latency).
+
+   Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options.
 
 ## Testing:
 Games that i have tested so far
