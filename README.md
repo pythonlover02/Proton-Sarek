@@ -152,7 +152,7 @@ First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 | `Zram-Generator`       | Zram, formerly called compcache, is a Linux kernel module for creating a compressed block device in RAM.        | [GitHub - Zram-Generator](https://github.com/systemd/zram-generator) |
 | `MangoHud`              | MangoHud is a Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more.              | [GitHub - MangoHud](https://github.com/flightlessmango/MangoHud) |
 
-My personal recomendation its to search a tutorial for the installation of both in your favorite Linux Distro *;P*
+My personal recomendation its to search a tutorial for the installation of the three in your favorite Linux Distro *;P*
 
 ## Mesa:
 For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
