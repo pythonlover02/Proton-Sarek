@@ -37,6 +37,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
    		- [Mesa](#Mesa)
 		- [Nvidia](#Nvidia)
 		- [Software Rendering](#software-rendering)
+		- [Additional Tips](#additional-tips)
 - [Testing](#Testing)
 - [Building](#Building)
 - [Credits](#Credits)
@@ -181,7 +182,7 @@ No GPU Driver its used to render the game here, just the CPU, so it doesnt matte
 | `MESA_SHADER_CACHE_DISABLE=[false/true]`     | Disable or enable the GPU shader cache on the disk.                                                                                            |
 | `MESA_SHADER_CACHE_DIR=/path/to/location`     | Path for the shader cache.                                                                                                                    |
 
-## Aditional tips 
+## Additional Tips 
 Okay, let me try again without removing any of the original text:
 
 1. If that of a above its not enought, you might want to check newer kernel versions or patched/customiced kernels(zen, liquorix, xanmod, cachyoskernel, clearkernel, etc), i personally recomend the vanilla kernel tought
