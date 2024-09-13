@@ -192,6 +192,7 @@ No GPU Driver its used to render the game here, just the CPU, so it doesnt matte
    ```
    sudo su
    echo 3 > /proc/sys/vm/drop_caches
+   exit
    ```
 
 3. You might want to use Mangohud to cap your fps and set the fps cap mode, this its an example:
