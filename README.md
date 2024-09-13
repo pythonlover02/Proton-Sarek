@@ -183,7 +183,6 @@ No GPU Driver its used to render the game here, just the CPU, so it doesnt matte
 | `MESA_SHADER_CACHE_DIR=/path/to/location`     | Path for the shader cache.                                                                                                                    |
 
 ## Additional Tips 
-Okay, let me try again without removing any of the original text:
 
 1. If that of a above its not enought, you might want to check newer kernel versions or patched/customiced kernels(zen, liquorix, xanmod, cachyoskernel, clearkernel, etc), i personally recomend the vanilla kernel tought
 
