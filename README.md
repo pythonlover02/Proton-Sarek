@@ -74,9 +74,9 @@ Current status and upcoming changes for the Builds. The following features are c
 |-----------------------------------------------------------|--------------------|
 | **DXVK 1.10.3 on Proton**                                 | <span style="color: green;">**Ready**</span>✅               |
 | **Global Patches for the Proton Prefix**                  | <span style="color: green;">**Ready**</span>✅               |
-| **WineD3D uses OpenGL 4.6**                               | <span style="color: lightblue;">**Testing**</span>🔵         |
+| **WineD3D uses OpenGL 4.6**                               | <span style="color: lightblue;">**Ready**</span>✅           |
 | **WineD3D with command stream and command serialization** | <span style="color: lightblue;">**Testing**</span>🔵         |
-| **DXVK Async modification and implementation**            | <span style="color: red;">**Work in Progress**</span>🔴      |
+| **DXVK Async implementation**                             | <span style="color: red;">**Work in Progress**</span>🔴      |
 | **Gallium Nine implementation**                           | <span style="color: red;">**Work in Progress**</span>🔴      |
 
 ## Status Definitions
