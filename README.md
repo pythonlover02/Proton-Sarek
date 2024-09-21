@@ -1,316 +1,292 @@
-Introduction
-------------
+# Proton-For-Old-Vulkan or "Sarek"
+
+Lasted Proton Versions patched to work with DXVK v1.10.3
+
+*Why does this repository exist?*
+
+Because there are still people with Vulkan-compatible GPUs that dont support Vulkan 1.3, but do have support for Vulkan 1.1+. 
+
+Being forced to use WineD3D while playing on Linux or locally patch each version of Proton if playing on Steam.
+The idea is to patch all the stable versions of proton and put them here.
+
+Also understand that because we are using an old version of DXVK, game performance and compatibility will be worse than the newer ones, but it should be better than WineD3D.
+
+Please be aware that this is a custom build of Proton and is **not** affiliated with Valve's Proton. If you encounter any issues specific to my Proton build from this repository that do not occur with Valve's version, kindly refrain from submitting a bug report to Valve's bug github. Instead, please reach out to me directly at my Gmail:pythonloverv2@gmail.com. Thank you for your understanding!
+
+----
+
+[![Badge License](https://img.shields.io/github/license/pythonlover02/Proton-Sarek)](LICENSE)
+![Badge Language](https://img.shields.io/github/languages/top/pythonlover02/Proton-Sarek)
+[![Stars](https://img.shields.io/github/stars/pythonlover02/Proton-Sarek?style=social)](https://github.com/pythonlover02/Proton-Sarek/stargazers)
+![Hello There](https://img.shields.io/badge/hello-_there-blue)
+
+----
+
+# Table of Contents:
+- [Install](#Install)
+	- [Native](#Native)
+	- [Flatpak](#Flatpak)
+- [Roadmap](#Roadmap)
+- [GPU-List](#GPU-List)
+	- [Nvidia](#Nvidia)
+	- [AMD](#AMD)
+- [Parameters](#Parameters)
+	- [Proton](#Proton)
+	- [Optimization](#Optimization)
+		- [System](#System)
+   		- [Mesa](#Mesa)
+		- [Nvidia](#Nvidia)
+		- [Software Rendering](#software-rendering)
+		- [Additional Tips](#additional-tips)
+- [Testing](#Testing)
+- [Building](#Building)
+- [Credits](#Credits)
+
+
+## Install:
+1. Download a release from the release page
+2. Now follow the instruction of the installation for Flatpak Steam or Native Steam
+
+##  *Native*
+
+3. Create a ~/.local/share/Steam/compatibilitytools.d/ directory if it does not exist.
+
+4. Extract the release inside
+ 
+5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+
+6. Restart and thats it!!! Enjoy :P
+ 
+## *Flatpak*
+ 
+3. Create a ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/ directory if it does not exist.
+
+4. Extract the release inside
+ 
+5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+
+6. Restart and thats it!!! Enjoy :P
+
+## Roadmap:
+Current status and upcoming changes for the Builds. The following features are categorized based on their current development status:
+
+| Feature Description                                         | Status             |
+|-----------------------------------------------------------|--------------------|
+| **DXVK 1.10.3 on Proton**                                 | <span style="color: green;">**Ready**</span>✅               |
+| **Global Patches for the Proton Prefix**                  | <span style="color: green;">**Ready**</span>✅               |
+| **WineD3D uses OpenGL 4.6**                               | <span style="color: lightblue;">**Ready**</span>✅           |
+| **WineD3D with command stream and command serialization** | <span style="color: lightblue;">**Testing**</span>🔵         |
+| **DXVK Async implementation**                             | <span style="color: red;">**Work in Progress**</span>🔴      |
+| **Gallium Nine implementation**                           | <span style="color: red;">**Work in Progress**</span>🔴      |
+
+## Status Definitions
+- **Ready**: The change is included in both the Stable and Testing Builds.
+- **Testing**: The change is only available in the Testing build.
+- **Work in Progress**: Currently being worked on, might be included in the next Testing Release.
+
+## GPU-List
+This List still very much work in progress, if you know about a GPU that have Vulkan 1.1+ support but less than 1.3, that its not listed here pls write a gmail at pythonloverv2@gmail.com with the gpu name and the source. And thank you!!
+
+## Nvidia
+| Series                   | Graphics Cards                                                                                                                |
+|--------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| **GeForce 700 Series**   | GeForce GTX 780 Ti, GeForce GTX 780, GeForce GTX 770, GeForce GTX 760, GeForce GTX 760 Ti (OEM), GeForce GTX 750 Ti, GeForce GTX 750, GeForce GTX 745, GeForce GT 740, GeForce GT 730, GeForce GT 720, GeForce GT 710 |
+| **GeForce 600 Series**   | GeForce GTX 690, GeForce GTX 680, GeForce GTX 670, GeForce GTX 660 Ti, GeForce GTX 660, GeForce GTX 650 Ti BOOST, GeForce GTX 650 Ti, GeForce GTX 650, GeForce GTX 645, GeForce GT 640, GeForce GT 635, GeForce GT 630 |
+| **GeForce 600M Series**  | GeForce GT 640M LE                                                                                                         |
+| **NVIDIA TITAN Series**  | GeForce GTX TITAN X, GeForce GTX TITAN, GeForce GTX TITAN Black, GeForce GTX TITAN Z                                         |
+| **Quadro Series**        | Quadro M6000 24GB, Quadro M6000, Quadro M5000, Quadro M4000, Quadro M2000, Quadro K6000, Quadro K5200, Quadro K5000, Quadro K4000, Quadro K4200, Quadro K2200, Quadro K2000, Quadro K2000D, Quadro K1200, Quadro K620, Quadro K600, Quadro K420, Quadro 410 |
+| **Quadro NVS Series**    | NVS 510                                                                                                                     |
+| **GRID Series**          | GRID K520                                                                                                                  |
+
+## AMD:
+| Series                     | Graphics Cards                                                                                                                  |
+|----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| **Southern Islands (HD 7300)**  | Radeon HD 7350 OEM PCI, Radeon HD 7350 OEM                                                                                      |
+| **Southern Islands (HD 7400)**  | Radeon HD 7450 OEM, Radeon HD 7470 OEM                                                                                      |
+| **Southern Islands (HD 7500)**  | Radeon HD 7510 OEM, Radeon HD 7570 OEM, Radeon HD 7570                                                                          |
+| **Southern Islands (HD 7600)**  | Radeon HD 7670 OEM                                                                                                           |
+| **Southern Islands (HD 7700)**  | Radeon HD 7720 OEM, Radeon HD 7730, Radeon HD 7750, Radeon HD 7770 GHz Edition, Radeon HD 7790                                 |
+| **Southern Islands (HD 7800)**  | Radeon HD 7850, Radeon HD 7870 GHz Edition, Radeon HD 7870 XT                                                                  |
+| **Southern Islands (HD 7900)**  | Radeon HD 7950 Monica BIOS 1, Radeon HD 7950 Monica BIOS 2, Radeon HD 7950 Mac Edition, Radeon HD 7950, Radeon HD 7950 Boost, Radeon HD 7970, Radeon HD 7970 GHz Edition, Radeon HD 7970 X2, Radeon HD 7990 |
+| **Sea Islands (HD 8300)**       | Radeon HD 8350 OEM                                                                                                           |
+| **Sea Islands (HD 8400)**       | Radeon HD 8450 OEM, Radeon HD 8470 OEM, Radeon HD 8490 OEM                                                                   |
+| **Sea Islands (HD 8500)**       | Radeon HD 8510 OEM (multiple variants), Radeon HD 8550 OEM, Radeon HD 8570 OEM Rebrand, Radeon HD 8570 OEM                   |
+| **Sea Islands (HD 8600)**       | Radeon HD 8670 OEM                                                                                                           |
+| **Sea Islands (HD 8700)**       | Radeon HD 8730 OEM, Radeon HD 8740 OEM, Radeon HD 8760 OEM, Radeon HD 8770 OEM                                                |
+| **Sea Islands (HD 8800)**       | Radeon HD 8860 OEM, Radeon HD 8870 OEM                                                                                        |
+| **Sea Islands (HD 8900)**       | Radeon HD 8950 OEM, Radeon HD 8970 OEM, Radeon HD 8990 OEM                                                                    |
+
+## Parameters:
+
+## Proton:
+This are set on the Launch Options of a game on Steam, example:
+
+	PROTON_USE_WINED3D=1 PROTON_NO_ESYNC=1 mesa_glthread=true %command%
+
+The Optimzation variables are set on the same way on the launch options
+
+| Environment Variable                          | Description                                                                                                                                     |
+|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `PROTON_USE_WINED3D=[0/1]`                   | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d9 to d3d11.                                                                     |
+| `PROTON_NO_D3D12=[0/1]`                      | Disables DX12.                                                                                                                                 |
+| `PROTON_NO_D3D11=[0/1]`                      | Disables DX11.                                                                                                                                 |
+| `PROTON_NO_D3D10=[0/1]`                      | Disables DX10.                                                                                                                                 |
+| `PROTON_NO_D3D9=[0/1]`                       | Disables DX9.                                                                                                                                  |
+| `PROTON_NO_ESYNC=[0/1]`                      | Do not use eventfd-based in-process synchronization primitives.                                                                                |
+| `PROTON_NO_FSYNC=[0/1]`                      | Do not use futex-based in-process synchronization primitives.                                                                                  |
+| `PROTON_FORCE_LARGE_ADDRESS_AWARE=[0/1]`    | Force Wine to enable the LARGE_ADDRESS_AWARE flag for all executables.                                                                        |
+| `PROTON_HEAP_DELAY_FREE=[0/1]`               | Delay freeing some memory, to work around application use-after-free bugs.                                                                     |
+| `PROTON_ENABLE_NVAPI=[0/1]`                  | Enable NVIDIA's NVAPI GPU support library.                                                                                                    |
+| `PROTON_OLD_GL_STRING=[0/1]`                 | Set some driver overrides to limit the length of the GL extension string, for old games that crash on very long extension strings.             |
+| `PROTON_USE_XALIA=[0/1]`                     | Enable Xalia, a program that can add a gamepad UI for some keyboard/mouse interfaces.                                                         |
+| `MESA_GL_VERSION_OVERRIDE=4.6 MESA_GLSL_VERSION_OVERRIDE=460`               | Only for Mesa, it changes the default string of the OpenGL version to OpenGL 4.6, faking it and making the game believe that your GPU supports that version. The game may open or not; if it doesn't open, your only solution is [Software Rendering](#software-rendering). |
 
-**Proton** is a tool for use with the Steam client which allows games which are
-exclusive to Windows to run on the Linux operating system. It uses Wine to
-facilitate this.
+## Optimization:
 
-**Most users should use Proton provided by the Steam Client itself.** See
-[this Steam Community post][steam-play-introduction] for more details.
+## System:
+First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 
-The source code is provided to enable advanced users the ability to alter
-Proton. For example, some users may wish to use a different version of Wine
-with a particular title.
+| Tool/Library          | Description                                                                                                      | Link                                                 |
+|-----------------------|------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|
+| `GameMode`               | GameMode is a daemon/lib combo for Linux that allows games to request a set of optimizations to be temporarily applied to the host OS and/or a game process. | [GitHub - GameMode](https://github.com/FeralInteractive/gamemode) |
+| `Zram-Generator`       | Zram, formerly called compcache, is a Linux kernel module for creating a compressed block device in RAM.        | [GitHub - Zram-Generator](https://github.com/systemd/zram-generator) |
+| `MangoHud`              | MangoHud is a Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more.              | [GitHub - MangoHud](https://github.com/flightlessmango/MangoHud) |
 
-**The changelog** is available on [our wiki][changelog].
+My personal recomendation its to search a tutorial for the installation of the three in your favorite Linux Distro *;P*
 
-[steam-play-introduction]: https://steamcommunity.com/games/221410/announcements/detail/1696055855739350561
-[changelog]: https://github.com/ValveSoftware/Proton/wiki/Changelog
+## Mesa:
+For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
 
+| Environment Variable                    | Description                                                                                         |
+|-----------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `mesa_glthread=[false/true]`           | Active or disable threaded optimizations for the OpenGL API.                                      |
+| `MESA_SHADER_CACHE_DISABLE=[false/true]` | Disable or enable the GPU shader cache on the disk.                                              |
+| `MESA_SHADER_CACHE_DIR=/path/to/location` | Path for the shader cache.                                                                         |
 
-Obtaining Proton sources
-------------------------
+## Nvidia:
+Nvidia GPUs with the Propietary Driver
 
-Acquire Proton's source by cloning <https://github.com/ValveSoftware/Proton>
-and checking out the branch you desire.
+| Environment Variable                       | Description                                                                                                                                    |
+|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `__GL_THREADED_OPTIMIZATIONS=[0/1]`       | Active or disable threaded optimizations for the OpenGL API; while it can help to increase FPS, in some games it may worsen performance.       |
+| `__GL_SHADER_DISK_CACHE=[0/1]`            | Enable or disable the GPU shader cache on the disk.                                                                                          |
+| `__GL_SHADER_DISK_CACHE_PATH=/path/to/location` | Path for the shader cache.                                                                                                                    |
 
-You can clone the latest Proton to your system with this command:
+## Software Rendering:
+No GPU Driver its used to render the game here, just the CPU, so it doesnt matter if you have the Nvidia Propietary Driver installed. But remember that you should have Mesa on your system
 
-```bash
-git clone --recurse-submodules https://github.com/ValveSoftware/Proton.git proton
-```
+| Environment Variable                          | Description                                                                                                                                     |
+|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `LIBGL_ALWAYS_SOFTWARE=1`                     | Enables software rendering for the OpenGL API (4.5 is the maximum version supported). Not recommended for performance, but can be useful if no compatible GPU is available; uses CPU for rendering, which is slow. |
+| `__GLX_VENDOR_LIBRARY_NAME=mesa`              | Specifies the use of the Mesa GLX vendor library for OpenGL rendering, use it when you are using the Nvidia Propietary Driver.               |
+| `mesa_glthread=[false/true]`                 | Active or disable threaded optimizations for the OpenGL API.                                                                                  |
+| `MESA_SHADER_CACHE_DISABLE=[false/true]`     | Disable or enable the GPU shader cache on the disk.                                                                                            |
+| `MESA_SHADER_CACHE_DIR=/path/to/location`     | Path for the shader cache.                                                                                                                    |
 
-Be sure to update submodules when switching between branches:
+## Additional Tips 
 
-```bash
-git checkout experimental_6.3
-git submodule update --init --recursive
-```
+1. If that of a above its not enought, you might want to check newer kernel versions or patched/customiced kernels(zen, liquorix, xanmod, cachyoskernel, clearkernel, etc), i personally recomend the vanilla kernel tought
 
-If you want to change any subcomponent, now is the time to do so. For
-example, if you wish to make changes to Wine, you would apply them to the
-`wine/` directory.
+2. You might want to use the drop shader cache command of the linux kernel before playing a game, you should do:
 
+   ```
+   sudo su
+   echo 3 > /proc/sys/vm/drop_caches
+   exit
+   ```
 
-Building Proton
----------------
+3. You might want to use Mangohud to cap your fps and set the fps cap mode, this its an example:
 
-Most of Proton builds inside the Proton SDK container with very few
-dependencies on the host side.
+   ```
+   MANGOHUD_CONFIG=fps_limit=60,fps_limit_method=early,no_display mangohud %command%
+   ```
 
-## Preparing the build environment
+   What does this do? `MANGOHUD_CONFIG=parameters,parameters` overwrites the current MangoHud config. Another option is to add the following to the MangoHud config file:
 
-You need either a Docker or a Podman setup. We highly recommend [the rootless
-Podman setup][rootless-podman]. Please refer to your distribution's
-documentation for setup instructions (e.g. Arch [Podman][arch-podman] /
-[Docker][arch-docker], Debian [Podman][debian-podman] /
-[Docker][debian-docker]).
+   ```
+   fps_limit=60
+   fps_limit_method=early
+   no_display
+   ```
 
-[rootless-podman]: https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md
-[arch-podman]: https://wiki.archlinux.org/title/Podman
-[arch-docker]: https://wiki.archlinux.org/title/Docker
-[debian-podman]: https://wiki.debian.org/Podman
-[debian-docker]: https://wiki.debian.org/Docker
+   Also, remember that for MangoHud to work with OpenGL games, you should use `mangohud --dlsym` instead of just `mangohud` in the Steam Launch Parameters.
 
+   You can remove the `no_display` option (which hides the MangoHud HUD), change the `fps_limit` value to any number you like, and change the `fps_limit_method` to `early` (for smoother frametimes) or `late` (for the lowest latency).
 
-## The Easy Way
+   Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options.
 
-We provide a top-level Makefile which will execute most of the build commands
-for you.
+## Testing:
+Games that i have tested so far
 
-After checking out the repository and updating its submodules, assuming that
-you have a working Docker or Podman setup, you can build and install Proton
-with a simple:
+| Game                        | Status                                         | Issues/Notes                                                | Screenshot                                                            |
+|-----------------------------|------------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------|
+| **ULTRAKILL**               | Playable with DXVK 1.10.3 and WineD3D       | No issues so far; experience is the same as with DXVK 2.4.0 | ![Screenshot](https://github.com/user-attachments/assets/e9ab1204-b95b-4b4d-9405-cf8de0cb4537) |
+| **Dark Souls III**          | Playable with DXVK 1.10.3 and WineD3D       | Higher GPU usage than v2.4.0; occasional stutters          | ![Screenshot](https://github.com/user-attachments/assets/d9aed291-588a-4ada-9846-e2ab60d1beb3) |
+| **Project Wingman**         | Unplayable with DXVK 1.10.3 or WineD3D      | Needs a patch; works with DXVK 2.4.0                      | ![Screenshot](https://github.com/user-attachments/assets/52ac464c-0ee7-408d-8031-27bf3361842a) |
+| **Red Orchestra 2**         | Playable with DXVK 1.10.3 and WineD3D       | Graphical glitches on sky; stutters at start               | ![Screenshot](https://github.com/user-attachments/assets/0b13b35e-ffef-4899-be2a-7097ae691303) |
+| **S.T.A.L.K.E.R Call Of The Zone** | Playable with DXVK 1.10.3 and WineD3D | No issues so far                                           | ![Screenshot](https://github.com/user-attachments/assets/c86f8e09-4e35-4bfd-af12-ff2531e52ab8) |
 
-```bash
-make install
-```
+## Building:
 
-If your build system is missing dependencies, it will fail quickly with a clear
-error message.
+Heres the neat part, you dont :), now out of jokes, i manually assemble the next release based on the already compiled Proton or Proton GE version.
 
-After the build finishes, you may need to restart the Steam client to see the
-new Proton tool. The tool's name in the Steam client will be based on the
-currently checked out branch of Proton. You can override this name using the
-`build_name` variable.
+Why do I assemble it this way? Because I find it easier. I know that easier doesn't mean it's the right approach, but I try to do my best. Also, if we keep out the overwrite of the DXVK version, the only changes are in the wine.inf file, which contains the Proton/Wine prefix configuration. Features like using OpenGL 4.6 with WineD3D with command stream and command serialization were achieved there.
 
-See `make help` for other build targets and options.
+I’m not a great coder like most of the people out there on the Linux community; I just want to share the builds I've modified for my friends (both of them have GT 710s). So yeah, I am an amateur trying his best.
 
+So How i replicate the releases here?
 
+Simple just follow this steps:
 
-## Manual building
+1. Download the DXVK version that you want to use
 
-### Configuring the build
+2. Download the wine.inf file of the GitHub (If you want to use my patches and custom prefix)
 
-```bash
-mkdir ../build && cd ../build
-../proton/configure.sh --enable-ccache --build-name=my_build
-```
+3. Copy the contents of the DXVK/x32/ to ProtonBuild/files/lib/wine/dxvk/
 
-Running `configure.sh` will create a `Makefile` allowing you to build Proton.
-The scripts checks if containers are functional and prompt you if any
-host-side dependencies are missing. You should run the command from a
-directory created specifically for your build.
+4. Copy the contents of the DXVK/x64/ to ProtonBuild/files/lib64/wine/dxvk/
 
-The configuration script tries to discover a working Docker or Podman setup
-to use, but you can force a compatible engine with
-`--container-engine=<executable_name>`.
+5. Copy the wine.inf file to ProtonBuild/files/share/wine/
 
-You can enable ccache with `--enable-cache` flag. This will mount your
-`$CCACHE_DIR` or `$HOME/.ccache` inside the container.
+6. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
 
-`--proton-sdk-image=registry.gitlab.steamos.cloud/proton/soldier/sdk:<version>`
-can be used to build with a custom version of the Proton SDK images.
+7. Enjoy :P 
 
-Check `--help` for other configuration options.
+## Credits:
+This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
 
-NOTE: If **SELinux** is in use, the Proton build container may fail to access
-your user's files. This is caused by [SELinux's filesystem
-labels][selinux-labels]. You may pass the `--relabel-volumes` switch to
-configure to cause the [container engine to relabel its
-bind-mounts][bind-mounts] and allow access to those files from within the
-container. This can be dangerous when used with system directories. Proceed
-with caution and refer your container engine's manual.
+Valve: https://github.com/ValveSoftware/Proton
 
-[selinux-labels]: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/security-enhanced_linux/sect-security-enhanced_linux-working_with_selinux-selinux_contexts_labeling_files
-[bind-mounts]: https://docs.docker.com/storage/bind-mounts/
+GloriousEggroll: https://github.com/GloriousEggroll/proton-ge-custom && https://www.patreon.com/gloriouseggroll
 
+Kron4ek: https://github.com/Kron4ek/Wine-Builds/releases
 
-### Building
+doitsujin/ドイツ人 (Philip Rebohle): https://github.com/doitsujin/dxvk
 
-```
-make
-```
+Sporif: https://github.com/Sporif/dxvk-async
 
-**Important make targets:**
+TKG (Etienne Juvigny): https://github.com/Frogging-Family/wine-tkg-git && https://www.patreon.com/tkglitch
 
-`make install` - install Proton into your user's Steam directory, see the [install Proton
-locally](#install-proton-locally) section for details.
+HansKristian/themaister (Hans-Kristian Arntzen): https://github.com/HansKristian-Work/vkd3d-proton
 
-`make redist` - create a redistribute build (`redist/`) that can be copied to
-`~/.steam/root/compatibilitytools.d/`.
+Also i want to thanks all of those reddit users that help me make the Supported GPU List:
 
-`make deploy` - create a deployment build (`deploy/`). This is what we use to
-deploy Proton to Steam users via Steamworks.
+	wolfegothmog
 
-`make module=<module> module` - build both 32- and 64-bit versions of the
-specified wine module. This allows rapid iteration on one module. This target
-is only useful after building Proton.
+	mrvictorywin
 
-`make dxvk` / `make vkd3d-proton` - rebuild DXVK / vkd3d-proton.
+	Alternative-Pie345
 
+	Cool-Arrival-2617
 
-### Debug Builds
+	oln
 
-To prevent symbol stripping add `UNSTRIPPED_BUILD=1` to the `make`
-invocation. This should be used only with a clean build directory.
+	Informal-Clock
 
-E.g.:
+	turdas
 
-```
-mkdir ../debug-proton-build && cd ../debug-proton-build
-../proton/configure.sh --enable-ccache --build-name=debug_build
-make UNSTRIPPED_BUILD=1 install
-```
+	AlienOverlordXenu 
 
-
-Install Proton locally
-----------------------
-
-Steam ships with several versions of Proton, which games will use by default or
-that you can select in Steam Settings' Steam Play page. Steam also supports
-running games with local builds of Proton, which you can install on your
-machine.
-
-To install a local build of Proton into Steam, make a new directory in
-`~/.steam/root/compatibilitytools.d/` with a tool name of your choosing and
-place the directory containing your redistributable build under that path.
-
-The `make install` target will perform this task for you, installing the
-Proton build into the Steam folder for the current user. You will have to
-restart the Steam client for it to pick up on a new tool.
-
-A correct local tool installation should look similar to this:
-
-```
-compatibilitytools.d/my_proton/
-├── compatibilitytool.vdf
-├── filelock.py
-├── LICENSE
-├── proton
-├── proton_dist.tar
-├── toolmanifest.vdf
-├── user_settings.sample.py
-└── version
-```
-
-To enable your local build in Steam, go to the Steam Play section of the
-Settings window. If the build was correctly installed, you should see
-"proton-localbuild" in the drop-down list of compatibility tools.
-
-Each component of this software is used under the terms of their licenses.
-See the `LICENSE` files here, as well as the `LICENSE`, `COPYING`, etc files
-in each submodule and directory for details. If you distribute a built
-version of Proton to other users, you must adhere to the terms of these
-licenses.
-
-
-Debugging
----------
-
-Proton builds have their symbols stripped by default. You can switch to
-"debug" beta branch in Steam (search for Proton in your library,
-Properties... -> BETAS -> select "debug") or build without stripping (see
-[Debug Builds section](#debug-builds)).
-
-The symbols are provided through the accompanying `.debug` files which may
-need to be explicitly loaded by the debugging tools. For GDB there's a helper
-script `wine/tools/gdbinit.py` (source it) that provides `load-symbol-files`
-(or `lsf` for short) command which loads the symbols for all the mapped files.
-
-For tips on debugging see [docs/DEBUGGING.md](docs/DEBUGGING.md).
-
-
-`compile_commands.json`
------------------------
-
-For use with [clangd](https://clangd.llvm.org/) LSP server and similar tooling.
-
-Projects built using cmake or meson (e.g. vkd3d-proton) automatically come with
-`compile_commands.json`. For autotools (e.g. wine) you have to [configure the
-build](#configuring-the-build) with `--enable-bear` that uses
-[bear](https://github.com/rizsotto/Bear) to create the compilation database.
-It's not on by default as it make the build slightly slower.
-
-The build system collects all the created compile_commands.json files in a
-build subdirectory named `compile_commands/`.
-
-The paths are translated to point to the real source (i.e. not the rsynced
-copy). It still may depend on build directory for things like auto-generated
-`config.h` though and for wine it may be beneficial to run `tools/make_requests`
-in you source directories as those changes are not committed.
-
-You can then configure your editor to use that file for clangd in a few ways:
-
-1) directly - some editors/plugins allow you to specify the path to `compile_commands.json`
-2) via `.clangd` file, e.g.
-```bash
-cd src/proton/wine/
-cat > .clangd <<EOF
-CompileFlags:
-  CompilationDatabase: ../build/current-dev/compile_commands/wine64/
-EOF
-```
-3) by symlinking:
-```bash
-ln -s ../build/current-dev/compile_commands/wine64/compile_commands.json .
-```
-
-
-Runtime Config Options
-----------------------
-
-Proton can be tuned at runtime to help certain games run. The Steam client sets
-some options for known games using the `STEAM_COMPAT_CONFIG` variable.
-You can override these options using the environment variables described below.
-
-The best way to set these environment overrides for all games is by renaming
-`user_settings.sample.py` to `user_settings.py` and modifying it appropriately.
-This file is located in the Proton installation directory in your Steam library
-(often `~/.steam/steam/steamapps/common/Proton #.#`).
-
-If you want to change the runtime configuration for a specific game, you can
-use the `Set Launch Options` setting in the game's `Properties` dialog in the
-Steam client. Set the variable, followed by `%command%`. For example, input
-"`PROTON_USE_WINED3D=1 %command%`" to use the OpenGL-based wined3d renderer
-instead of the Vulkan-based DXVK renderer.
-
-To enable an option, set the variable to a non-`0` value.  To disable an
-option, set the variable to `0`. To use Steam's default configuration, do
-not specify the variable at all.
-
-All of the below are runtime options. They do not effect permanent changes to
-the Wine prefix. Removing the option will revert to the previous behavior.
-
-| Compat config string  | Environment Variable               | Description  |
-| :-------------------- | :--------------------------------- | :----------- |
-|                       | `PROTON_LOG`                       | Convenience method for dumping a useful debug log to `$PROTON_LOG_DIR/steam-$APPID.log`. Set to `1` to enable default logging, or set to a string to be appended to the default `WINEDEBUG` channels. |
-|                       | `PROTON_LOG_DIR`                   | Output log files into the directory specified. Defaults to your home directory. |
-|                       | `PROTON_WAIT_ATTACH`               | Wait for a debugger to attach to steam.exe before launching the game process. To attach to the game process at startup, debuggers should be set to follow child processes. |
-|                       | `PROTON_CRASH_REPORT_DIR`          | Write crash logs into this directory. Does not clean up old logs, so may eat all your disk space eventually. |
-| `wined3d`             | `PROTON_USE_WINED3D`               | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d11, d3d10, and d3d9. |
-| `nod3d11`             | `PROTON_NO_D3D11`                  | Disable `d3d11.dll`, for d3d11 games which can fall back to and run better with d3d9. |
-| `nod3d10`             | `PROTON_NO_D3D10`                  | Disable `d3d10.dll` and `dxgi.dll`, for d3d10 games which can fall back to and run better with d3d9. |
-| `dxvkd3d8`            | `PROTON_DXVK_D3D8`                 | Use DXVK's `d3d8.dll`. |
-| `noesync`             | `PROTON_NO_ESYNC`                  | Do not use eventfd-based in-process synchronization primitives. |
-| `nofsync`             | `PROTON_NO_FSYNC`                  | Do not use futex-based in-process synchronization primitives. (Automatically disabled on systems with no `FUTEX_WAIT_MULTIPLE` support.) |
-| `noxim`               | `PROTON_NO_XIM`                    | Enabled by default. Do not attempt to use XIM (X Input Methods) support. XIM support is known to cause crashes with libx11 older than version 1.7. |
-| `disablenvapi`        | `PROTON_DISABLE_NVAPI`             | Disable NVIDIA's NVAPI GPU support library. |
-| `nativevulkanloader`  |                                    | Use the Vulkan loader shipped with the game instead of Proton's built-in Vulkan loader. This breaks VR support, but is required by a few games. |
-| `forcelgadd`          | `PROTON_FORCE_LARGE_ADDRESS_AWARE` | Force Wine to enable the LARGE_ADDRESS_AWARE flag for all executables. Enabled by default. |
-| `heapdelayfree`       | `PROTON_HEAP_DELAY_FREE`           | Delay freeing some memory, to work around application use-after-free bugs. |
-| `gamedrive`           | `PROTON_SET_GAME_DRIVE`            | Create an S: drive which points to the Steam Library which contains the game. |
-| `noforcelgadd`        |                                    | Disable forcelgadd. If both this and `forcelgadd` are set, enabled wins. |
-| `oldglstr`            | `PROTON_OLD_GL_STRING`             | Set some driver overrides to limit the length of the GL extension string, for old games that crash on very long extension strings. |
-| `vkd3dfl12`           |                                    | Force the Direct3D 12 feature level to 12, regardless of driver support. |
-| `vkd3dbindlesstb`     |                                    | Put `force_bindless_texel_buffer` into `VKD3D_CONFIG`. |
-| `nomfdxgiman`         | `WINE_DO_NOT_CREATE_DXGI_DEVICE_MANAGER` | Enable hack to work around video issues in some games due to incomplete IMFDXGIDeviceManager support. |
-| `noopwr`              | `WINE_DISABLE_VULKAN_OPWR`               | Enable hack to disable Vulkan other process window rendering which sometimes causes issues on Wayland due to blit being one frame behind. |
-| `hidenvgpu`           | `PROTON_HIDE_NVIDIA_GPU`           | Force Nvidia GPUs to always be reported as AMD GPUs. Some games require this if they depend on Windows-only Nvidia driver functionality. See also DXVK's nvapiHack config, which only affects reporting from Direct3D. |
-|                       | `WINE_FULLSCREEN_INTEGER_SCALING`  | Enable integer scaling mode, to give sharp pixels when upscaling. |
-| `cmdlineappend:`      |                                    | Append the string after the colon as an argument to the game command. May be specified more than once. Escape commas and backslashes with a backslash. |
-| `xalia`               | `PROTON_USE_XALIA`                 | Enable Xalia, a program that can add a gamepad UI for some keyboard/mouse interfaces. |
-| `seccomp`             | `PROTON_USE_SECCOMP`               | **Note: Obsoleted in Proton 5.13.** In older versions, enable seccomp-bpf filter to emulate native syscalls, required for some DRM protections to work. |
-| `d9vk`                | `PROTON_USE_D9VK`                  | **Note: Obsoleted in Proton 5.0.** In older versions, use Vulkan-based DXVK instead of OpenGL-based wined3d for d3d9. |
-
-<!-- Target:  GitHub Flavor Markdown.  To test locally:  pandoc -f markdown_github -t html README.md  -->
+And the Great Redditor that came with the name ❤️:
+	
+ 	Meshuggah333
