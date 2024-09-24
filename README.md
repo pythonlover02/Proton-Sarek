@@ -81,8 +81,8 @@ Current status and upcoming changes for the Builds. The following features are c
 
 ## Status Definitions
 - **Ready**: The change is included in the Stable, Stable Async and Testing Builds.
-- **Async**: The change is only available in the Async build.
-- **Testing**: The change is only available in the Testing build.
+- **Async**: The change is available in the Async build.
+- **Testing**: The change is available in the Testing build.
 - **Work in Progress**: Currently being worked on, might be included in the next Testing Release.
 
 ## GPU-List
