@@ -72,15 +72,16 @@ Current status and upcoming changes for the Builds. The following features are c
 
 | Feature Description                                         | Status             |
 |-----------------------------------------------------------|--------------------|
-| **DXVK 1.10.3 on Proton**                                 | <span style="color: green;">**Ready**</span>✅               |
-| **Global Patches for the Proton Prefix**                  | <span style="color: green;">**Ready**</span>✅               |
-| **WineD3D uses OpenGL 4.6**                               | <span style="color: lightblue;">**Ready**</span>✅           |
-| **WineD3D with command stream and command serialization** | <span style="color: lightblue;">**Testing**</span>🔵         |
-| **DXVK Async implementation**                             | <span style="color: red;">**Work in Progress**</span>🔴      |
-| **Gallium Nine implementation**                           | <span style="color: red;">**Work in Progress**</span>🔴      |
+| **DXVK 1.10.3 on Proton**                                 | <span style="color: green;">**Ready**</span>               |
+| **Global Patches for the Proton Prefix**                  | <span style="color: green;">**Ready**</span>               |
+| **WineD3D uses OpenGL 4.6**                               | <span style="color: green;">**Ready**</span>               |
+| **WineD3D with command stream and command serialization** | <span style="color: green;">**Ready**</span>               |
+| **DXVK Async implementation**                             | <span style="color: green;">**Async**</span>               |
+| **Gallium Nine implementation**                           | <span style="color: green;">**Work in Progress**</span>    |
 
 ## Status Definitions
-- **Ready**: The change is included in both the Stable and Testing Builds.
+- **Ready**: The change is included in the Stable, Stable Async and Testing Builds.
+- **Async**: The change is only available in the Async build.
 - **Testing**: The change is only available in the Testing build.
 - **Work in Progress**: Currently being worked on, might be included in the next Testing Release.
 
