@@ -21,8 +21,9 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 	- [Native](#Native)
 	- [Flatpak](#Flatpak)
 - [Roadmap](#Roadmap)
-- [GPU-List](#GPU-List)
-	- [Nvidia](#Nvidia)
+- [Known Bugs](#Known-Bugs)
+- [GPU List](#GPU-List)
+	- [NVIDIA](#NVIDIA)
 	- [AMD](#AMD)
 - [Parameters](#Parameters)
 	- [Proton](#Proton)
@@ -30,8 +31,8 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 		- [System](#System)
    		- [Mesa](#Mesa)
 		- [Nvidia](#Nvidia)
-		- [Software Rendering](#software-rendering)
-		- [Additional Tips](#additional-tips)
+		- [Software Rendering](#Software-Rendering)
+		- [Additional Tips](#Additional-Tips)
 - [Testing](#Testing)
 - [Building](#Building)
 - [Credits](#Credits)
@@ -79,10 +80,21 @@ Current status and upcoming changes for the Builds. The following features are c
 - **Testing**: The change is available in the Testing build.
 - **Work in Progress**: Currently being worked on, might be included in the next Testing Release.
 
-## GPU-List
+## Known Bugs:
+Somethimes, when using WineD3D, the maximum supported OpenGL version is capped at 4.4 instead of the expected 4.6. This appears to be a glitch that can be temporarily resolved by following these steps:
+
+1. Start the game using a different Proton version.
+
+2. Once the game is running and rendering properly, close it.
+
+3. Switch back to the desired Sarek Proton build.
+
+4. Open the game, and it should now use the correct OpenGL version.
+
+## GPU List
 This List still very much work in progress, if you know about a GPU that have Vulkan 1.1+ support but less than 1.3, that its not listed here pls write a gmail at pythonloverv2@gmail.com with the gpu name and the source. And thank you!!
 
-## Nvidia
+## NVIDIA:
 | Series                   | Graphics Cards                                                                                                                |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------|
 | **GeForce 700 Series**   | GeForce GTX 780 Ti, GeForce GTX 780, GeForce GTX 770, GeForce GTX 760, GeForce GTX 760 Ti (OEM), GeForce GTX 750 Ti, GeForce GTX 750, GeForce GTX 745, GeForce GT 740, GeForce GT 730, GeForce GT 720, GeForce GT 710 |
