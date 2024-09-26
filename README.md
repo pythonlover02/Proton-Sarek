@@ -91,6 +91,8 @@ Somethimes, when using WineD3D, the maximum supported OpenGL version is capped a
 
 4. Open the game, and it should now use the correct OpenGL version.
 
+I’m still investigating a permanent solution to this issue, but this workaround has proven effective in the meantime.
+
 ## GPU List
 This List still very much work in progress, if you know about a GPU that have Vulkan 1.1+ support but less than 1.3, that its not listed here pls write a gmail at pythonloverv2@gmail.com with the gpu name and the source. And thank you!!
 
