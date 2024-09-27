@@ -247,19 +247,21 @@ So How i replicate the releases here?
 
 Simple just follow this steps:
 
-1. Download the DXVK version that you want to use
+1. Compile or Download the Proton Version that you want to use
 
-2. Download the wine.inf file of the GitHub (If you want to use my patches and custom prefix)
+2. Download the DXVK version that you want to use
 
-3. Copy the contents of the DXVK/x32/ to ProtonBuild/files/lib/wine/dxvk/
+3. Download the wine.inf file of the GitHub (If you want to use my patches and custom prefix)
 
-4. Copy the contents of the DXVK/x64/ to ProtonBuild/files/lib64/wine/dxvk/
+4. Copy the contents of the DXVK/x32/ to ProtonBuild/files/lib/wine/dxvk/
 
-5. Copy the wine.inf file to ProtonBuild/files/share/wine/
+5. Copy the contents of the DXVK/x64/ to ProtonBuild/files/lib64/wine/dxvk/
 
-6. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
+6. Copy the wine.inf file to ProtonBuild/files/share/wine/
 
-7. Enjoy :P 
+7. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
+
+8. Enjoy :P 
 
 ## Credits:
 This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
