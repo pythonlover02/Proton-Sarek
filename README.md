@@ -257,7 +257,7 @@ Simple just follow this steps:
 
 6. Copy the wine.inf file to ProtonBuild/files/share/wine/
 
-7. Add any extra configuration that you would want to add to the wine.inf, what dlls will be on native, building or both, this can be do per game or in general; regedit keys and values to modify the Proton behavior(Set a determinated Video Memory Size, CSMT, etc). Check out:https://gitlab.winehq.org/wine/wine/-/wikis/Useful-Registry-Keys for more info.
+7. Add any extra configuration that you would want to add to the wine.inf, what dlls will be on native, building or both, this can be do per game or in general; regedit keys and values to modify the Proton behavior(Set a determinated Video Memory Size, CSMT, etc). Check out [WineHQ  Useful Registry Keys](https://gitlab.winehq.org/wine/wine/-/wikis/Useful-Registry-Keys for more info).
 
 8. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
 
