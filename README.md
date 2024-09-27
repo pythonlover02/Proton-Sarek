@@ -237,11 +237,9 @@ Games that i have tested so far
 
 ## Building:
 
-Heres the neat part, you dont :), now out of jokes, i manually assemble the next release based on the already compiled Proton or Proton GE version.
+Heres the neat part, you dont :), now out of jokes, i manually assemble the next release based on a locally compiled Proton or Proton GE version, or if i dont that much time i download and already compiled build and work with that.
 
 Why do I assemble it this way? Because I find it easier. I know that easier doesn't mean it's the right approach, but I try to do my best. Also, if we keep out the overwrite of the DXVK version, the only changes are in the wine.inf file, which contains the Proton/Wine prefix configuration. Features like using OpenGL 4.6 with WineD3D with command stream and command serialization were achieved there.
-
-I’m not a great coder like most of the people out there on the Linux community; I just want to share the builds I've modified for my friends (both of them have GT 710s). So yeah, I am an amateur trying his best.
 
 So How i replicate the releases here?
 
@@ -259,9 +257,11 @@ Simple just follow this steps:
 
 6. Copy the wine.inf file to ProtonBuild/files/share/wine/
 
-7. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
+7. Add any extra configuration that you would want to add to the wine.inf, what dlls will be on native, building or both, this can be do per game or in general; regedit keys and values to modify the Proton behavior(Set a determinated Video Memory Size, CSMT, etc). Check out [WineHQ  Useful Registry Keys](https://gitlab.winehq.org/wine/wine/-/wikis/Useful-Registry-Keys) for more info.
 
-8. Enjoy :P 
+8. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
+
+9. Enjoy :P 
 
 ## Credits:
 This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
