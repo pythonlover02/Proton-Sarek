@@ -81,7 +81,7 @@ Current status and upcoming changes for the Builds. The following features are c
 - **Work in Progress**: Currently being worked on, might be included in the next Testing Release.
 
 ## Known Bugs:
-Somethimes, when using WineD3D, the maximum supported OpenGL version is capped at 4.4 instead of the expected 4.6. This appears to be a glitch that can be temporarily resolved by following these steps:
+Sometimes, when using WineD3D, the maximum supported OpenGL version is capped at 4.4 instead of the expected 4.6. This appears to be a glitch that can be temporarily resolved by following these steps:
 
 1. Start the game using a different Proton version.
 
