@@ -266,21 +266,27 @@ Simple just follow this steps:
 ## Credits:
 This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
 
-Valve: https://github.com/ValveSoftware/Proton
+### Valve:
+https://github.com/ValveSoftware/Proton && https://github.com/ValveSoftware/wine
 
-GloriousEggroll: https://github.com/GloriousEggroll/proton-ge-custom && https://www.patreon.com/gloriouseggroll
+First of all, we extend our sincere thanks to Valve for their incredible contributions to the Linux gaming community through the creation of Proton, which has made gaming on Linux more accessible and enjoyable for everyone. As such, we sometimes use Valve's Proton builds as a base for our internal or public releases, or for comparison with those based on Proton-GE. Additionally, much of the code in the wine.inf file is directly sourced from Valve's Proton and Wine.
 
-Kron4ek: https://github.com/Kron4ek/Wine-Builds/releases
+### GloriousEggroll: 
+https://github.com/GloriousEggroll/proton-ge-custom && https://github.com/GloriousEggroll/wine-ge-custom
 
-doitsujin/ドイツ人 (Philip Rebohle): https://github.com/doitsujin/dxvk
+We would like to extend our gratitude to GloriousEggroll for the creation of both Proton-GE and Wine-GE, which have greatly enhanced gaming on Linux. Most of the time, the releases of this project are based on Proton-GE. We also use many configurations from the wine.inf file, from both Wine-GE and Proton-GE, particularly the custom per-game configurations.
 
-Sporif: https://github.com/Sporif/dxvk-async
+### doitsujin/ドイツ人 (Philip Rebohle):
+https://github.com/doitsujin/dxvk
 
-TKG (Etienne Juvigny): https://github.com/Frogging-Family/wine-tkg-git && https://www.patreon.com/tkglitch
+This project benefits from the incredible work of Philip Rebohle (doitsujin) and his creation of DXVK, which plays a key role in Linux gaming, making Windows games run smoothly on Linux through Vulkan. We deeply appreciate his contributions and proudly use DXVK in this project.
 
-HansKristian/themaister (Hans-Kristian Arntzen): https://github.com/HansKristian-Work/vkd3d-proton
+### Sporif: 
+https://github.com/Sporif/dxvk-async
 
-Also i want to thanks all of those reddit users that help me make the Supported GPU List:
+This project incorporates work from Sporif's DXVK Async, which provides patched versions of DXVK that enable asynchronous pipeline compilation. This allows shaders to be compiled in the background, reducing stuttering caused by synchronous shader compilation, and enhancing performance in certain scenarios. We would like to thank Sporif for their valuable contributions, and we are pleased to integrate DXVK Async into this project.
+
+### Also i want to thanks all of those reddit users that help me make the Supported GPU List:
 
 	wolfegothmog
 
@@ -298,6 +304,6 @@ Also i want to thanks all of those reddit users that help me make the Supported 
 
 	AlienOverlordXenu 
 
-And the Great Redditor that came with the name ❤️:
+### And the Great Redditor that came with the name ❤️:
 	
  	Meshuggah333
