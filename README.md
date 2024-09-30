@@ -16,7 +16,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 
 ----
 
-# Table of Contents:
+## Table of Contents:
 - [Install](#Install)
 	- [Native](#Native)
 	- [Flatpak](#Flatpak)
