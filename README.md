@@ -98,10 +98,10 @@ I’m still investigating a permanent solution to this issue, but this workaroun
 ## GPU List:
 Here its the GPU List of the ones on witch its recommended to use this Proton Build
 
-### *NVIDIA:*
+## *NVIDIA:*
 On NVIDIA cards, it should be all the ones that are stuck on the 470 drivers, previous drivers like 440, 415, 390 and Nouveau users.
 
-### *Intel && AMD:*
+## *Intel && AMD:*
 Any GPU or iGPU that is OpenGL only or has a Vulkan API lower than 1.3.
 
 ## Parameters:
