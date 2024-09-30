@@ -42,7 +42,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 
 ##  *Native:*
 
-1. Download a release from the release page
+1. Download a release from the release [page](https://github.com/pythonlover02/Proton-Sarek/releases)
 
 2. Create a ~/.local/share/Steam/compatibilitytools.d/ directory if it does not exist.
 
@@ -54,7 +54,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
  
 ## *Flatpak:*
 
-1. Download a release from the release page
+1. Download a release from the release [page](https://github.com/pythonlover02/Proton-Sarek/releases)
  
 2. Create a ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/ directory if it does not exist.
 
