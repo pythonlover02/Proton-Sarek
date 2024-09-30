@@ -24,7 +24,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [Known Bugs](#Known-Bugs)
 - [GPU List](#GPU-List)
 	- [NVIDIA](#NVIDIA)
-	- [Intel && AMD](#Intel-&&-AMD)
+	- [Intel && AMD](#Intel-AMD)
 - [Parameters](#Parameters)
 	- [Proton](#Proton)
 	- [Optimization](#Optimization)
