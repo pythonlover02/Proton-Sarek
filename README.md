@@ -24,7 +24,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [Known Bugs](#Known-Bugs)
 - [GPU List](#GPU-List)
 	- [NVIDIA](#NVIDIA)
-	- [AMD](#AMD)
+	- [Intel && AMD](#Intel--AMD)
 - [Parameters](#Parameters)
 	- [Proton](#Proton)
 	- [Optimization](#Optimization)
@@ -39,28 +39,30 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 
 
 ## Install:
-1. Download a release from the release page
-2. Now follow the instruction of the installation for Flatpak Steam or Native Steam
 
-##  *Native*
+###  Native:
 
-3. Create a ~/.local/share/Steam/compatibilitytools.d/ directory if it does not exist.
+1. Download a release from the release [page](https://github.com/pythonlover02/Proton-Sarek/releases)
 
-4. Extract the release inside
+2. Create a ~/.local/share/Steam/compatibilitytools.d/ directory if it does not exist.
+
+3. Extract the release inside
  
-5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+4. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
 
-6. Restart and thats it!!! Enjoy :P
+5. Restart and thats it!!! Enjoy :P
  
-## *Flatpak*
- 
-3. Create a ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/ directory if it does not exist.
+### Flatpak:
 
-4. Extract the release inside
+1. Download a release from the release [page](https://github.com/pythonlover02/Proton-Sarek/releases)
  
-5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+2. Create a ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/ directory if it does not exist.
 
-6. Restart and thats it!!! Enjoy :P
+3. Extract the release inside
+ 
+4. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+
+5. Restart and thats it!!! Enjoy :P
 
 ## Roadmap:
 Current status and upcoming changes for the Builds. The following features are categorized based on their current development status:
@@ -74,7 +76,7 @@ Current status and upcoming changes for the Builds. The following features are c
 | **DXVK Async implementation**                             | <span style="color: green;">**Async**</span>               |
 | **Gallium Nine implementation**                           | <span style="color: green;">**Work in Progress**</span>    |
 
-## Status Definitions
+### Status Definitions:
 - **Ready**: The change is included in the Stable, Stable Async and Testing Builds.
 - **Async**: The change is available in the Async build.
 - **Testing**: The change is available in the Testing build.
@@ -93,41 +95,18 @@ Sometimes, when using WineD3D, the maximum supported OpenGL version is capped at
 
 I’m still investigating a permanent solution to this issue, but this workaround has proven effective in the meantime.
 
-## GPU List
-This List still very much work in progress, if you know about a GPU that have Vulkan 1.1+ support but less than 1.3, that its not listed here pls write a gmail at pythonloverv2@gmail.com with the gpu name and the source. And thank you!!
+## GPU List:
+Here its the GPU List of the ones on witch its recommended to use this Proton Build
 
-## NVIDIA:
-| Series                   | Graphics Cards                                                                                                                |
-|--------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| **GeForce 700 Series**   | GeForce GTX 780 Ti, GeForce GTX 780, GeForce GTX 770, GeForce GTX 760, GeForce GTX 760 Ti (OEM), GeForce GTX 750 Ti, GeForce GTX 750, GeForce GTX 745, GeForce GT 740, GeForce GT 730, GeForce GT 720, GeForce GT 710 |
-| **GeForce 600 Series**   | GeForce GTX 690, GeForce GTX 680, GeForce GTX 670, GeForce GTX 660 Ti, GeForce GTX 660, GeForce GTX 650 Ti BOOST, GeForce GTX 650 Ti, GeForce GTX 650, GeForce GTX 645, GeForce GT 640, GeForce GT 635, GeForce GT 630 |
-| **GeForce 600M Series**  | GeForce GT 640M LE                                                                                                         |
-| **NVIDIA TITAN Series**  | GeForce GTX TITAN X, GeForce GTX TITAN, GeForce GTX TITAN Black, GeForce GTX TITAN Z                                         |
-| **Quadro Series**        | Quadro M6000 24GB, Quadro M6000, Quadro M5000, Quadro M4000, Quadro M2000, Quadro K6000, Quadro K5200, Quadro K5000, Quadro K4000, Quadro K4200, Quadro K2200, Quadro K2000, Quadro K2000D, Quadro K1200, Quadro K620, Quadro K600, Quadro K420, Quadro 410 |
-| **Quadro NVS Series**    | NVS 510                                                                                                                     |
-| **GRID Series**          | GRID K520                                                                                                                  |
+### NVIDIA:
+On NVIDIA cards, it should be all the ones that are stuck on the 470 drivers, previous drivers like 440, 415, 390 and Nouveau users.
 
-## AMD:
-| Series                     | Graphics Cards                                                                                                                  |
-|----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| **Southern Islands (HD 7300)**  | Radeon HD 7350 OEM PCI, Radeon HD 7350 OEM                                                                                      |
-| **Southern Islands (HD 7400)**  | Radeon HD 7450 OEM, Radeon HD 7470 OEM                                                                                      |
-| **Southern Islands (HD 7500)**  | Radeon HD 7510 OEM, Radeon HD 7570 OEM, Radeon HD 7570                                                                          |
-| **Southern Islands (HD 7600)**  | Radeon HD 7670 OEM                                                                                                           |
-| **Southern Islands (HD 7700)**  | Radeon HD 7720 OEM, Radeon HD 7730, Radeon HD 7750, Radeon HD 7770 GHz Edition, Radeon HD 7790                                 |
-| **Southern Islands (HD 7800)**  | Radeon HD 7850, Radeon HD 7870 GHz Edition, Radeon HD 7870 XT                                                                  |
-| **Southern Islands (HD 7900)**  | Radeon HD 7950 Monica BIOS 1, Radeon HD 7950 Monica BIOS 2, Radeon HD 7950 Mac Edition, Radeon HD 7950, Radeon HD 7950 Boost, Radeon HD 7970, Radeon HD 7970 GHz Edition, Radeon HD 7970 X2, Radeon HD 7990 |
-| **Sea Islands (HD 8300)**       | Radeon HD 8350 OEM                                                                                                           |
-| **Sea Islands (HD 8400)**       | Radeon HD 8450 OEM, Radeon HD 8470 OEM, Radeon HD 8490 OEM                                                                   |
-| **Sea Islands (HD 8500)**       | Radeon HD 8510 OEM (multiple variants), Radeon HD 8550 OEM, Radeon HD 8570 OEM Rebrand, Radeon HD 8570 OEM                   |
-| **Sea Islands (HD 8600)**       | Radeon HD 8670 OEM                                                                                                           |
-| **Sea Islands (HD 8700)**       | Radeon HD 8730 OEM, Radeon HD 8740 OEM, Radeon HD 8760 OEM, Radeon HD 8770 OEM                                                |
-| **Sea Islands (HD 8800)**       | Radeon HD 8860 OEM, Radeon HD 8870 OEM                                                                                        |
-| **Sea Islands (HD 8900)**       | Radeon HD 8950 OEM, Radeon HD 8970 OEM, Radeon HD 8990 OEM                                                                    |
+### Intel && AMD:
+Any GPU or iGPU that is OpenGL only or has a Vulkan API lower than 1.3.
 
 ## Parameters:
 
-## Proton:
+### Proton:
 This are set on the Launch Options of a game on Steam, example:
 
 	PROTON_USE_WINED3D=1 PROTON_NO_ESYNC=1 mesa_glthread=true %command%
@@ -152,7 +131,7 @@ The Optimzation variables are set on the same way on the launch options
 
 ## Optimization:
 
-## System:
+### System:
 First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 
 | Tool/Library          | Description                                                                                                      | Link                                                 |
@@ -163,7 +142,7 @@ First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 
 My personal recomendation its to search a tutorial for the installation of the three in your favorite Linux Distro *;P*
 
-## Mesa:
+### Mesa:
 For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
 
 | Environment Variable                    | Description                                                                                         |
@@ -172,7 +151,7 @@ For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
 | `MESA_SHADER_CACHE_DISABLE=[false/true]` | Disable or enable the GPU shader cache on the disk.                                              |
 | `MESA_SHADER_CACHE_DIR=/path/to/location` | Path for the shader cache.                                                                         |
 
-## Nvidia:
+### Nvidia:
 Nvidia GPUs with the Propietary Driver
 
 | Environment Variable                       | Description                                                                                                                                    |
@@ -181,7 +160,7 @@ Nvidia GPUs with the Propietary Driver
 | `__GL_SHADER_DISK_CACHE=[0/1]`            | Enable or disable the GPU shader cache on the disk.                                                                                          |
 | `__GL_SHADER_DISK_CACHE_PATH=/path/to/location` | Path for the shader cache.                                                                                                                    |
 
-## Software Rendering:
+### Software Rendering:
 No GPU Driver its used to render the game here, just the CPU, so it doesnt matter if you have the Nvidia Propietary Driver installed. But remember that you should have Mesa on your system
 
 | Environment Variable                          | Description                                                                                                                                     |
@@ -192,7 +171,7 @@ No GPU Driver its used to render the game here, just the CPU, so it doesnt matte
 | `MESA_SHADER_CACHE_DISABLE=[false/true]`     | Disable or enable the GPU shader cache on the disk.                                                                                            |
 | `MESA_SHADER_CACHE_DIR=/path/to/location`     | Path for the shader cache.                                                                                                                    |
 
-## Additional Tips 
+### Additional Tips:
 
 1. If that of a above its not enought, you might want to check newer kernel versions or patched/customiced kernels(zen, liquorix, xanmod, cachyoskernel, clearkernel, etc), i personally recomend the vanilla kernel tought
 
