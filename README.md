@@ -39,28 +39,30 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 
 
 ## Install:
+
+##  *Native:*
+
 1. Download a release from the release page
-2. Now follow the instruction of the installation for Flatpak Steam or Native Steam
 
-##  *Native*
+2. Create a ~/.local/share/Steam/compatibilitytools.d/ directory if it does not exist.
 
-3. Create a ~/.local/share/Steam/compatibilitytools.d/ directory if it does not exist.
-
-4. Extract the release inside
+3. Extract the release inside
  
-5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+4. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
 
-6. Restart and thats it!!! Enjoy :P
+5. Restart and thats it!!! Enjoy :P
  
-## *Flatpak*
- 
-3. Create a ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/ directory if it does not exist.
+## *Flatpak:*
 
-4. Extract the release inside
+1. Download a release from the release page
  
-5. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+2. Create a ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/ directory if it does not exist.
 
-6. Restart and thats it!!! Enjoy :P
+3. Extract the release inside
+ 
+4. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
+
+5. Restart and thats it!!! Enjoy :P
 
 ## Roadmap:
 Current status and upcoming changes for the Builds. The following features are categorized based on their current development status:
@@ -74,7 +76,7 @@ Current status and upcoming changes for the Builds. The following features are c
 | **DXVK Async implementation**                             | <span style="color: green;">**Async**</span>               |
 | **Gallium Nine implementation**                           | <span style="color: green;">**Work in Progress**</span>    |
 
-## Status Definitions
+## *Status Definitions:*
 - **Ready**: The change is included in the Stable, Stable Async and Testing Builds.
 - **Async**: The change is available in the Async build.
 - **Testing**: The change is available in the Testing build.
@@ -93,18 +95,18 @@ Sometimes, when using WineD3D, the maximum supported OpenGL version is capped at
 
 I’m still investigating a permanent solution to this issue, but this workaround has proven effective in the meantime.
 
-## GPU List
+## GPU List:
 Here its the GPU List of the ones on witch its recommended to use this Proton Build
 
-### NVIDIA:
+### *NVIDIA:*
 On NVIDIA cards, it should be all the ones that are stuck on the 470 drivers, previous drivers like 440, 415, 390 and Nouveau users.
 
-### Intel && AMD:
+### *Intel && AMD:*
 Any GPU or iGPU that is OpenGL only or has a Vulkan API lower than 1.3.
 
 ## Parameters:
 
-### Proton:
+## *Proton:*
 This are set on the Launch Options of a game on Steam, example:
 
 	PROTON_USE_WINED3D=1 PROTON_NO_ESYNC=1 mesa_glthread=true %command%
@@ -129,7 +131,7 @@ The Optimzation variables are set on the same way on the launch options
 
 ## Optimization:
 
-### System:
+## *System:*
 First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 
 | Tool/Library          | Description                                                                                                      | Link                                                 |
@@ -140,7 +142,7 @@ First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 
 My personal recomendation its to search a tutorial for the installation of the three in your favorite Linux Distro *;P*
 
-### Mesa:
+## *Mesa:*
 For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
 
 | Environment Variable                    | Description                                                                                         |
@@ -149,7 +151,7 @@ For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
 | `MESA_SHADER_CACHE_DISABLE=[false/true]` | Disable or enable the GPU shader cache on the disk.                                              |
 | `MESA_SHADER_CACHE_DIR=/path/to/location` | Path for the shader cache.                                                                         |
 
-### Nvidia:
+## *Nvidia:*
 Nvidia GPUs with the Propietary Driver
 
 | Environment Variable                       | Description                                                                                                                                    |
@@ -158,7 +160,7 @@ Nvidia GPUs with the Propietary Driver
 | `__GL_SHADER_DISK_CACHE=[0/1]`            | Enable or disable the GPU shader cache on the disk.                                                                                          |
 | `__GL_SHADER_DISK_CACHE_PATH=/path/to/location` | Path for the shader cache.                                                                                                                    |
 
-### Software Rendering:
+## *Software Rendering:*
 No GPU Driver its used to render the game here, just the CPU, so it doesnt matter if you have the Nvidia Propietary Driver installed. But remember that you should have Mesa on your system
 
 | Environment Variable                          | Description                                                                                                                                     |
@@ -169,7 +171,7 @@ No GPU Driver its used to render the game here, just the CPU, so it doesnt matte
 | `MESA_SHADER_CACHE_DISABLE=[false/true]`     | Disable or enable the GPU shader cache on the disk.                                                                                            |
 | `MESA_SHADER_CACHE_DIR=/path/to/location`     | Path for the shader cache.                                                                                                                    |
 
-### Additional Tips 
+## *Additional Tips:*
 
 1. If that of a above its not enought, you might want to check newer kernel versions or patched/customiced kernels(zen, liquorix, xanmod, cachyoskernel, clearkernel, etc), i personally recomend the vanilla kernel tought
 
