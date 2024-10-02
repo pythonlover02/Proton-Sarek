@@ -95,6 +95,8 @@ Sometimes, when using WineD3D, the maximum supported OpenGL version is capped at
 
 I’m still investigating a permanent solution to this issue, but this workaround has proven effective in the meantime.
 
+Edit: It should be fixed on versions 9-15-r1 and above thanks to [Artewar67](https://github.com/Artewar67)
+
 ## GPU List:
 Here its the GPU List of the ones on witch its recommended to use this Proton Build
 
