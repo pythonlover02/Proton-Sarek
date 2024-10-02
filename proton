@@ -11,6 +11,7 @@ import os
 import shutil
 import errno
 import platform
+import resource
 import stat
 import subprocess
 import sys
@@ -36,14 +37,113 @@ from ctypes import c_ssize_t
 
 from filelock import FileLock
 from random import randrange
+from pathlib import Path
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="9.0-200"
+CURRENT_PREFIX_VERSION="Sarek9-15-r1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
+
+def empty_directory(path):
+    # Walk through the directory structure top-down (False)
+    for root, dirs, files in os.walk(path, topdown=False):
+        # Remove files and symlinks to files
+        for name in files:
+            item_path = os.path.join(root, name)
+            if os.path.islink(item_path):
+                os.remove(item_path) # Remove symlink
+            else:
+                os.remove(item_path) # Remove file
+        # Remove directories and symlinks to directories
+        for name in dirs:
+            item_path = os.path.join(root, name)
+            if os.path.islink(item_path):
+                os.remove(item_path) # Remove symlink
+            else:
+                os.rmdir(item_path) # Remove directory
+
+# If -steamdeck mode is enabled, try to copy existing game prefixes to steamdeck's prefix location -- this helps to preserve mods and saves across systems
+# Note: this completely wipes the existing destination prefix and copies the source prefix over instead.
+
+# source = game partition, destination = steamdeck prefix location
+# From game partition to steamdeck (steamdeck enabled)
+if os.getenv("SteamDeck") == "1" and os.getenv("COPYPREFIX") == "1":
+    # Get the value of the STEAM_COMPAT_INSTALL_PATH environment variable
+    steam_compat_install_path = os.getenv('STEAM_COMPAT_INSTALL_PATH')
+
+    # Navigate up two directories
+    parent_directory = Path(steam_compat_install_path).parents[1]
+
+    # Check if the "compatdata/<steam game>" folder exists and is not empty
+    compatdata_path = parent_directory / "compatdata" / str(os.environ.get("SteamAppId", 0))
+    if compatdata_path.exists() and os.listdir(compatdata_path):
+        # Define the destination directory
+        steamdeck_compatdata = Path(os.environ["STEAM_BASE_FOLDER"]) / "steamapps" / "compatdata" / str(os.environ.get("SteamAppId", 0))
+
+        # Remove destination if it already exists:
+        if os.path.isdir(steamdeck_compatdata) and os.listdir(steamdeck_compatdata):
+            empty_directory(steamdeck_compatdata)
+
+        # Copy the "compatdata/<steam game>" folder to the destination directory
+        # Use dirs_exist_ok=True to avoid FileExistsError if the destination directory already exists
+        shutil.copytree(compatdata_path, steamdeck_compatdata, dirs_exist_ok=True, symlinks=True)
+
+    # Check if the "shadercache/<steam game>" folder exists and is not empty
+    shadercache_path = parent_directory / "shadercache" / str(os.environ.get("SteamAppId", 0))
+
+    if shadercache_path.exists() and os.listdir(shadercache_path):
+        # Define the destination directory
+        steamdeck_shadercache = Path(os.environ["STEAM_BASE_FOLDER"]) / "steamapps" / "shadercache" / str(os.environ.get("SteamAppId", 0))
+
+        # Remove destination if it already exists:
+        if os.path.isdir(steamdeck_shadercache) and os.listdir(steamdeck_shadercache):
+            empty_directory(steamdeck_shadercache)
+
+        # Copy the "shadercache/<steam game>" folder to the destination directory
+        # Use dirs_exist_ok=True to avoid FileExistsError if the destination directory already exists
+        shutil.copytree(shadercache_path, steamdeck_shadercache, dirs_exist_ok=True, symlinks=True)
+
+# source = steamdeck prefix location, destination = game partition
+# From steamdeck to game partition (steamdeck disabled)
+if os.getenv("SteamDeck") == "0" or "SteamDeck" not in os.environ:
+    if os.getenv("COPYPREFIX") == "1":
+        # Get the value of the STEAM_COMPAT_INSTALL_PATH environment variable
+        steam_compat_install_path = os.getenv('STEAM_COMPAT_INSTALL_PATH')
+
+        # Navigate up two directories
+        parent_directory = Path(steam_compat_install_path).parents[1]
+
+        # Check if the "compatdata/<steam game>" folder exists and is not empty
+        steamdeck_compatdata = Path(os.environ["STEAM_BASE_FOLDER"]) / "steamapps" / "compatdata" / str(os.environ.get("SteamAppId", 0))
+        if os.path.isdir(steamdeck_compatdata) and os.listdir(steamdeck_compatdata):
+            # Define the destination directory
+            compatdata_path = parent_directory / "compatdata" / str(os.environ.get("SteamAppId", 0))
+
+            # Remove destination if it already exists:
+            if os.path.isdir(compatdata_path) and os.listdir(compatdata_path):
+                empty_directory(compatdata_path)
+
+            # Copy the steamdeck_compatdata to the compatdata_path
+            # Use dirs_exist_ok=True to avoid FileExistsError if the destination directory already exists
+            shutil.copytree(steamdeck_compatdata, compatdata_path, dirs_exist_ok=True, symlinks=True)
+
+        # Similar logic for shadercache
+        steamdeck_shadercache = Path(os.environ["STEAM_BASE_FOLDER"]) / "steamapps" / "shadercache" / str(os.environ.get("SteamAppId", 0))
+
+        if os.path.isdir(steamdeck_shadercache) and os.listdir(steamdeck_shadercache):
+            # Define the destination directory
+            shadercache_path = parent_directory / "shadercache" / str(os.environ.get("SteamAppId", 0))
+
+            # Remove destination if it already exists:
+            if os.path.isdir(shadercache_path) and os.listdir(shadercache_path):
+                empty_directory(shadercache_path)
+
+            # Copy the steamdeck_shadercache to the shadercache_path
+            # Use dirs_exist_ok=True to avoid FileExistsError if the destination directory already exists
+            shutil.copytree(steamdeck_shadercache, shadercache_path, dirs_exist_ok=True, symlinks=True)
 
 def file_exists(s, *, follow_symlinks):
     if follow_symlinks:
@@ -56,13 +156,13 @@ def nonzero(s):
     return len(s) > 0 and s != "0"
 
 def prepend_to_env_str(env, variable, prepend_str, separator):
-    if not variable in env:
+    if variable not in env:
         env[variable] = prepend_str
     else:
         env[variable] = prepend_str + separator + env[variable]
 
 def append_to_env_str(env, variable, append_str, separator):
-    if not variable in env:
+    if variable not in env:
         env[variable] = append_str
     else:
         env[variable] = env[variable] + separator + append_str
@@ -144,7 +244,7 @@ def merge_user_dir(src, dst):
             extant_dirs += dst_dir
 
 def try_copy(src, dst, prefix=None, add_write_perm=True, copy_metadata=False, optional=False,
-             follow_symlinks=True, track_file=False, link_debug=False):
+             follow_symlinks=True, track_file=None, link_debug=False):
     try:
         if prefix is not None:
             dst = os.path.join(prefix, dst)
@@ -176,7 +276,7 @@ def try_copy(src, dst, prefix=None, add_write_perm=True, copy_metadata=False, op
 
         if file_exists(dst + '.debug', follow_symlinks=False):
             os.remove(dst + '.debug')
-        elif link_debug:
+        elif link_debug and track_file:
             track_file.write(os.path.relpath(dst + '.debug', prefix) + '\n')
 
         if link_debug:
@@ -266,20 +366,20 @@ def getmtimestr(*path_fragments):
         return "0"
 
 def try_get_game_library_dir():
-    if not "STEAM_COMPAT_INSTALL_PATH" in g_session.env or \
-            not "STEAM_COMPAT_LIBRARY_PATHS" in g_session.env:
+    if "STEAM_COMPAT_INSTALL_PATH" not in g_session.env or \
+            "STEAM_COMPAT_LIBRARY_PATHS" not in g_session.env:
         return None
 
     #find library path which is a subset of the game path
     library_paths = g_session.env["STEAM_COMPAT_LIBRARY_PATHS"].split(":")
-    for l in library_paths:
-        if l in g_session.env["STEAM_COMPAT_INSTALL_PATH"]:
-            return l
+    for path in library_paths:
+        if path in g_session.env["STEAM_COMPAT_INSTALL_PATH"]:
+            return path
 
     return None
 
 def try_get_steam_dir():
-    if not "STEAM_COMPAT_CLIENT_INSTALL_PATH" in g_session.env:
+    if "STEAM_COMPAT_CLIENT_INSTALL_PATH" not in g_session.env:
         return None
 
     return g_session.env["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
@@ -517,7 +617,7 @@ class CompatData:
         if old_ver is None:
             return
 
-        if not '-' in old_ver:
+        if '-' not in old_ver:
             #How can this happen??
             log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
             #If it does, just let the Wine upgrade happen and hope it works...
@@ -526,7 +626,7 @@ class CompatData:
         try:
             old_proton_ver, old_prefix_ver = old_ver.split('-')
             old_proton_maj, old_proton_min = old_proton_ver.split('.')
-            new_proton_ver, new_prefix_ver = CURRENT_PREFIX_VERSION.split('-')
+            new_proton_ver, _              = CURRENT_PREFIX_VERSION.split('-')
             new_proton_maj, new_proton_min = new_proton_ver.split('.')
 
             if int(new_proton_maj) < int(old_proton_maj) or \
@@ -537,6 +637,9 @@ class CompatData:
                     #proton 3.7 did not generate tracked_files, so copy it into place first
                     try_copy(g_proton.path("proton_3.7_tracked_files"), self.tracked_files_file)
                 self.remove_tracked_files()
+                path = self.prefix_dir + "/drive_c/Program Files (x86)/Ubisoft/Ubisoft Game Launcher/version.txt"
+                if file_exists(path, follow_symlinks=False) and os.path.isfile(path):
+                    os.remove(path)
                 return
 
             if old_proton_ver == "3.7" and old_prefix_ver == "1":
@@ -687,7 +790,7 @@ class CompatData:
             for line in tracked_files:
                 prev_tracked_files.add(line.strip())
         with open(self.tracked_files_file, "a") as tracked_files:
-            for src_dir, dirs, files in os.walk(g_proton.default_pfx_dir):
+            for src_dir, _, files in os.walk(g_proton.default_pfx_dir):
                 rel_dir = src_dir.replace(g_proton.default_pfx_dir, "", 1).lstrip('/')
                 if len(rel_dir) > 0:
                     rel_dir = rel_dir + "/"
@@ -805,6 +908,7 @@ class CompatData:
             use_dxvk_dxgi = not use_wined3d and \
                     not ("WINEDLLOVERRIDES" in g_session.env and "dxgi=b" in g_session.env["WINEDLLOVERRIDES"])
             use_nvapi = 'disablenvapi' not in g_session.compat_config or 'forcenvapi' in g_session.compat_config
+            use_dxvk_d3d8 = "dxvkd3d8" in g_session.compat_config
 
             builtin_dll_copy = os.environ.get("PROTON_DLL_COPY",
                     #dxsetup redist
@@ -819,11 +923,17 @@ class CompatData:
                     "xinput*.dll," +
 
                     #vcruntime redist
-                    "atl*.dll," +
+                    "atl1*.dll," +
+                    "atl.dll," +
                     "concrt*.dll," +
-                    "msvcp*.dll," +
-                    "msvcr*.dll," +
-                    "msvcm*.dll," +
+                    "msvcp1*.dll," +
+                    "msvcrt*.dll," +
+                    "msvcp7*.dll," +
+                    "msvcp6*.dll," +
+                    "msvcp_win.dll," +
+                    "msvcr1*.dll," +
+                    "msvcrt*.dll," +
+                    "msvcr7*.dll," +
                     "vcamp1*.dll," +
                     "vcomp1*.dll," +
                     "vccorlib1*.dll," +
@@ -855,6 +965,7 @@ class CompatData:
                 str(use_dxvk_dxgi),
                 builtin_dll_copy,
                 str(use_nvapi),
+                str(use_dxvk_d3d8),
             ))
 
             # check whether any prefix config has changed
@@ -930,7 +1041,7 @@ class CompatData:
                     vkd3d_protonfiles = []
                     wined3dfiles = ["d3d12", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 else:
-                    dxvkfiles = ["d3d11", "d3d10core", "d3d9"]
+                    dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                     vkd3d_protonfiles = ["d3d12", "d3d12core"]
                     wined3dfiles = []
 
@@ -938,6 +1049,11 @@ class CompatData:
                     dxvkfiles.append("dxgi")
                 else:
                     wined3dfiles.append("dxgi")
+
+                if use_dxvk_d3d8:
+                    dxvkfiles.append("d3d8")
+                else:
+                    wined3dfiles.append("d3d8")
 
                 for f in wined3dfiles:
                     try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll", "drive_c/windows/system32",
@@ -953,13 +1069,10 @@ class CompatData:
                     g_session.dlloverrides[f] = "n"
 
                 for f in vkd3d_protonfiles:
-                    optional = False
-                    if f == "d3d12core":
-                        optional = True
                     try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     try_copy(g_proton.lib_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     g_session.dlloverrides[f] = "n"
 
                 # If the user requested the NVAPI be available, copy it into place.
@@ -995,11 +1108,6 @@ class CompatData:
             setup_game_dir_drive()
             setup_steam_dir_drive()
 
-            # add Steam ffmpeg libraries to path
-            use_ffmpeg = "PROTON_NO_STEAM_FFMPEG" not in os.environ or not nonzero(os.environ["PROTON_NO_STEAM_FFMPEG"])
-            if use_ffmpeg and 'nosteamffmpeg' not in g_session.compat_config:
-                prepend_to_env_str(g_session.env, ld_path_var, steamdir + "/ubuntu12_64/video/:" + steamdir + "/ubuntu12_32/video/", ":")
-
 def comma_escaped(s):
     escaped = False
     idx = -1
@@ -1021,6 +1129,9 @@ def default_compat_config():
                 "1359980", #POSTAL: Brain Damaged
                 "1766430", #POSTAL Brain Damaged Demo
                 "692890", #Roboquest
+                "794260", #Outward: Definitive Edition
+                "1328350", #Turbo Overkill
+                "2001540", #Slayers X Demo
 
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
@@ -1030,6 +1141,8 @@ def default_compat_config():
                 "1522260", #Iragon: Prologue 18+
                 "2229300", #Iragon
                 "1097480", #Iragon 18+
+                #CW bug 23986
+                "1928420", #Farlight 84
                 ]:
             ret.add("nomfdxgiman")
 
@@ -1075,10 +1188,7 @@ def default_compat_config():
                 ]:
             ret.add("noopwr")
 
-        if appid in [
-                "1621680",
-                "359870",
-                ]:
+        if appid == "1621680":
             ret.add("noforcelgadd")
 
         if appid in [
@@ -1098,6 +1208,12 @@ def default_compat_config():
                 "2371630", #Sword Art Online: Integral Factor
                 "460790", #Bayonetta
                 "273590", #Descent 3
+                "834530", #Yakuza Kiwami
+                "1088710", #Yakuza 3 Remastered
+                "1105500", #Yakuza 4 Remastered
+                "714010", #Aimlabs
+                "2249070", #Strip Fighter ZERO
+                "2526380", #Sword of Convallaria
                 ]:
             ret.add("gamedrive")
 
@@ -1121,9 +1237,18 @@ def default_compat_config():
         if appid in [
                 "2630", #Call of Duty 2
                 "1060210", #Disaster Report 4: Summer Memories
+                "414740", #RAID: World War II
+                "201510", #Flatout 3
                 ]:
             ret.add("nofsync")
             ret.add("noesync")
+
+        if appid in [
+                "1237970", #Titanfall 2
+                ]:
+            for idx, arg in enumerate(sys.argv):
+                if '-northstar' in arg:
+                    ret.add("northstar")
 
         if appid in [
                 # disable dxvknvapi for titles which dislike it
@@ -1137,6 +1262,9 @@ def default_compat_config():
                 "109600", #Neverwinter
                 "9900", #Star Trek Online
                 "9880", #Champions Online
+                "202750", #Alan Wake's American Nightmare
+                "255220", #GRID Autosport
+                "44350", #GRID 2
                 ]:
             ret.add("disablenvapi")
 
@@ -1150,6 +1278,9 @@ def default_compat_config():
                 ]:
             ret.add("hideapu")
 
+    #options to also be enabled for prerequisite setup steps
+    if "STEAM_COMPAT_APP_ID" in os.environ:
+        appid = os.environ["STEAM_COMPAT_APP_ID"]
         if appid in [
                 "7000", # Tomb Raider: Legend
                 "8000", # Tomb Raider: Anniversary
@@ -1160,8 +1291,14 @@ def default_compat_config():
                 "397950", # Clustertruck
                 "489830", # The Elder Scrolls V: Skyrim Special Edition
                 "712180", # Mugsters
+                "1818750", # MultiVersus
                 ]:
             ret.add("xalia")
+
+        if appid in [
+                "255960", #Bad Mojo Redux
+                ]:
+            ret.add("gamedrive")
 
     return ret
 
@@ -1203,10 +1340,10 @@ class Session:
             config = os.environ["STEAM_COMPAT_CONFIG"]
 
             while config:
-                (cur, sep, config) = config.partition(',')
+                (cur, _, config) = config.partition(',')
                 if cur.startswith("cmdlineappend:"):
                     while comma_escaped(cur):
-                        (a, b, c) = config.partition(',')
+                        (a, _, c) = config.partition(',')
                         cur = cur[:-1] + ',' + a
                         config = c
                     self.cmdlineappend.append(cur[14:].replace('\\\\','\\'))
@@ -1214,7 +1351,7 @@ class Session:
                     self.compat_config.add(cur)
 
         #turn forcelgadd on by default unless it is disabled in compat config
-        if not "noforcelgadd" in self.compat_config:
+        if "noforcelgadd" not in self.compat_config:
             self.compat_config.add("forcelgadd")
 
         appid = os.environ.get("SteamGameId", 0)
@@ -1248,6 +1385,7 @@ class Session:
 
         self.env["GST_PLUGIN_SYSTEM_PATH_1_0"] = g_proton.lib64_dir + "gstreamer-1.0" + ":" + g_proton.lib_dir + "gstreamer-1.0"
         self.env["WINE_GST_REGISTRY_DIR"] = g_compatdata.path("gstreamer-1.0/")
+        self.env["GST_GL_WINDOW"] = "surfaceless"
 
         if "STEAM_COMPAT_MEDIA_PATH" in os.environ:
             old_audiofoz_path = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/audio.foz"
@@ -1266,7 +1404,7 @@ class Session:
         prepend_to_env_str(self.env, "PATH", g_proton.bin_dir, ":")
 
     def check_environment(self, env_name, config_name):
-        if not env_name in self.env:
+        if env_name not in self.env:
             return False
         if nonzero(self.env[env_name]):
             self.compat_config.add(config_name)
@@ -1278,10 +1416,10 @@ class Session:
         try:
             if "PRESSURE_VESSEL_RUNTIME_BASE" in self.env:
                 with open(self.env["PRESSURE_VESSEL_RUNTIME_BASE"] + "/VERSIONS.txt", "r") as f:
-                    for l in f:
-                        l = l.strip()
-                        if len(l) > 0 and not l.startswith("#"):
-                            cleaned = l.split("#")[0].strip().replace("\t", " ")
+                    for line in f:
+                        line = line.strip()
+                        if len(line) > 0 and not line.startswith("#"):
+                            cleaned = line.split("#")[0].strip().replace("\t", " ")
                             split = cleaned.split(" ", maxsplit=1)
                             self.log_file.write(split[0] + ": " + split[1] + "\n")
         except (OSError, IOError, TypeError, KeyError):
@@ -1294,7 +1432,7 @@ class Session:
             #SteamGameId is not always available
             lfile_path = basedir + "/steam-proton.log"
         else:
-            if not "SteamGameId" in os.environ:
+            if "SteamGameId" not in os.environ:
                 return False
 
             lfile_path = basedir + "/steam-" + os.environ["SteamGameId"] + ".log"
@@ -1313,12 +1451,12 @@ class Session:
         used_user_settings = {}
         if file_exists(g_proton.user_settings_file, follow_symlinks=True):
             try:
-                import user_settings
+                import user_settings # pyright: ignore [reportMissingImports]
                 for key, value in user_settings.user_settings.items():
-                    if not key in self.env:
+                    if key not in self.env:
                         self.env[key] = value
                         used_user_settings[key] = value
-            except:
+            except Exception:
                 log("************************************************")
                 log("THERE IS AN ERROR IN YOUR user_settings.py FILE:")
                 log("%s" % sys.exc_info()[1])
@@ -1349,6 +1487,7 @@ class Session:
 
         if not self.check_environment("PROTON_USE_WINED3D", "wined3d"):
             self.check_environment("PROTON_USE_WINED3D11", "wined3d")
+        self.check_environment("PROTON_DXVK_D3D8", "dxvkd3d8")
         self.check_environment("PROTON_NO_D3D11", "nod3d11")
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
         self.check_environment("PROTON_NO_ESYNC", "noesync")
@@ -1371,7 +1510,7 @@ class Session:
         else:
             self.env["WINEESYNC"] = "1"
 
-        if not "noxim" in self.compat_config:
+        if "noxim" not in self.compat_config:
             self.env.pop("WINE_ALLOW_XIM")
 
         if "nofsync" in self.compat_config:
@@ -1384,6 +1523,12 @@ class Session:
             self.env["MESA_EXTENSION_MAX_YEAR"] = "2003"
             #nvidia override
             self.env["__GL_ExtensionStringVersion"] = "17700"
+
+        if os.environ.get("SteamGameId", 0) == "444930":
+            self.env["MESA_EXTENSION_OVERRIDE"] = "-GL_ARB_bindless_texture"
+
+        if os.environ.get("SteamGameId", 0) == "500810":
+            self.dlloverrides["ddraw"] = "n,b"
 
         if "forcelgadd" in self.compat_config:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
@@ -1400,8 +1545,11 @@ class Session:
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
 
+        if "northstar" in self.compat_config:
+            append_to_env_str(self.env, "WINEDLLOVERRIDES", "wsock32=n,b", ";")
+
         if "vkd3dfl12" in self.compat_config:
-            if not "VKD3D_FEATURE_LEVEL" in self.env:
+            if "VKD3D_FEATURE_LEVEL" not in self.env:
                 self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
 
         if "hidevggpu" in self.compat_config:
@@ -1430,6 +1578,12 @@ class Session:
 
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
+
+        # NVIDIA software may check NVIDIA_WINE_DLL_DIR as a search-path for
+        # driver-provided DLLs for use by Proton/Wine.
+        nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
+        if nvidia_wine_dll_dir:
+            self.env["NVIDIA_WINE_DLL_DIR"] = nvidia_wine_dll_dir
 
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             if self.setup_logging(append_forever=False):
@@ -1463,13 +1617,24 @@ class Session:
                     if var in self.env:
                         self.log_file.write("Effective " + var + ": " + self.env[var] + "\n")
 
+                # check for low fd limit
+                _soft_limit, hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
+                if hard_limit < 524288:
+                    self.log_file.write(f"WARNING: Low file descriptor limit: {hard_limit} (see https://github.com/ValveSoftware/Proton/wiki/File-Descriptors)\n")
+
+                if os.path.exists("/proc/sys/vm/max_map_count"):
+                    with open("/proc/sys/vm/max_map_count", "r") as f:
+                        max_map_count = int(f.read())
+                        if max_map_count < 1048576:
+                            self.log_file.write(f"WARNING: Low /proc/sys/vm/max_map_count: {max_map_count} will prevent some games from working\n")
+
                 self.log_file.write("======================\n")
                 self.log_file.flush()
             else:
                 self.env["WINEDEBUG"] = "-all"
 
         if "PROTON_REMOTE_DEBUG_CMD" in self.env:
-            self.remote_debug_cmd = shlex.split(self.env.get("PROTON_REMOTE_DEBUG_CMD"))
+            self.remote_debug_cmd = shlex.split(self.env["PROTON_REMOTE_DEBUG_CMD"])
         else:
             self.remote_debug_cmd = None
 
@@ -1527,8 +1692,23 @@ class Session:
             remote_debug_proc = None
 
         # CoD: Black Ops 3 workaround
-        if os.environ.get("SteamGameId", 0) == "311210":
+        if os.environ.get("SteamGameId", 0) in [
+                    "311210",   # CoD: Black Ops 3
+                    "1549250",  # Undecember
+                ]:
             argv = [g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"]
+        # Don't use steam if it's not a steam game
+        # Prevent this warning for non-steam games:
+        # [S_API FAIL] SteamAPI_Init() failed; no appID found.
+        # Either launch the game from Steam, or put the file steam_appid.txt containing the correct appID in your game folder.
+        elif "UMU_ID" in os.environ:
+            log(sys.argv[2])
+            if len(sys.argv) >=  3 and sys.argv[2].startswith('/'):
+                log("Executable a unix path, launching with /unix option.")
+                argv = [g_proton.wine64_bin, "start", "/unix"]
+            else:
+                log("Executable is inside wine prefix, launching normally.")
+                argv = [g_proton.wine64_bin]
         else:
             argv = [g_proton.wine64_bin, "c:\\windows\\system32\\steam.exe"]
 
@@ -1537,8 +1717,8 @@ class Session:
         if remote_debug_proc:
             remote_debug_proc.kill()
             try:
-                remote_debug_proc.communicate(2)
-            except subprocess.TimeoutExpired as e:
+                remote_debug_proc.communicate(timeout=2)
+            except subprocess.TimeoutExpired:
                 log("terminate remote debugger")
                 remote_debug_proc.terminate()
                 remote_debug_proc.communicate()
@@ -1546,7 +1726,7 @@ class Session:
         return rc
 
 if __name__ == "__main__":
-    if not "STEAM_COMPAT_DATA_PATH" in os.environ:
+    if "STEAM_COMPAT_DATA_PATH" not in os.environ:
         log("No compat data path?")
         sys.exit(1)
 
@@ -1561,10 +1741,33 @@ if __name__ == "__main__":
 
     g_session.init_wine()
 
+    # This is needed for protonfixes
+    os.environ["PROTON_DLL_COPY"] = "*"
+
     if g_proton.missing_default_prefix():
         g_proton.make_default_prefix()
 
     g_session.init_session(sys.argv[1] != "runinprefix")
+
+    # Allow umu clients to run winetricks verbs and be the frontend for them
+    if (
+        g_session.env.get("UMU_ID")
+        and g_session.env.get("EXE", "").endswith("winetricks")
+        and g_session.env.get("PROTON_VERB") == "waitforexitandrun"
+    ):
+        wt_verbs = " ".join(sys.argv[2:][2:])
+        g_session.env["WINE"] = g_proton.wine_bin
+        g_session.env["WINELOADER"] = g_proton.wine_bin
+        g_session.env["WINESERVER"] = g_proton.wineserver_bin
+        g_session.env["WINETRICKS_LATEST_VERSION_CHECK"] = "disabled"
+        g_session.env["LD_PRELOAD"] = ""
+
+        log(f"Running winetricks verbs in prefix: {wt_verbs}")
+        rc = subprocess.run(sys.argv[2:], check=False, env=g_session.env).returncode
+
+        sys.exit(rc)
+
+    import protonfixes
 
     #determine mode
     rc = 0
