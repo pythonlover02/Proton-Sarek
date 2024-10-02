@@ -232,19 +232,21 @@ Simple just follow this steps:
 
 2. Download the DXVK version that you want to use
 
-3. Download the wine.inf file of the GitHub (If you want to use my patches and custom prefix)
+3. Download the wine.inf and proton file of the GitHub (If you want to use my patches and custom prefix)
 
 4. Copy the contents of the DXVK/x32/ to ProtonBuild/files/lib/wine/dxvk/
 
 5. Copy the contents of the DXVK/x64/ to ProtonBuild/files/lib64/wine/dxvk/
 
-6. Copy the wine.inf file to ProtonBuild/files/share/wine/
+6. Copy the proton file to ProtonBuild/
 
-7. Add any extra configuration that you would want to add to the wine.inf, what dlls will be on native, building or both, this can be do per game or in general; regedit keys and values to modify the Proton behavior(Set a determinated Video Memory Size, CSMT, etc). Check out [WineHQ  Useful Registry Keys](https://gitlab.winehq.org/wine/wine/-/wikis/Useful-Registry-Keys) for more info.
+7. Copy the wine.inf file to ProtonBuild/files/share/wine/
 
-8. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
+8. Add any extra configuration that you would want to add to the wine.inf, what dlls will be on native, building or both, this can be do per game or in general; regedit keys and values to modify the Proton behavior(Set a determinated Video Memory Size, CSMT, etc). Check out [WineHQ  Useful Registry Keys](https://gitlab.winehq.org/wine/wine/-/wikis/Useful-Registry-Keys) for more info.
 
-9. Enjoy :P 
+9. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
+
+10. Enjoy :P 
 
 ## Credits:
 This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
