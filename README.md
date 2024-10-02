@@ -16,6 +16,8 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 
 ----
 
+## Important!!! VKD3D its not supported at this moment.
+
 ## Table of Contents:
 - [Install](#Install)
 	- [Native](#Native)
