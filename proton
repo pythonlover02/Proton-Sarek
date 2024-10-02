@@ -42,7 +42,7 @@ from pathlib import Path
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="Sarek9-15-r1-async"
+CURRENT_PREFIX_VERSION="Sarek9-15-r1"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
