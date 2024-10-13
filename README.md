@@ -17,8 +17,6 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 
 ----
 
-## Important!!! VKD3D its not supported at this moment.
-
 ## Table of Contents:
 - [Install](#Install)
 	- [Native](#Native)
@@ -73,11 +71,11 @@ Current status and upcoming changes for the Builds. The following features are c
 | Feature Description                                         | Status             |
 |-----------------------------------------------------------|--------------------|
 | **DXVK 1.10.3 on Proton**                                 | <span style="color: green;">**Ready**</span>               |
+| **VKD3D 2.8 on Proton**                                   | <span style="color: green;">**Ready**</span>               |
 | **Global Patches for the Proton Prefix**                  | <span style="color: green;">**Ready**</span>               |
 | **WineD3D uses OpenGL 4.6**                               | <span style="color: green;">**Ready**</span>               |
 | **WineD3D with command stream and command serialization** | <span style="color: green;">**Ready**</span>               |
 | **DXVK Async implementation**                             | <span style="color: green;">**Async**</span>               |
-| **VKD3D Support**                                  | <span style="color: green;">**Work in Progress**</span>    |
 | **Gallium Nine implementation**                           | <span style="color: green;">**Work in Progress**</span>    |
 
 ### Status Definitions:
