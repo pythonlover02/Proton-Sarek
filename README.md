@@ -271,6 +271,11 @@ https://github.com/Sporif/dxvk-async
 
 This project incorporates work from Sporif's DXVK Async, which provides patched versions of DXVK that enable asynchronous pipeline compilation. This allows shaders to be compiled in the background, reducing stuttering caused by synchronous shader compilation, and enhancing performance in certain scenarios. We would like to thank Sporif for their valuable contributions, and we are pleased to integrate DXVK Async into this project.
 
+### HansKristian-Work: 
+https://github.com/HansKristian-Work/vkd3d-proton
+
+This project benefits from the incredible work of HansKristian-Work and his creation of VKD3D-proton, which plays a key role in Linux gaming, making Windows DX12 games run smoothly on Linux through Vulkan. We deeply appreciate his contributions and use VKD3D-proton in this project.
+
 ### Also i want to thanks all of those reddit users that help me make the Supported GPU List:
 
 	wolfegothmog
