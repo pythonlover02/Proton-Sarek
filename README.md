@@ -71,7 +71,7 @@ Current status and upcoming changes for the Builds. The following features are c
 | Feature Description                                         | Status             |
 |-----------------------------------------------------------|--------------------|
 | **DXVK 1.10.3 on Proton**                                 | <span style="color: green;">**Ready**</span>               |
-| **VKD3D 2.8 on Proton**                                   | <span style="color: green;">**Ready**</span>               |
+| **VKD3D-proton 2.6 on Proton**                            | <span style="color: green;">**Ready**</span>               |
 | **Global Patches for the Proton Prefix**                  | <span style="color: green;">**Ready**</span>               |
 | **WineD3D uses OpenGL 4.6**                               | <span style="color: green;">**Ready**</span>               |
 | **WineD3D with command stream and command serialization** | <span style="color: green;">**Ready**</span>               |
