@@ -220,33 +220,48 @@ Games that i have tested so far
 
 ## Building:
 
-Heres the neat part, you dont :), now out of jokes, i manually assemble the next release based on a locally compiled Proton or Proton GE version, or if i dont that much time i download and already compiled build and work with that.
+Follow these steps to add to your Proton Build the Sarek patches:
 
-Why do I assemble it this way? Because I find it easier. I know that easier doesn't mean it's the right approach, but I try to do my best. Also, if we keep out the overwrite of the DXVK version, the only changes are in the wine.inf file, which contains the Proton/Wine prefix configuration. Features like using OpenGL 4.6 with WineD3D with command stream and command serialization were achieved there.
+### 1. Download/Compile Proton
+- **Option 1:** Compile your Proton build from source.
 
-So How i replicate the releases here?
+- **Option 2:** Download a precompiled Proton build (GE-Proton or Valve's stable release are the only ones officially supported).
 
-Simple just follow this steps:
+### 2. Get the Sarek Patches
+- Clone or download the Sarek patches from this repository.
 
-1. Compile or Download the Proton Version that you want to use
+### 3. Rename the Proton Executable (if necessary)
+- If you're using **GE-Proton**, no need to rename anything, as the default `proton` file works out of the box.
+- For **Valve's Proton** builds:
+  - Rename `proton` (from the Sarek-Patches dir) to something else like `proton-ge`.
+  - Rename the `proton-valve` file from the Sarek-Patches to `proton`.
 
-2. Download the DXVK version that you want to use
+### 4. Modify Compatibilitytool.vdf and Proton Files
+- Edit both `compatibilitytool.vdf` and `proton` files to reflect the name of your build (replace "Sarek" with your custom build name).
 
-3. Download the wine.inf and proton file of the GitHub (If you want to use my patches and custom prefix)
+- Optionally, make additional tweaks to `wine.inf` or other configuration files as needed for your specific build.
 
-4. Copy the contents of the DXVK/x32/ to ProtonBuild/files/lib/wine/dxvk/
+### 5. Make the `make.sh` Script Executable
+- If you want a build with normal DXVK or DXVK-Async, make the appropriate script executable:
 
-5. Copy the contents of the DXVK/x64/ to ProtonBuild/files/lib64/wine/dxvk/
+		chmod +x /path/to/make.sh       # For normal DXVK
+		chmod +x /path/to/make-async.sh  # For DXVK-Async
 
-6. Copy the proton file to ProtonBuild/
+### 6. Run the Build Script
 
-7. Copy the wine.inf file to ProtonBuild/files/share/wine/
+- Execute the script with superuser privileges:
 
-8. Add any extra configuration that you would want to add to the wine.inf, what dlls will be on native, building or both, this can be do per game or in general; regedit keys and values to modify the Proton behavior(Set a determinated Video Memory Size, CSMT, etc). Check out [WineHQ  Useful Registry Keys](https://gitlab.winehq.org/wine/wine/-/wikis/Useful-Registry-Keys) for more info.
+		sudo /path/to/make.sh
 
-9. You should change the name of the build, the one that Steam will show under the compatibility section. To do this go to ProtonBuild/ and open the compatibilitytool.vdf and change the internal name of the tool and the display_name 
+- or for the async build:
 
-10. Enjoy :P 
+		sudo /path/to/make-async.sh
+
+When prompted, provide the path to the Proton build you downloaded or compiled.
+
+### 7. Enjoy Your Custom Proton Build!
+
+- Thats all, enjoy *:)*
 
 ## Credits:
 This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
