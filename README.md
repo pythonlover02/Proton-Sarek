@@ -30,9 +30,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 	- [Proton](#Proton)
 	- [Optimization](#Optimization)
 		- [System](#System)
-   		- [Mesa](#Mesa)
-		- [Nvidia](#Nvidia)
-		- [Software Rendering](#Software-Rendering)
+   		- [Sarek](#Sarek)
 		- [Additional Tips](#Additional-Tips)
 - [Testing](#Testing)
 - [Building](#Building)
@@ -75,6 +73,7 @@ Current status and upcoming changes for the Builds. The following features are c
 | **Global Patches for the Proton Prefix**                  | <span style="color: green;">**Ready**</span>               |
 | **WineD3D uses OpenGL 4.6**                               | <span style="color: green;">**Ready**</span>               |
 | **WineD3D with command stream and command serialization** | <span style="color: green;">**Ready**</span>               |
+| **PROTON_TWEAKS Parameters** 			            | <span style="color: green;">**Ready**</span>               |
 | **DXVK Async implementation**                             | <span style="color: green;">**Async**</span>               |
 | **Gallium Nine implementation**                           | <span style="color: green;">**Work in Progress**</span>    |
 
@@ -131,7 +130,7 @@ The Optimzation variables are set on the same way on the launch options
 | `PROTON_ENABLE_NVAPI=[0/1]`                  | Enable NVIDIA's NVAPI GPU support library.                                                                                                    |
 | `PROTON_OLD_GL_STRING=[0/1]`                 | Set some driver overrides to limit the length of the GL extension string, for old games that crash on very long extension strings.             |
 | `PROTON_USE_XALIA=[0/1]`                     | Enable Xalia, a program that can add a gamepad UI for some keyboard/mouse interfaces.                                                         |
-| `MESA_GL_VERSION_OVERRIDE=4.6 MESA_GLSL_VERSION_OVERRIDE=460`               | Only for Mesa, it changes the default string of the OpenGL version to OpenGL 4.6, faking it and making the game believe that your GPU supports that version. The game may open or not; if it doesn't open, your only solution is [Software Rendering](#software-rendering). |
+| `MESA_GL_VERSION_OVERRIDE=4.6 MESA_GLSL_VERSION_OVERRIDE=460`               | Only for Mesa, it changes the default string of the OpenGL version to OpenGL 4.6, faking it and making the game believe that your GPU supports that version. The game may open or not; if it doesn't open, your only solution is Software Rendering. |
 
 ## Optimization:
 
@@ -146,34 +145,15 @@ First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 
 My personal recomendation its to search a tutorial for the installation of the three in your favorite Linux Distro *;P*
 
-### Mesa:
-For AMD, Intel and Nvidia GPUs (Only Open Source Drivers)
+### Sarek:
+Starting with the Sarek 9-16 release, Sarek will include custom parameters aimed at maximizing performance. However, it's important to note that while these parameters can boost performance, they may also worsen it in certain situations, cause visual glitches, or lead to instability. It's recommended to use them only when necessary.
 
-| Environment Variable                    | Description                                                                                         |
-|-----------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `mesa_glthread=[false/true]`           | Active or disable threaded optimizations for the OpenGL API.                                      |
-| `MESA_SHADER_CACHE_DISABLE=[false/true]` | Disable or enable the GPU shader cache on the disk.                                              |
-| `MESA_SHADER_CACHE_DIR=/path/to/location` | Path for the shader cache.                                                                         |
-
-### Nvidia:
-Nvidia GPUs with the Propietary Driver
-
-| Environment Variable                       | Description                                                                                                                                    |
-|--------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| `__GL_THREADED_OPTIMIZATIONS=[0/1]`       | Active or disable threaded optimizations for the OpenGL API; while it can help to increase FPS, in some games it may worsen performance.       |
-| `__GL_SHADER_DISK_CACHE=[0/1]`            | Enable or disable the GPU shader cache on the disk.                                                                                          |
-| `__GL_SHADER_DISK_CACHE_PATH=/path/to/location` | Path for the shader cache.                                                                                                                    |
-
-### Software Rendering:
-No GPU Driver its used to render the game here, just the CPU, so it doesnt matter if you have the Nvidia Propietary Driver installed. But remember that you should have Mesa on your system
-
-| Environment Variable                          | Description                                                                                                                                     |
-|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| `LIBGL_ALWAYS_SOFTWARE=1`                     | Enables software rendering for the OpenGL API (4.5 is the maximum version supported). Not recommended for performance, but can be useful if no compatible GPU is available; uses CPU for rendering, which is slow. |
-| `__GLX_VENDOR_LIBRARY_NAME=mesa`              | Specifies the use of the Mesa GLX vendor library for OpenGL rendering, use it when you are using the Nvidia Propietary Driver.               |
-| `mesa_glthread=[false/true]`                 | Active or disable threaded optimizations for the OpenGL API.                                                                                  |
-| `MESA_SHADER_CACHE_DISABLE=[false/true]`     | Disable or enable the GPU shader cache on the disk.                                                                                            |
-| `MESA_SHADER_CACHE_DIR=/path/to/location`     | Path for the shader cache.                                                                                                                    |
+| Environment Variable              | Description                                                                                      |
+|-----------------------------------|--------------------------------------------------------------------------------------------------|
+| `PROTON_TWEAKS=[0/1]`             | Enables all the `PROTON_TWEAKS_*` parameters                                                     |
+| `PROTON_TWEAKS_PROTON=[0/1]`      | Adds a set of Proton/Wine optimizations as environment variables                                 |
+| `PROTON_TWEAKS_NVIDIA=[0/1]`      | Adds a set of optimizations as environment variables for the NVIDIA proprietary drivers          |
+| `PROTON_TWEAKS_MESA=[0/1]`        | Adds a set of optimizations as environment variables for the MESA drivers                        |
 
 ### Additional Tips:
 
