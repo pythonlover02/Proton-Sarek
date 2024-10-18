@@ -401,8 +401,27 @@ def setup_dir_drive(compat_option, drive_name, dest_dir):
         elif file_exists(drive_path, follow_symlinks=False):
             os.remove(drive_path)
 
+def is_directory_empty(dir_path):
+    # Check if the directory is empty
+    return not any(os.scandir(dir_path))
+
 def setup_game_dir_drive():
-        setup_dir_drive("gamedrive", "s:", try_get_game_library_dir())
+        if os.environ.get('UMU_ID', ''):
+            directories_to_check = [
+                '/media',
+                '/run/media',
+                '/mnt',
+                os.path.expanduser("~")  # Current user's home directory
+            ]
+
+            drive_letter = ord('u')  # Start from 'u'
+
+            for directory in directories_to_check:
+                if os.path.exists(directory) and not is_directory_empty(directory):
+                    setup_dir_drive("gamedrive", f"{chr(drive_letter)}:", directory)
+                    drive_letter += 1  # Increment to the next drive letter
+        else:
+            setup_dir_drive("gamedrive", "s:", try_get_game_library_dir())
 
 def setup_steam_dir_drive():
         setup_dir_drive("steamdrive", "t:", try_get_steam_dir())
@@ -1235,6 +1254,11 @@ def default_compat_config():
             ret.add("heapzeromemory")
 
         if appid in [
+                "71230", #Crazy Taxi
+                ]:
+            ret.add("heaptopdown")
+
+        if appid in [
                 "2630", #Call of Duty 2
                 "1060210", #Disaster Report 4: Summer Memories
                 "414740", #RAID: World War II
@@ -1265,6 +1289,7 @@ def default_compat_config():
                 "202750", #Alan Wake's American Nightmare
                 "255220", #GRID Autosport
                 "44350", #GRID 2
+                "2176900", #Fablecraft
                 ]:
             ret.add("disablenvapi")
 
@@ -1283,13 +1308,18 @@ def default_compat_config():
         appid = os.environ["STEAM_COMPAT_APP_ID"]
         if appid in [
                 "7000", # Tomb Raider: Legend
+                "7200", # Trackmania United Forever
                 "8000", # Tomb Raider: Anniversary
+                "11020", # TrackMania Nations Forever
+                "15750", # Oddworld: Stranger's Wrath HD
                 "22300", # Fallout 3
                 "22370", # Fallout 3: Game of the Year Edition
+                "22380", # Fallout: New Vegas
                 "72850", # The Elder Scrolls V: Skyrim
                 "377160", # Fallout 4
                 "397950", # Clustertruck
                 "489830", # The Elder Scrolls V: Skyrim Special Edition
+                "610190", # WARRIORS ALL-STARS
                 "712180", # Mugsters
                 "1818750", # MultiVersus
                 ]:
@@ -1299,6 +1329,10 @@ def default_compat_config():
                 "255960", #Bad Mojo Redux
                 ]:
             ret.add("gamedrive")
+
+    # hack to force gamedrive compat_config always for umu
+    if os.environ.get('UMU_ID', ''):
+        ret.add("gamedrive")
 
     return ret
 
@@ -1541,6 +1575,9 @@ class Session:
 
         if "heapzeromemory" in self.compat_config:
             self.env["WINE_HEAP_ZERO_MEMORY"] = "1"
+
+        if "heaptopdown" in self.compat_config:
+            self.env["WINE_HEAP_TOP_DOWN"] = "1"
 
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
