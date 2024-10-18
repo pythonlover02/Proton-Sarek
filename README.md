@@ -73,6 +73,7 @@ Current status and upcoming changes for the Builds. The following features are c
 | **Global Patches for the Proton Prefix**                  | <span style="color: green;">**Ready**</span>               |
 | **WineD3D uses OpenGL 4.6**                               | <span style="color: green;">**Ready**</span>               |
 | **WineD3D with command stream and command serialization** | <span style="color: green;">**Ready**</span>               |
+| **PROTON_TWEAKS Parameters** 			            | <span style="color: green;">**Ready**</span>               |
 | **DXVK Async implementation**                             | <span style="color: green;">**Async**</span>               |
 | **Gallium Nine implementation**                           | <span style="color: green;">**Work in Progress**</span>    |
 
