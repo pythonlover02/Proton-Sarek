@@ -12,6 +12,10 @@
     #echo "DXVK: -Nvidia Reflex- Add NV low latency support"
     #pushd include/vulkan; git pull; git checkout bbe0f575ebd6098369f0ac6c6a43532732ed0ba6; popd
     #patch -Np1 < ../patches/proton/80-nv_low_latency_dxvk.patch
+
+    echo "DXVK: add dxvk async patch"
+    patch -Np1 < ../patches/dxvk/dxvk-async.patch
+    
     popd
 
     pushd vkd3d-proton
