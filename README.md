@@ -4,7 +4,7 @@ Sarek (Proton-For-Old-Vulkan): A custom Proton build with DXVK 1.10.3 for users 
 
 **Why does this repository exist?**
 
-Because there are still users with GPUs that support Vulkan 1.1+ but not Vulkan 1.3, as well as others with non-Vulkan support. Those who can use DXVK often rely on older Proton versions, which suffer from lower compatibility and performance compared to newer builds. Meanwhile, users dependent on WineD3D frequently face poor gaming experiences. This repository provides patched versions of Proton and/or Proton-GE, offering better performance with DXVK v1.10.3 and significant improvements to WineD3D, ensuring a smoother experience for both Vulkan and non-Vulkan setups.
+Because there are still users with GPUs that support Vulkan 1.1+ but not Vulkan 1.3, as well as others with non-Vulkan support. Those who can use DXVK often rely on older Proton versions, which suffer from lower compatibility and performance compared to newer builds. Meanwhile, users dependent on WineD3D frequently face poor gaming experiences. This repository provides patched versions of Proton and/or Proton-GE, offering better performance with DXVK v1.10.3 and WineD3D mainly trough the custom parameter `PROTON_TWEAKS`, along with other enhancements, ensuring a smoother experience for both Vulkan and non-Vulkan setups.
 
 Please be aware that this is a custom build of Proton and is **not** affiliated with Valve's Proton. If you encounter any issues specific to my Proton build from this repository that do not occur with Valve's version, kindly refrain from submitting a bug report to Valve's bug github. Instead, please report the issue directly on this GitHub. Thank you for your understanding!
 
@@ -67,15 +67,15 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 Current status and upcoming changes for the Builds. The following features are categorized based on their current development status:
 
 | Feature Description                                         | Status             |
-|-----------------------------------------------------------|--------------------|
-| **DXVK 1.10.3 on Proton**                                 | <span style="color: green;">**Ready**</span>               |
-| **VKD3D-proton 2.6 on Proton**                            | <span style="color: green;">**Ready**</span>               |
-| **Global Patches for the Proton Prefix**                  | <span style="color: green;">**Ready**</span>               |
-| **WineD3D uses OpenGL 4.6**                               | <span style="color: green;">**Ready**</span>               |
-| **WineD3D with command stream and command serialization** | <span style="color: green;">**Ready**</span>               |
-| **PROTON_TWEAKS Parameters** 			            | <span style="color: green;">**Ready**</span>               |
-| **DXVK Async implementation**                             | <span style="color: green;">**Async**</span>               |
-| **Gallium Nine implementation**                           | <span style="color: green;">**Work in Progress**</span>    |
+|-------------------------------------------------------------|--------------------|
+| **DXVK 1.10.3 on Proton**                                   | <span style="color: green;">**Ready**</span>               |
+| **VKD3D-proton 2.6 on Proton**                              | <span style="color: green;">**Ready**</span>               |
+| **Global Patches for the Proton Prefix**                    | <span style="color: green;">**Ready**</span>               |
+| **WineD3D can use a maximum of OpenGL 4.6**                 | <span style="color: green;">**Ready**</span>               |
+| **WineD3D forces command stream and command serialization** | <span style="color: green;">**Ready**</span>               |
+| **PROTON_TWEAKS Parameters on Proton** 		      | <span style="color: green;">**Ready**</span>               |
+| **DXVK Async on Proton**                                    | <span style="color: green;">**Async**</span>               |
+| **Gallium Nine on Proton**                                  | <span style="color: green;">**Work in Progress**</span>    |
 
 ### Status Definitions:
 - **Ready**: The change is included in the Stable, Stable Async and Testing Builds.
@@ -154,6 +154,10 @@ Starting with the Sarek 9-16 release, Sarek will include custom parameters aimed
 | `PROTON_TWEAKS_PROTON=[0/1]`      | Adds a set of Proton/Wine optimizations as environment variables                                 |
 | `PROTON_TWEAKS_NVIDIA=[0/1]`      | Adds a set of optimizations as environment variables for the NVIDIA proprietary drivers          |
 | `PROTON_TWEAKS_MESA=[0/1]`        | Adds a set of optimizations as environment variables for the MESA drivers                        |
+
+Here are 2 benchmarks in witch i compare the performance of having PROTON_TWEAKS on and off:
+ - [AMD Benchmark](https://flightlessmango.com/games/38020/logs/5865)
+ - [NVIDIA Benchmark](https://flightlessmango.com/games/38020/logs/5863) (With Proprietary Drivers)
 
 ### Additional Tips:
 
