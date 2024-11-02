@@ -1444,7 +1444,7 @@ class Session:
 
         if "PROTON_OGL_SOFTWARE" in self.env and nonzero(self.env["PROTON_OGL_SOFTWARE"]):
 
-            # Enables software rendering for OpenGL up to version 4.5. PROTON_TWEAKS_PROTON and PROTON_TWEAKS_MESA comes enabled by default as you will need it 100%.
+            # Enables software rendering for OpenGL up to version 4.6. PROTON_TWEAKS_PROTON and PROTON_TWEAKS_MESA comes enabled by default as you will need it 100%.
             self.env["LIBGL_ALWAYS_SOFTWARE"] = "1"
             self.env["__GLX_VENDOR_LIBRARY_NAME"] = "mesa"
 
