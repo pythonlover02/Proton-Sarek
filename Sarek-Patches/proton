@@ -17,6 +17,7 @@ import subprocess
 import sys
 import tarfile
 import shlex
+import uuid
 
 from ctypes import CDLL
 from ctypes import CFUNCTYPE
