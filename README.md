@@ -158,16 +158,15 @@ These are the custom parameters introduced in Sarek to enhance performance and p
 | `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3, PROTON_TWEAKS comes enabled by default |
 | `PROTON_OGL_SOFTWARE=[0/1]`       | Uses LLVMpipe for CPU-based rendering for OpenGL, supporting API version 4.6, PROTON_TWEAKS comes enabled by default |
 
-#### Below are benchmarks comparing performance with `PROTON_TWEAKS` enabled and disabled:
-
+**Below are benchmarks comparing performance with** `PROTON_TWEAKS` **enabled and disabled:** 
 - [AMD Benchmark](https://flightlessmango.com/games/38020/logs/5865)
 - [NVIDIA Benchmark](https://flightlessmango.com/games/38020/logs/5863) (using proprietary drivers)
 
-#### Requirements for Using Lavapipe (Vulkan Software Rendering):
+**Requirements for Using Lavapipe (Vulkan Software Rendering):**
 - **Mesa Version**: 20.3 or newer
 - **CPU**: Multi-core recommended for better performance
 
-#### Requirements for Using LLVMpipe (OpenGL Software Rendering):
+**Requirements for Using LLVMpipe (OpenGL Software Rendering):**
 - **Mesa Version**: Any recent version (LLVMpipe is well-supported in current Mesa releases)
 - **CPU**: Multi-core recommended for better performance
 
