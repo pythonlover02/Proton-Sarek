@@ -74,6 +74,7 @@ Current status and upcoming changes for the Builds. The following features are c
 | **WineD3D can use a maximum of OpenGL 4.6**                 | <span style="color: green;">**Ready**</span>               |
 | **WineD3D forces command stream and command serialization** | <span style="color: green;">**Ready**</span>               |
 | **PROTON_TWEAKS Parameters on Proton** 		      | <span style="color: green;">**Ready**</span>               |
+| **PROTON_API_SOFTWARE Parameters on Proton** 		      | <span style="color: green;">**Ready**</span>               |
 | **DXVK Async on Proton**                                    | <span style="color: green;">**Async**</span>               |
 | **Gallium Nine on Proton**                                  | <span style="color: green;">**Work in Progress**</span>    |
 
@@ -146,18 +147,28 @@ First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 My personal recomendation its to search a tutorial for the installation of the three in your favorite Linux Distro *;P*
 
 ### Sarek:
-Starting with the Sarek 9-16 release, Sarek will include custom parameters aimed at maximizing performance. However, it's important to note that while these parameters can boost performance, they may also worsen it in certain situations, cause visual glitches, or lead to instability. It's recommended to use them only when necessary.
+These are the custom parameters introduced in Sarek to enhance performance and provide fallback rendering options.
 
-| Environment Variable              | Description                                                                                      |
-|-----------------------------------|--------------------------------------------------------------------------------------------------|
-| `PROTON_TWEAKS=[0/1]`             | Enables all the `PROTON_TWEAKS_*` parameters                                                     |
-| `PROTON_TWEAKS_PROTON=[0/1]`      | Adds a set of Proton/Wine optimizations as environment variables                                 |
-| `PROTON_TWEAKS_NVIDIA=[0/1]`      | Adds a set of optimizations as environment variables for the NVIDIA proprietary drivers          |
-| `PROTON_TWEAKS_MESA=[0/1]`        | Adds a set of optimizations as environment variables for the MESA drivers                        |
+| Environment Variable              | Description                                                                                                          |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| `PROTON_TWEAKS=[0/1]`             | Enables all the `PROTON_TWEAKS_*` parameters for general performance optimization                                    |
+| `PROTON_TWEAKS_PROTON=[0/1]`      | Adds a set of Proton/Wine optimizations as environment variables                                                     |
+| `PROTON_TWEAKS_NVIDIA=[0/1]`      | Adds a set of optimizations for NVIDIA proprietary drivers                                                           |
+| `PROTON_TWEAKS_MESA=[0/1]`        | Adds a set of optimizations for MESA drivers                                                                         |
+| `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3, PROTON_TWEAKS comes enabled by default |
+| `PROTON_OGL_SOFTWARE=[0/1]`       | Uses LLVMpipe for CPU-based rendering for OpenGL, supporting API version 4.6, PROTON_TWEAKS comes enabled by default |
 
-Here are 2 benchmarks in witch i compare the performance of having PROTON_TWEAKS on and off:
- - [AMD Benchmark](https://flightlessmango.com/games/38020/logs/5865)
- - [NVIDIA Benchmark](https://flightlessmango.com/games/38020/logs/5863) (With Proprietary Drivers)
+**Below are benchmarks comparing performance with** `PROTON_TWEAKS` **enabled and disabled:** 
+- [AMD Benchmark](https://flightlessmango.com/games/38020/logs/5865)
+- [NVIDIA Benchmark](https://flightlessmango.com/games/38020/logs/5863) (using proprietary drivers)
+
+**Requirements for Using Lavapipe (Vulkan Software Rendering):**
+- **Mesa Version**: 20.3 or newer
+- **CPU**: Multi-core recommended for better performance
+
+**Requirements for Using LLVMpipe (OpenGL Software Rendering):**
+- **Mesa Version**: Any recent version (LLVMpipe is well-supported in current Mesa releases)
+- **CPU**: Multi-core recommended for better performance
 
 ### Additional Tips:
 
