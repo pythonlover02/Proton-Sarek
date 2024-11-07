@@ -43,4 +43,8 @@ cp "$SCRIPT_DIR/compatibilitytool.vdf" "$protondir/" || { echo "Failed to copy c
 echo "Copying wine.inf file..."
 cp "$SCRIPT_DIR/wine.inf" "$protondir/files/share/wine/" || { echo "Failed to copy wine.inf file."; exit 1; }
 
+# Copy the user.reg file
+echo "Copying user.reg file..."
+cp "$SCRIPT_DIR/user.reg" "$protondir/files/share/default_pfx/" || { echo "Failed to copy user.reg file."; exit 1; }
+
 echo "All files copied successfully."
