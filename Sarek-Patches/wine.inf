@@ -3182,3 +3182,8 @@ HKCU,Software\Wine\AppDefaults\RiftApart.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\ffxvi.exe\DllOverrides,"atiadlxx",,"builtin"
 HKLM,Software\Wow6432Node\lucasarts entertainment company llc\Star Wars: Episode I Racer\v1.0,"Display Height",0x10001,480
 HKLM,Software\Wow6432Node\lucasarts entertainment company llc\Star Wars: Episode I Racer\v1.0,"Display Width",0x10001,640
+;;App-specific overrides for dinput8.dll.
+HKCU,Software\Wine\AppDefaults\speed.exe\DllOverrides,"dinput8",0x2,"native,builtin"
+HKCU,Software\Wine\AppDefaults\speed2.exe\DllOverrides,"dinput8",0x2,"native,builtin"
+HKCU,Software\Wine\AppDefaults\nfs.exe\DllOverrides,"dinput8",0x2,"native,builtin"
+HKCU,Software\Wine\AppDefaults\nfsc.exe\DllOverrides,"dinput8",0x2,"native,builtin"
