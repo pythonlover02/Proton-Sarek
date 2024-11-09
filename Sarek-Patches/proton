@@ -1787,6 +1787,26 @@ class Session:
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
+        # Always set DRI_PRIME=1 if more than one GPU is detected.
+        # Fixes Diablo IV grey screen with igpu + dgpu
+        try:
+            # Execute the lspci command to list all PCI devices
+            output = subprocess.check_output(['lspci'], encoding='utf-8')
+
+            # Filter the output for VGA compatible controllers
+            gpu_list = [line for line in output.split('\n') if 'VGA compatible controller' in line]
+
+            # Count the number of GPUs
+            num_gpus = len(gpu_list)
+
+            if num_gpus > 1:
+                self.env["DRI_PRIME"] = "1"
+
+        except subprocess.CalledProcessError:
+            print("Failed to execute lspci. Ensure the command is available on your system.")
+        except FileNotFoundError:
+            print("lspci command not found. Ensure it is installed on your system.")
+
         # NVIDIA software may check NVIDIA_WINE_DLL_DIR as a search-path for
         # driver-provided DLLs for use by Proton/Wine.
         nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
