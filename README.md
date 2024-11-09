@@ -11,7 +11,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 ----
 
 ![Badge Language](https://img.shields.io/github/languages/top/pythonlover02/Proton-Sarek)
-![GitHub commits](https://img.shields.io/github/commits-since/pythonlover02/Proton-Sarek/latest/dev?label=Total%20Commits)
+![GitHub commits](https://img.shields.io/github/commits-since/pythonlover02/Proton-Sarek/latest/onlyfixes?label=Total%20Commits)
 ![Hello There](https://img.shields.io/badge/hello-_there-blue)
 [![Stars](https://img.shields.io/github/stars/pythonlover02/Proton-Sarek?style=social)](https://github.com/pythonlover02/Proton-Sarek/stargazers)
 
