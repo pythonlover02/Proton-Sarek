@@ -3136,12 +3136,17 @@ HKCU,Software\Wine\AppDefaults\DarkSoulsIII.exe\X11 Driver,"LimitNumberOfResolut
 HKCU,Software\Wine\AppDefaults\sekiro.exe\X11 Driver,"LimitNumberOfResolutions",0x2,"32"
 HKCU,Software\Wine\AppDefaults\NieRAutomata.exe\X11 Driver,"LimitNumberOfResolutions",0x2,"32"
 HKCU,Software\Wine\AppDefaults\SpellForce.exe\X11 Driver,"LimitNumberOfResolutions",0x2,"16"
+HKLM,Software\Wow6432Node\lucasarts entertainment company llc\Star Wars: Episode I Racer\v1.0,"Display Height",0x10001,480
+HKLM,Software\Wow6432Node\lucasarts entertainment company llc\Star Wars: Episode I Racer\v1.0,"Display Width",0x10001,640
 ;;Other app-specific overrides
 HKCU,Software\Wine\AppDefaults\Pentiment.exe\DllOverrides,"SpeechSynthesisWrapper",,"disabled"
 HKCU,Software\Wine\AppDefaults\Maine-Win64-Shipping.exe\DllOverrides,"SpeechSynthWrapper",0x2,"disabled"
 HKCU,Software\Wine\AppDefaults\rayne1.exe\DllOverrides,"d3d8",,"native"
 HKCU,Software\Wine\AppDefaults\rayne2.exe\DllOverrides,"d3d8",,"native"
 HKCU,Software\Wine\AppDefaults\RDR2.exe\DllOverrides,"vulkan-1",,"native"
+HKCU,Software\Wine\AppDefaults\msedgewebview2.exe,"Version",,"win81"
+HKCU,Software\Wine\AppDefaults\TDUSC.exe\DllOverrides,"xinput1_3",,"native,builtin"
+HKCU,Software\Wine\AppDefaults\Paradox Launcher.exe\DllOverrides,,4,
 ;;App-specific overrides for amd_ags_x64.dll.
 HKCU,Software\Wine\AppDefaults\NewColossus_x64vk.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
 HKCU,Software\Wine\AppDefaults\RDR2.exe\DllOverrides,"amd_ags_x64",0x2,"builtin,native"
@@ -3153,7 +3158,6 @@ HKCU,Software\Wine\AppDefaults\MonsterHunterRise.exe\DllOverrides,"amd_ags_x64",
 HKCU,Software\Wine\AppDefaults\Sam4.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
 HKCU,Software\Wine\AppDefaults\Sam4_Unrestricted.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
 HKCU,Software\Wine\AppDefaults\ShadowOfWar.exe\DllOverrides,"amd_ags_x64",,"disabled"
-HKCU,Software\Wine\AppDefaults\TDUSC.exe\DllOverrides,"xinput1_3",,"native,builtin"
 HKCU,Software\Wine\AppDefaults\u4.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
 HKCU,Software\Wine\AppDefaults\tll.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
 HKCU,Software\Wine\AppDefaults\SOPFFO.exe\DllOverrides,"amd_ags_x64",0x2,"builtin"
@@ -3170,18 +3174,14 @@ HKCU,Software\Wine\AppDefaults\BlackOps3.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\NFS16.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\ShadowOfWar.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\DIRT5.exe\DllOverrides,"atiadlxx",,"builtin"
-HKCU,Software\Wine\AppDefaults\Paradox Launcher.exe\DllOverrides,,4,
 HKCU,Software\Wine\AppDefaults\gotg.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\RelicCardinal.exe\DllOverrides,"atiadlxx",,"builtin"
-HKCU,Software\Wine\AppDefaults\msedgewebview2.exe,"Version",,"win81"
 HKCU,Software\Wine\AppDefaults\Avengers.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\starwarssquadrons.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\GW2.Main_Win64_Retail.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\Spider-Man.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\RiftApart.exe\DllOverrides,"atiadlxx",,"builtin"
 HKCU,Software\Wine\AppDefaults\ffxvi.exe\DllOverrides,"atiadlxx",,"builtin"
-HKLM,Software\Wow6432Node\lucasarts entertainment company llc\Star Wars: Episode I Racer\v1.0,"Display Height",0x10001,480
-HKLM,Software\Wow6432Node\lucasarts entertainment company llc\Star Wars: Episode I Racer\v1.0,"Display Width",0x10001,640
 ;;App-specific overrides for dinput8.dll.
 HKCU,Software\Wine\AppDefaults\speed.exe\DllOverrides,"dinput8",0x2,"native,builtin"
 HKCU,Software\Wine\AppDefaults\speed2.exe\DllOverrides,"dinput8",0x2,"native,builtin"
