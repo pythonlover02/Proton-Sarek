@@ -14,6 +14,7 @@ import stat
 import subprocess
 import sys
 import shlex
+import uuid
 
 from ctypes import CDLL
 from ctypes import CFUNCTYPE
@@ -405,6 +406,57 @@ def set_dir_casefold_bit(dir_path):
         pass
     os.close(dr)
 
+def get_replace_reg_value(file, key, name, new_value=None):
+    if not file_exists(file, follow_symlinks=True):
+        return None
+    replaced = False
+    out = None
+    if new_value is not None:
+        out = open(file + ".new", "w")
+    found_key = False
+    old_value = None
+    namestr="\"" + name + "\"="
+    with open(file, "r") as reg_in:
+        for line in reg_in:
+            if not replaced:
+                if line[0] == '[':
+                    if found_key:
+                        if out is not None:
+                            out.close()
+                        return None
+                    if line[1:len(key) + 1] == key:
+                        found_key = True
+                elif found_key:
+                    idx = line.find(namestr)
+                    if idx != -1:
+                        old_value = line[idx + len(namestr):]
+                        if out is not None:
+                            out.write(namestr + new_value)
+                            replaced = True
+                            continue
+                        else:
+                            return old_value
+            if out is not None:
+                out.write(line)
+
+    if out is not None:
+        out.close()
+
+    if replaced:
+        try:
+            os.rename(file, file + ".old")
+        except OSError:
+            os.remove(file)
+            pass
+
+        try:
+            os.rename(file + ".new", file)
+        except OSError:
+            log("Unable to write new registry file to " + file)
+            pass
+
+    return old_value
+
 class Proton:
     def __init__(self, base_dir):
         self.base_dir = base_dir + "/"
@@ -478,6 +530,7 @@ class CompatData:
         self.config_info_file = self.path("config_info")
         self.tracked_files_file = self.path("tracked_files")
         self.prefix_lock = FileLock(self.path("pfx.lock"), timeout=-1)
+        self.old_machine_guid = None
 
     def path(self, d):
         return self.base_dir + d
@@ -531,6 +584,7 @@ class CompatData:
                     (int(new_proton_maj) == int(old_proton_maj) and \
                      int(new_proton_min) < int(old_proton_min)):
                 log("Removing newer prefix")
+                self.old_machine_guid = get_replace_reg_value(self.prefix_dir + "system.reg", "Software\\\\Microsoft\\\\Cryptography", "MachineGuid")
                 if old_proton_ver == "3.7" and not file_exists(self.tracked_files_file, follow_symlinks=True):
                     #proton 3.7 did not generate tracked_files, so copy it into place first
                     try_copy(g_proton.path("proton_3.7_tracked_files"), self.tracked_files_file)
@@ -790,6 +844,10 @@ class CompatData:
 
             if not file_exists(self.prefix_dir + "/user.reg", follow_symlinks=True):
                 self.copy_pfx()
+                machine_guid = self.old_machine_guid
+                if machine_guid is None:
+                    machine_guid = "\"" + str(uuid.uuid4()) + "\""
+                get_replace_reg_value(self.prefix_dir + "system.reg", "Software\\\\Microsoft\\\\Cryptography", "MachineGuid", machine_guid)
 
             self.migrate_user_paths()
 
