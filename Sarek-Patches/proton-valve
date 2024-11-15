@@ -1363,109 +1363,72 @@ class Session:
         #disable XIM support until libx11 >= 1.7 is widespread
         self.env.setdefault("WINE_ALLOW_XIM", "0")
 
-        # <<Sarek Commands>>
+        # <<Sarek Parameters>>
 
+        # Software Rendering Parameters:
         if "PROTON_OGL_SOFTWARE" in self.env and nonzero(self.env["PROTON_OGL_SOFTWARE"]):
-
-            # Enables software rendering for OpenGL up to version 4.6. PROTON_TWEAKS_PROTON and PROTON_TWEAKS_MESA comes enabled by default as you will need it 100%.
             self.env["LIBGL_ALWAYS_SOFTWARE"] = "1"
             self.env["__GLX_VENDOR_LIBRARY_NAME"] = "mesa"
-
-            # Enable Wine and Proton Tweaks:
             self.env["PROTON_TWEAKS_PROTON"] = "1"
-
-            # Enable Tweaks for the Mesa Drivers:
             self.env["PROTON_TWEAKS_MESA"] = "1"
 
         if "PROTON_VK_SOFTWARE" in self.env and nonzero(self.env["PROTON_VK_SOFTWARE"]):
-
-            # Enables software rendering for VK up to version 1.3. PROTON_TWEAKS_PROTON and PROTON_TWEAKS_MESA comes enabled by default as you will need it 100%.
             self.env["MESA_VK_DEVICE_SELECT"] = "10005:0!"
-
-            # Enable Wine and Proton Tweaks:
             self.env["PROTON_TWEAKS_PROTON"] = "1"
-
-            # Enable Tweaks for the Mesa Drivers:
             self.env["PROTON_TWEAKS_MESA"] = "1"
 
+        # Define tweak settings for Proton, NVIDIA, and Mesa:
+        proton_tweaks = {
+            "WINEDEBUG": "-all",
+            "DXVK_LOG_LEVEL": "none",
+            "VKD3D_DEBUG": "none",
+            "VKD3D_SHADER_DEBUG": "none",
+            "WINE_FULLSCREEN_FSR": "1",
+            "STAGING_WRITECOPY": "1",
+            "STAGING_SHARED_MEMORY": "1",
+            "PROTON_NO_WRITE_WATCH": "1",
+            "PROTON_FORCE_LARGE_ADDRESS_AWARE": "1",
+        }
+
+        nvidia_tweaks = {
+            "__GL_THREADED_OPTIMIZATIONS": "1",
+            "__GL_SHADER_DISK_CACHE": "1",
+            "__GL_SHADER_DISK_CACHE_SIZE": "2147483648",
+            "__GL_SYNC_TO_VBLANK": "0",
+            "__GL_LOG_MAX_ANISO": "0",
+            "__GL_IGNORE_GLSL_EXT_REQS": "1",
+            "__GL_YIELD": "NOTHING",
+            "__GL_MaxFramesAllowed": "1",
+        }
+
+        mesa_tweaks = {
+            "mesa_glthread": "true",
+            "MESA_SHADER_CACHE_DISABLE": "false",
+            "MESA_SHADER_CACHE_MAX_SIZE": "2097152K",
+            "vblank_mode": "0",
+            "MESA_EXTENSION_OVERRIDE": "-GL_EXT_texture_filter_anisotropic",
+            "MESA_GL_VERSION_OVERRIDE": "4.6",
+            "MESA_GLSL_VERSION_OVERRIDE": "460",
+            "MESA_NO_ERROR": "true",
+            "MESA_DEBUG": "silent",
+            "MESA_NO_DITHER": "1",
+        }
+
+        # Apply Tweaks if wanted:
         if "PROTON_TWEAKS" in self.env and nonzero(self.env["PROTON_TWEAKS"]):
-
-            # Enable Wine and Proton Tweaks:
-            self.env["PROTON_TWEAKS_PROTON"] = "1"
-
-            # Enable Tweaks for the NVIDIA Propietary Driver:
-            self.env["PROTON_TWEAKS_NVIDIA"] = "1"
-
-            # Enable Tweaks for the Mesa Drivers:
-            self.env["PROTON_TWEAKS_MESA"] = "1"
+            for tweak_flag in ["PROTON_TWEAKS_PROTON", "PROTON_TWEAKS_NVIDIA", "PROTON_TWEAKS_MESA"]:
+                self.env[tweak_flag] = "1"
 
         if "PROTON_TWEAKS_PROTON" in self.env and nonzero(self.env["PROTON_TWEAKS_PROTON"]):
-
-            # Wine Optimization:
-            self.env["WINEDEBUG"] = "-all"
-            self.env["DXVK_LOG_LEVEL"] = "none"
-            self.env["VKD3D_DEBUG"] = "none"
-            self.env["VKD3D_SHADER_DEBUG"] = "none"
-            self.env["WINE_FULLSCREEN_FSR"] = "1"
-            self.env["STAGING_WRITECOPY"] = "1"
-            self.env["STAGING_SHARED_MEMORY"] = "1"
-
-            # Proton Optimization:
-            self.env["PROTON_NO_WRITE_WATCH"] = "1"
-            self.env["PROTON_FORCE_LARGE_ADDRESS_AWARE"] = "1"
+            self.env.update(proton_tweaks)
 
         if "PROTON_TWEAKS_NVIDIA" in self.env and nonzero(self.env["PROTON_TWEAKS_NVIDIA"]):
-
-            # Enable GL_THREAD:
-            self.env["__GL_THREADED_OPTIMIZATIONS"] = "1"
-
-            # Shader Cache:
-            self.env["__GL_SHADER_DISK_CACHE"] = "1"
-            self.env["__GL_SHADER_DISK_CACHE_SIZE"] = "2147483648"
-
-            # Disable Vsync on OpenGL/WineD3D Games:
-            self.env["__GL_SYNC_TO_VBLANK"] = "0"
-
-            # Disable Anisotropic on OpenGL/WineD3D Games:
-            self.env["__GL_LOG_MAX_ANISO"] = "0"
-
-            # Bypass some OpenGL requirements:
-            self.env["__GL_IGNORE_GLSL_EXT_REQS"] = "1"
-
-            # OpenGL/WineD3D Yield configuration:
-            self.env["__GL_YIELD"] = "NOTHING"
-
-            # Change Pre-rendered frames to 1:
-            self.env["__GL_MaxFramesAllowed"] = "1"
-
+            self.env.update(nvidia_tweaks)
 
         if "PROTON_TWEAKS_MESA" in self.env and nonzero(self.env["PROTON_TWEAKS_MESA"]):
+            self.env.update(mesa_tweaks)
 
-            # Enable GL_THREAD:
-            self.env["mesa_glthread"] = "true"
-
-            # Shader Cache:
-            self.env["MESA_SHADER_CACHE_DISABLE"] = "false"
-            self.env["MESA_SHADER_CACHE_MAX_SIZE"] = "2097152K"
-
-            # Disable Vsync on OpenGL/WineD3D Games:
-            self.env["vblank_mode"] = "0"
-
-            # Disable Anisotropic on OpenGL/WineD3D Games:
-            self.env["MESA_EXTENSION_OVERRIDE"] = "-GL_EXT_texture_filter_anisotropic"
-
-            # Bypass some OpenGL requirements:
-            self.env["MESA_GL_VERSION_OVERRIDE"] = "4.6"
-            self.env["MESA_GLSL_VERSION_OVERRIDE"] = "460"
-
-            # Disable Mesa Logs:
-            self.env["MESA_NO_ERROR"] = "true"
-            self.env["MESA_DEBUG"] = "silent"
-
-            # Disable Dithering:
-            self.env["MESA_NO_DITHER"] = "1"
-
-        # <<Sarek Commands>>
+        # <<Sarek Parameters>>
 
         if "wined3d11" in self.compat_config:
             self.compat_config.add("wined3d")

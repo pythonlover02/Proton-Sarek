@@ -846,8 +846,6 @@ ff,ff,00,00,00,00,00,00,00,00,00,00,00,00,90,01,00,00,00,00,00,01,00,00,00,\
 
 [Software\\Wine\\Direct3D] 1731014179
 #time=1db315a4a215432
-"csmt"=dword:00000003
-"MaxVersionGL"=dword:00040006
 
 [Software\\Wine\\DllOverrides] 1730438569
 #time=1db2c1e179317da
