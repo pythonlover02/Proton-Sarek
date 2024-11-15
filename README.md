@@ -21,7 +21,6 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 	- [Native](#Native)
 	- [Flatpak](#Flatpak)
 - [Roadmap](#Roadmap)
-- [Known Bugs](#Known-Bugs)
 - [GPU List](#GPU-List)
 	- [NVIDIA](#NVIDIA)
 	- [Intel && AMD](#Intel--AMD)
@@ -42,7 +41,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 
 1. Download a release from the release [page](https://github.com/pythonlover02/Proton-Sarek/releases)
 
-2. Create a ~/.local/share/Steam/compatibilitytools.d/ directory if it does not exist.
+2. Create a `~/.steam/root/compatibilitytools.d` directory if it does not exist.
 
 3. Extract the release inside
  
@@ -54,7 +53,7 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 
 1. Download a release from the release [page](https://github.com/pythonlover02/Proton-Sarek/releases)
  
-2. Create a ~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/ directory if it does not exist.
+2. Create a `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/` directory if it does not exist.
 
 3. Extract the release inside
  
@@ -79,21 +78,6 @@ Current status and upcoming changes for the Builds. The following features are c
 - **Async**: The change is available in the Async build.
 - **Testing**: The change is available in the Testing build.
 - **Work in Progress**: Currently being worked on, might be included in the next Testing Release.
-
-## Known Bugs:
-Sometimes, when using WineD3D, the maximum supported OpenGL version is capped at 4.4 instead of the expected 4.6. This appears to be a glitch that can be temporarily resolved by following these steps:
-
-1. Start the game using a different Proton version.
-
-2. Once the game is running and rendering properly, close it.
-
-3. Switch back to the desired Sarek Proton build.
-
-4. Open the game, and it should now use the correct OpenGL version.
-
-I’m still investigating a permanent solution to this issue, but this workaround has proven effective in the meantime.
-
-Edit: It should be fixed on versions 9-15-r1 and above thanks to [Artewar67](https://github.com/Artewar67)
 
 ## GPU List:
 Here its the GPU List of the ones on witch its recommended to use this Proton Build
