@@ -4,7 +4,7 @@ Sarek (Proton-For-Old-Vulkan): A custom Proton build with DXVK 1.10.3 for users 
 
 **Why does this repository exist?**
 
-Because there are still users with GPUs that support Vulkan 1.1+ but not Vulkan 1.3, as well as others with non-Vulkan support. Those who can use DXVK often rely on older Proton versions, which suffer from lower compatibility and performance compared to newer builds. Meanwhile, users dependent on WineD3D frequently face poor gaming experiences. This repository provides patched versions of Proton and/or Proton-GE, offering better performance with DXVK v1.10.3 and WineD3D mainly through custom tweaks added to Proton, along with other enhancements, ensuring a smoother experience for both Vulkan and non-Vulkan setups.
+Because there are still users with GPUs that support Vulkan 1.1+ but not Vulkan 1.3, as well as others with non-Vulkan support. Those who can use DXVK often rely on older Proton versions, which suffer from lower compatibility and performance compared to newer builds. Meanwhile, users dependent on WineD3D frequently face poor gaming experiences. This repository provides patched versions of Proton and/or GE-Proton, offering better performance with DXVK v1.10.3 and WineD3D mainly through custom tweaks added to Proton, along with other enhancements, ensuring a smoother experience for both Vulkan and non-Vulkan setups.
 
 Please be aware that this is a custom build of Proton and is **not** affiliated with Valve's Proton. If you encounter any issues specific to my Proton build from this repository that do not occur with Valve's version, kindly refrain from submitting a bug report to Valve's bug GitHub. Instead, please report the issue directly on this GitHub. Thank you for your understanding!
 
