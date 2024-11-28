@@ -131,7 +131,7 @@ These are the custom parameters introduced in Sarek to provide fallback renderin
 
 | Environment Variable              | Description                                                                                                                     |
 |-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| `PROTON_DISABLE_TWEAKS=[0/1]`     | Disables all the tweaks added to Sarek for general performance optimization and restores it to the Default Proton Configuration |
+| `PROTON_NO_TWEAKS=[0/1]`     | Disables all the tweaks added to Sarek for general performance optimization and restores it to the Default Proton Configuration |
 | `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3.                                                   |
 | `PROTON_OGL_SOFTWARE=[0/1]`       | Uses LLVMpipe for CPU-based rendering for OpenGL, supporting API version 4.6.                                                   |
 
