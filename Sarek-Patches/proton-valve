@@ -1451,7 +1451,7 @@ class Session:
         }
 
         # Apply Tweaks if wanted:
-        if "PROTON_DISABLE_TWEAKS" in self.env and nonzero(self.env["PROTON_DISABLE_TWEAKS"]) or "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
+        if "PROTON_NO_TWEAKS" in self.env and nonzero(self.env["PROTON_NO_TWEAKS"]) or "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             pass
         else:
             self.env.update(proton_tweaks | nvidia_tweaks | mesa_tweaks)
