@@ -1574,12 +1574,6 @@ class Session:
             if self.env["PROTON_LOG"] != "1":
                 append_to_env_str(self.env, "WINEDEBUG", self.env["PROTON_LOG"], ",")
 
-        #for performance, logging is disabled by default; override with user_settings.py
-        self.env.setdefault("WINEDEBUG", "-all")
-        self.env.setdefault("DXVK_LOG_LEVEL", "none")
-        self.env.setdefault("VKD3D_DEBUG", "none")
-        self.env.setdefault("VKD3D_SHADER_DEBUG", "none")
-
         #disable XIM support until libx11 >= 1.7 is widespread
         self.env.setdefault("WINE_ALLOW_XIM", "0")
 
@@ -1589,13 +1583,9 @@ class Session:
         if "PROTON_OGL_SOFTWARE" in self.env and nonzero(self.env["PROTON_OGL_SOFTWARE"]):
             self.env["LIBGL_ALWAYS_SOFTWARE"] = "1"
             self.env["__GLX_VENDOR_LIBRARY_NAME"] = "mesa"
-            self.env["PROTON_TWEAKS_PROTON"] = "1"
-            self.env["PROTON_TWEAKS_MESA"] = "1"
 
         if "PROTON_VK_SOFTWARE" in self.env and nonzero(self.env["PROTON_VK_SOFTWARE"]):
             self.env["MESA_VK_DEVICE_SELECT"] = "10005:0!"
-            self.env["PROTON_TWEAKS_PROTON"] = "1"
-            self.env["PROTON_TWEAKS_MESA"] = "1"
 
         # Define tweak settings for Proton, NVIDIA, and Mesa:
         proton_tweaks = {
@@ -1603,20 +1593,12 @@ class Session:
             "DXVK_LOG_LEVEL": "none",
             "VKD3D_DEBUG": "none",
             "VKD3D_SHADER_DEBUG": "none",
-            "WINE_FULLSCREEN_FSR": "1",
-            "STAGING_WRITECOPY": "1",
-            "STAGING_SHARED_MEMORY": "1",
-            "PROTON_NO_WRITE_WATCH": "1",
-            "PROTON_FORCE_LARGE_ADDRESS_AWARE": "1",
         }
 
         nvidia_tweaks = {
             "__GL_THREADED_OPTIMIZATIONS": "1",
             "__GL_SHADER_DISK_CACHE": "1",
             "__GL_SHADER_DISK_CACHE_SIZE": "2147483648",
-            "__GL_SYNC_TO_VBLANK": "0",
-            "__GL_LOG_MAX_ANISO": "0",
-            "__GL_IGNORE_GLSL_EXT_REQS": "1",
             "__GL_YIELD": "NOTHING",
             "__GL_MaxFramesAllowed": "1",
         }
@@ -1625,28 +1607,16 @@ class Session:
             "mesa_glthread": "true",
             "MESA_SHADER_CACHE_DISABLE": "false",
             "MESA_SHADER_CACHE_MAX_SIZE": "2097152K",
-            "vblank_mode": "0",
-            "MESA_EXTENSION_OVERRIDE": "-GL_EXT_texture_filter_anisotropic",
-            "MESA_GL_VERSION_OVERRIDE": "4.6",
-            "MESA_GLSL_VERSION_OVERRIDE": "460",
             "MESA_NO_ERROR": "true",
             "MESA_DEBUG": "silent",
             "MESA_NO_DITHER": "1",
         }
 
         # Apply Tweaks if wanted:
-        if "PROTON_TWEAKS" in self.env and nonzero(self.env["PROTON_TWEAKS"]):
-            for tweak_flag in ["PROTON_TWEAKS_PROTON", "PROTON_TWEAKS_NVIDIA", "PROTON_TWEAKS_MESA"]:
-                self.env[tweak_flag] = "1"
-
-        if "PROTON_TWEAKS_PROTON" in self.env and nonzero(self.env["PROTON_TWEAKS_PROTON"]):
-            self.env.update(proton_tweaks)
-
-        if "PROTON_TWEAKS_NVIDIA" in self.env and nonzero(self.env["PROTON_TWEAKS_NVIDIA"]):
-            self.env.update(nvidia_tweaks)
-
-        if "PROTON_TWEAKS_MESA" in self.env and nonzero(self.env["PROTON_TWEAKS_MESA"]):
-            self.env.update(mesa_tweaks)
+        if "PROTON_NO_TWEAKS" in self.env and nonzero(self.env["PROTON_NO_TWEAKS"]) or "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
+            pass
+        else:
+            self.env.update(proton_tweaks | nvidia_tweaks | mesa_tweaks)
 
         # <<Sarek Parameters>>
 

@@ -4,7 +4,7 @@ Sarek (Proton-For-Old-Vulkan): A custom Proton build with DXVK 1.10.3 for users 
 
 **Why does this repository exist?**
 
-Because there are still users with GPUs that support Vulkan 1.1+ but not Vulkan 1.3, as well as others with non-Vulkan support. Those who can use DXVK often rely on older Proton versions, which suffer from lower compatibility and performance compared to newer builds. Meanwhile, users dependent on WineD3D frequently face poor gaming experiences. This repository provides patched versions of Proton and/or GE-Proton, offering better performance with DXVK v1.10.3 and WineD3D mainly through the custom parameter `PROTON_TWEAKS`, along with other enhancements, ensuring a smoother experience for both Vulkan and non-Vulkan setups.
+Because there are still users with GPUs that support Vulkan 1.1+ but not Vulkan 1.3, as well as others with non-Vulkan support. Those who can use DXVK often rely on older Proton versions, which suffer from lower compatibility and performance compared to newer builds. Meanwhile, users dependent on WineD3D frequently face poor gaming experiences. This repository provides patched versions of Proton and/or GE-Proton, offering better performance with DXVK v1.10.3 and WineD3D mainly through custom tweaks added to Proton, along with other enhancements, ensuring a smoother experience for both Vulkan and non-Vulkan setups.
 
 Please be aware that this is a custom build of Proton and is **not** affiliated with Valve's Proton. If you encounter any issues specific to my Proton build from this repository that do not occur with Valve's version, kindly refrain from submitting a bug report to Valve's bug GitHub. Instead, please report the issue directly on this GitHub. Thank you for your understanding!
 
@@ -127,18 +127,15 @@ First of all lets start with the must have, Gamemodem, Zram and MangoHud.
 My personal recomendation its to search a tutorial for the installation of the three in your favorite Linux Distro *;P*
 
 ### Sarek:
-These are the custom parameters introduced in Sarek to enhance performance and provide fallback rendering options.
+These are the custom parameters introduced in Sarek to provide fallback rendering options or controll over the build.
 
-| Environment Variable              | Description                                                                                                          |
-|-----------------------------------|----------------------------------------------------------------------------------------------------------------------|
-| `PROTON_TWEAKS=[0/1]`             | Enables all the `PROTON_TWEAKS_*` parameters for general performance optimization                                    |
-| `PROTON_TWEAKS_PROTON=[0/1]`      | Adds a set of Proton/Wine optimizations as environment variables                                                     |
-| `PROTON_TWEAKS_NVIDIA=[0/1]`      | Adds a set of optimizations for NVIDIA proprietary drivers                                                           |
-| `PROTON_TWEAKS_MESA=[0/1]`        | Adds a set of optimizations for MESA drivers                                                                         |
-| `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3, PROTON_TWEAKS comes enabled by default |
-| `PROTON_OGL_SOFTWARE=[0/1]`       | Uses LLVMpipe for CPU-based rendering for OpenGL, supporting API version 4.6, PROTON_TWEAKS comes enabled by default |
+| Environment Variable              | Description                                                                                                                     |
+|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| `PROTON_NO_TWEAKS=[0/1]`     | Disables all the tweaks added to Sarek for general performance optimization and restores it to the Default Proton Configuration |
+| `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3.                                                   |
+| `PROTON_OGL_SOFTWARE=[0/1]`       | Uses LLVMpipe for CPU-based rendering for OpenGL, supporting API version 4.6.                                                   |
 
-**Below are benchmarks comparing performance with** `PROTON_TWEAKS` **enabled and disabled:** 
+**Below are benchmarks comparing performance with the tweaks enabled and disabled:** 
 - [AMD Benchmark](https://flightlessmango.com/games/38020/logs/5865)
 - [NVIDIA Benchmark](https://flightlessmango.com/games/38020/logs/5863) (using proprietary drivers)
 
