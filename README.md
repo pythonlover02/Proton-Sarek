@@ -175,7 +175,7 @@ A simple runtime that configures the game environment by adding environment vari
 
 **There its an fps increase if i use agg instead of the default?**
 
-There is indeed a small difference in frames per second (FPS) between the default and agg profiles. In the games tested, the agg profile yielded an improvement of approximately 1 to 5 FPS over the default profile, resulting in better minimum, average and maximum FPS.
+There is indeed a small difference in frames per second (FPS) between the default and agg profiles. In the games tested, the agg profile yielded an improvement of approximately 1 to 5 FPS over the default profile, resulting in better minimum, average, maximum FPS and less stutters.
 
 To put this into perspective, when the FPS ranged between 120 and 130, the performance increase from the agg profile translates to about 0.8% to 4%. It's important to note that these results can vary significantly depending on the specific PC configuration and the game being played. 
 
