@@ -211,8 +211,6 @@ Follow these steps to add to your Proton Build the Sarek patches:
 ### 4. Modify Compatibilitytool.vdf and Proton Files
 - Edit both `compatibilitytool.vdf` and `proton` files to reflect the name of your build (replace "Sarek" with your custom build name).
 
-- Optionally, make additional tweaks to `wine.inf` or other configuration files as needed for your specific build.
-
 ### 5. Make the `make.sh` Script Executable
 - If you want a build with normal DXVK or DXVK-Async, make the appropriate script executable:
 
@@ -241,12 +239,12 @@ This project also uses many 3rd party code and patches, i just do little patches
 ### Valve:
 https://github.com/ValveSoftware/Proton && https://github.com/ValveSoftware/wine
 
-First of all, we extend our sincere thanks to Valve for their incredible contributions to the Linux gaming community through the creation of Proton, which has made gaming on Linux more accessible and enjoyable for everyone. As such, we sometimes use Valve's Proton builds as a base for our internal or public releases, or for comparison with those based on Proton-GE. Additionally, much of the code in the wine.inf file is directly sourced from Valve's Proton and Wine.
+First of all, we extend our sincere thanks to Valve for their incredible contributions to the Linux gaming community through the creation of Proton, which has made gaming on Linux more accessible and enjoyable for everyone. As such, we sometimes use Valve's Proton builds as a base for our internal or public releases, or for comparison with those based on Proton-GE.
 
 ### GloriousEggroll: 
 https://github.com/GloriousEggroll/proton-ge-custom && https://github.com/GloriousEggroll/wine-ge-custom
 
-We would like to extend our gratitude to GloriousEggroll for the creation of both Proton-GE and Wine-GE, which have greatly enhanced gaming on Linux. Most of the time, the releases of this project are based on Proton-GE. We also use many configurations from the wine.inf file, from both Wine-GE and Proton-GE, particularly the custom per-game configurations.
+We would like to extend our gratitude to GloriousEggroll for the creation of both Proton-GE and Wine-GE, which have greatly enhanced gaming on Linux. Most of the time, the releases of this project are based on Proton-GE.
 
 ### doitsujin/ドイツ人 (Philip Rebohle):
 https://github.com/doitsujin/dxvk
