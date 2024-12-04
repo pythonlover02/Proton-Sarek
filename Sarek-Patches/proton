@@ -1595,7 +1595,7 @@ class Session:
             "VKD3D_SHADER_DEBUG": "none",
         }
 
-        nvidia_tweaks_normal = {
+        nvidia_tweaks_default = {
             "__GL_SHADER_DISK_CACHE": "1",
             "__GL_SHADER_DISK_CACHE_SIZE": "2147483648",
         }
@@ -1609,7 +1609,7 @@ class Session:
             "__GL_VRR_ALLOWED": "0",
         }
 
-        mesa_tweaks_normal = {
+        mesa_tweaks_default = {
             "MESA_SHADER_CACHE_DISABLE": "false",
             "MESA_SHADER_CACHE_MAX_SIZE": "2097152K",
         }
@@ -1628,19 +1628,19 @@ class Session:
             "MESA_VK_VERSION_OVERRIDE": "1.3",
         }
 
-        normal_tweaks = proton_tweaks | nvidia_tweaks_normal | mesa_tweaks_normal | fixes
+        default_tweaks = proton_tweaks | nvidia_tweaks_default | mesa_tweaks_default | fixes
 
         runtime_modes = {
             "base": proton_tweaks,
-            "normal": normal_tweaks,
-            "agg": normal_tweaks | nvidia_tweaks_agg | mesa_tweaks_agg
+            "default": default_tweaks,
+            "agg": default_tweaks | nvidia_tweaks_agg | mesa_tweaks_agg
         }
 
         if "PROTON_SAREK_PROFILE" in self.env:
-            user_mode = runtime_modes.get(self.env["PROTON_SAREK_PROFILE"], normal_tweaks)
+            user_mode = runtime_modes.get(self.env["PROTON_SAREK_PROFILE"], default_tweaks)
             self.env.update(user_mode)
         else:
-            self.env.update(normal_tweaks)
+            self.env.update(default_tweaks)
 
         # <<Sarek Settings>>
 
