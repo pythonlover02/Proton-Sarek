@@ -131,13 +131,9 @@ These are the custom parameters introduced in Sarek to provide fallback renderin
 
 | Environment Variable              | Description                                                                                                                     |
 |-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| `PROTON_NO_TWEAKS=[0/1]`     | Disables all the tweaks added to Sarek for general performance optimization and restores it to the Default Proton Configuration |
+| `PROTON_SAREK_PROFILE`            | Changes the [Sarek Runtime](#Sarek-Runtime) behavior, it accepts the next values: `base`, `default` and `agg` |
 | `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3.                                                   |
 | `PROTON_OGL_SOFTWARE=[0/1]`       | Uses LLVMpipe for CPU-based rendering for OpenGL, supporting API version 4.6.                                                   |
-
-**Below are benchmarks comparing performance with the tweaks enabled and disabled:** 
-- [AMD Benchmark](https://flightlessmango.com/games/38020/logs/5865)
-- [NVIDIA Benchmark](https://flightlessmango.com/games/38020/logs/5863) (using proprietary drivers)
 
 **Requirements for Using Lavapipe (Vulkan Software Rendering):**
 - **Mesa Version**: 20.3 or newer
@@ -146,6 +142,57 @@ These are the custom parameters introduced in Sarek to provide fallback renderin
 **Requirements for Using LLVMpipe (OpenGL Software Rendering):**
 - **Mesa Version**: Any recent version (LLVMpipe is well-supported in current Mesa releases)
 - **CPU**: Multi-core recommended for better performance
+
+### Sarek Runtime:
+A simple runtime that configures the game environment by adding environment variables. Its behavior can be changed using the `PROTON_SAREK_PROFILE` parameter, which accepts the following values: `base`, `default`, and `agg`.
+
+**Configuration Options**:
+
+- **"base"(Valve's default settings):**
+  - Disables logging for Wine, DXVK, and VKD3D to enhance performance.
+
+- **"default" (Default Value):**
+  - Inherits all settings from the Base configuration.
+  - Introduces a set of fixes for OpenGL to both Mesa and NVIDIA proprietary drivers.
+  - Increases the maximum shader cache size on disk to **2GB per game**. This ensures that the driver maintains optimal performance without repeatedly regenerating previously created caches. It's unlikely to exceed **800MB** unless running graphically intensive games that require extensive caching.
+
+- **"agg":**
+  - Represents an aggressive performance tuning mode, incorporating all features from the default configuration, plus the following enhancements:
+
+  **NVIDIA OpenGL:**
+  - Forces no Vsync to reduce input lag.
+  - Forces rendering textures under performance settings instead of the default quality settings.
+  - Forces no Full-Screen Anti-Aliasing (FSAA) and FXAA.
+  - Prevents the usage of anisotropic filtering.
+  - Disables Variable Refresh Rate (VRR).
+
+  **Mesa OpenGL:**
+  - Forces no Vsync to minimize input lag.
+  - Disables error checking within the API to avoid CPU performance losses.
+  - Disables dithering.
+  - Forces no Full-Screen Anti-Aliasing (FSAA) 
+  - Prevents the usage of anisotropic filtering
+
+**There its an fps increase if i use agg instead of the default?**
+
+Yes and no, the agg profile has been added mainly to workaround games that do not allow you to disable antialiasing, vsync, and anisotropic filtering as these settings negatively impact performance in wined3d a loot. 
+However, there are some adjustments that generally improve performance:
+
+**NVIDIA OpenGL:**
+- Forces rendering textures under performance settings instead of the default quality settings.
+
+**Mesa OpenGL:**
+- Disables error checking within the API to avoid CPU performance losses.
+- Disables dithering
+
+The overall performance gain from these changes is minimal, typically ranging from 0.5 to 5 FPS, tough it helps with stutters on weak graphics cards.
+
+**Sources for the Sarek Runtime:**
+
+[OpenGL Extensions Documentation](https://registry.khronos.org/OpenGL/extensions/EXT/)
+[Mesa Documentation](https://docs.mesa3d.org/envvars.html#environment-variables)
+[NVIDIA 470 Drivers Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/470.256.02/README/openglenvvariables.html)
+[NVIDIA 390 Drivers Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/390.157/README/openglenvvariables.html)
 
 ### Additional Tips:
 
@@ -211,8 +258,6 @@ Follow these steps to add to your Proton Build the Sarek patches:
 ### 4. Modify Compatibilitytool.vdf and Proton Files
 - Edit both `compatibilitytool.vdf` and `proton` files to reflect the name of your build (replace "Sarek" with your custom build name).
 
-- Optionally, make additional tweaks to `wine.inf` or other configuration files as needed for your specific build.
-
 ### 5. Make the `make.sh` Script Executable
 - If you want a build with normal DXVK or DXVK-Async, make the appropriate script executable:
 
@@ -241,12 +286,12 @@ This project also uses many 3rd party code and patches, i just do little patches
 ### Valve:
 https://github.com/ValveSoftware/Proton && https://github.com/ValveSoftware/wine
 
-First of all, we extend our sincere thanks to Valve for their incredible contributions to the Linux gaming community through the creation of Proton, which has made gaming on Linux more accessible and enjoyable for everyone. As such, we sometimes use Valve's Proton builds as a base for our internal or public releases, or for comparison with those based on Proton-GE. Additionally, much of the code in the wine.inf file is directly sourced from Valve's Proton and Wine.
+First of all, we extend our sincere thanks to Valve for their incredible contributions to the Linux gaming community through the creation of Proton, which has made gaming on Linux more accessible and enjoyable for everyone. As such, we sometimes use Valve's Proton builds as a base for our internal or public releases, or for comparison with those based on Proton-GE.
 
 ### GloriousEggroll: 
 https://github.com/GloriousEggroll/proton-ge-custom && https://github.com/GloriousEggroll/wine-ge-custom
 
-We would like to extend our gratitude to GloriousEggroll for the creation of both Proton-GE and Wine-GE, which have greatly enhanced gaming on Linux. Most of the time, the releases of this project are based on Proton-GE. We also use many configurations from the wine.inf file, from both Wine-GE and Proton-GE, particularly the custom per-game configurations.
+We would like to extend our gratitude to GloriousEggroll for the creation of both Proton-GE and Wine-GE, which have greatly enhanced gaming on Linux. Most of the time, the releases of this project are based on Proton-GE.
 
 ### doitsujin/ドイツ人 (Philip Rebohle):
 https://github.com/doitsujin/dxvk
