@@ -174,6 +174,7 @@ A simple runtime that configures the game environment by adding environment vari
   - Prevents the usage of anisotropic filtering
 
 **There its an fps increase if i use agg instead of the default?**
+
 Yes and no, the agg profile has been added mainly to workaround games that do not allow you to disable antialiasing, vsync, and anisotropic filtering as these settings negatively impact performance in wined3d a loot. 
 However, there are some adjustments that generally improve performance:
 
