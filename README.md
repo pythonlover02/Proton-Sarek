@@ -174,12 +174,17 @@ A simple runtime that configures the game environment by adding environment vari
   - Prevents the usage of anisotropic filtering
 
 **There its an fps increase if i use agg instead of the default?**
+Yes and no, the agg profile has been added mainly to workaround games that do not allow you to disable antialiasing, vsync, and anisotropic filtering as these settings negatively impact performance in wined3d a loot. 
+However, there are some adjustments that generally improve performance:
 
-There is indeed a small difference in frames per second (FPS) between the default and agg profiles. In the games tested, the agg profile yielded an improvement of approximately 1 to 5 FPS over the default profile, resulting in better minimum, average, maximum FPS and less stutters.
+**NVIDIA OpenGL:**
+- Forces rendering textures under performance settings instead of the default quality settings.
 
-To put this into perspective, when the FPS ranged between 120 and 130, the performance increase from the agg profile translates to about 0.8% to 4%. It's important to note that these results can vary significantly depending on the specific PC configuration and the game being played. 
+**Mesa OpenGL:**
+- Disables error checking within the API to avoid CPU performance losses.
+- Disables dithering
 
-Overall, while the agg profile does provide a slight edge in performance, the impact may not be substantial for every user or game scenario.
+The overall performance gain from these changes is minimal, typically ranging from 0.5 to 5 FPS, tough it helps with stutters on weak graphics cards.
 
 **Sources for the Sarek Runtime:**
 
