@@ -991,7 +991,7 @@ class CompatData:
                     vkd3d_protonfiles = []
                     wined3dfiles = ["d3d12", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 else:
-                    dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
+                    dxvkfiles = ["d3d11", "d3d10core", "d3d9"]
                     vkd3d_protonfiles = ["d3d12"]
                     wined3dfiles = []
 
