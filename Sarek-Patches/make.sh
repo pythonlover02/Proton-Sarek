@@ -18,12 +18,12 @@ if [ ! -d "$protondir" ]; then
   exit 1
 fi
 
-# Copy the dxvk-1.10.3 files
-echo "Copying dxvk-1.10.3 32-bit files..."
-cp -r "$SCRIPT_DIR/dxvk-1.10.3/x32/"* "$protondir/files/lib/wine/dxvk/" || { echo "Failed to copy 32-bit dxvk files."; exit 1; }
+# Copy the dxvk files
+echo "Copying dxvk 32-bit files..."
+cp -r "$SCRIPT_DIR/dxvk/x32/"* "$protondir/files/lib/wine/dxvk/" || { echo "Failed to copy 32-bit dxvk files."; exit 1; }
 
-echo "Copying dxvk-1.10.3 64-bit files..."
-cp -r "$SCRIPT_DIR/dxvk-1.10.3/x64/"* "$protondir/files/lib64/wine/dxvk/" || { echo "Failed to copy 64-bit dxvk files."; exit 1; }
+echo "Copying dxvk 64-bit files..."
+cp -r "$SCRIPT_DIR/dxvk/x64/"* "$protondir/files/lib64/wine/dxvk/" || { echo "Failed to copy 64-bit dxvk files."; exit 1; }
 
 # Copy the vkd3d-proton-2.6 files
 echo "Copying vkd3d-proton-2.6 32-bit files..."
