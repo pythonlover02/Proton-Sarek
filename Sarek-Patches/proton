@@ -1155,18 +1155,27 @@ class CompatData:
                     g_session.dlloverrides[f] = "n"
 
                 for f in icufiles:
-                    self.create_symlink(self.prefix_dir + "drive_c/windows/system32/" + f + ".dll",
-                            g_proton.lib64_dir + "icu/" + f + ".dll")
-                    tracked_files.write("drive_c/windows/system32/" + f + '.dll\n')
+                    dst = "drive_c/windows/system32/" + f + ".dll"
+                    if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
+                        tracked_files.write(dst + '\n')
+                    self.create_symlink(self.prefix_dir + dst, g_proton.lib64_dir + "icu/" + f + ".dll")
+
+                    dst = "drive_c/windows/syswow64/" + f + ".dll"
+                    if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
+                        tracked_files.write(dst + '\n')
+                    self.create_symlink(self.prefix_dir + dst, g_proton.lib_dir + "icu/" + f + ".dll")
 
                 # If the user requested the NVAPI be available, copy it into place.
                 # If they didn't, clean up any stray nvapi DLLs.
                 if use_nvapi:
                     try_copy(g_proton.lib64_dir + "wine/nvapi/nvapi64.dll", "drive_c/windows/system32",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                    try_copy(g_proton.lib64_dir + "wine/nvapi/nvofapi64.dll", "drive_c/windows/system32",
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     try_copy(g_proton.lib_dir + "wine/nvapi/nvapi.dll", "drive_c/windows/syswow64",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     g_session.dlloverrides["nvapi64"] = "n"
+                    g_session.dlloverrides["nvofapi64"] = "n"
                     g_session.dlloverrides["nvapi"] = "n"
                     g_session.dlloverrides["nvcuda"] = "b"
                 else:
@@ -1183,11 +1192,14 @@ class CompatData:
 
                 # Try to detect known DLLs that ship with the NVIDIA Linux Driver
                 # and add them into the prefix
-                nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
-                if nvidia_wine_dll_dir:
+                if g_session.nvidia_wine_dll_dir:
                     for dll in ["_nvngx.dll", "nvngx.dll"]:
-                        try_copy(nvidia_wine_dll_dir + "/" + dll, "drive_c/windows/system32", optional=True,
-                                 prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                        try_copy(g_session.nvidia_wine_dll_dir + "/" + dll,
+                                 "drive_c/windows/system32",
+                                 optional=True,
+                                 prefix=self.prefix_dir,
+                                 track_file=tracked_files,
+                                 link_debug=True)
 
             setup_game_dir_drive()
             setup_steam_dir_drive()
@@ -1279,6 +1291,10 @@ def default_compat_config():
                 "257420", #Serious Sam 4
                 ]:
             ret.add("hidevggpu")
+        if appid in [
+                "2217000", #Rivals of Aether II
+                ]:
+            ret.add("hideintelgpu")
 
         if appid in [
                 "1341820", #As Dusk falls
@@ -1299,6 +1315,8 @@ def default_compat_config():
                 "2249070", #Strip Fighter ZERO
                 "2526380", #Sword of Convallaria
                 "6030", #Star Wars - Jedi Knight II: Jedi Outcast
+                "1845910", #Dragon Age: The Veilguard
+                "2842040", #Star Wars Outlaws
                 ]:
             ret.add("gamedrive")
 
@@ -1329,6 +1347,7 @@ def default_compat_config():
                 "1060210", #Disaster Report 4: Summer Memories
                 "414740", #RAID: World War II
                 "201510", #Flatout 3
+                "1233880", #Disgaea 4 Complete+
                 ]:
             ret.add("nofsync")
             ret.add("noesync")
@@ -1357,6 +1376,8 @@ def default_compat_config():
                 "44350", #GRID 2
                 "2176900", #Fablecraft
                 "407810", #Hard Reset Redux
+                "2853730", #Skull and Bones
+                "233130", #Shadow Warrior
                 ]:
             ret.add("disablenvapi")
 
@@ -1391,6 +1412,12 @@ def default_compat_config():
                 "1818750", # MultiVersus
                 ]:
             ret.add("xalia")
+
+        if appid in [
+                "275850", #No Man's Sky
+                "2012840", #Portal with RTX
+                ]:
+            ret.add("nohardwarescheduling")
 
         if appid in [
                 "255960", #Bad Mojo Redux
@@ -1501,6 +1528,8 @@ class Session:
 
         self.env["MEDIACONV_BLANK_VIDEO_FILE"] = g_proton.media_dir + "blank.mkv"
         self.env["MEDIACONV_BLANK_AUDIO_FILE"] = g_proton.media_dir + "blank.ptna"
+
+        self.env["ESPEAK_DATA_PATH"] = g_proton.dist_dir + "share"
 
         prepend_to_env_str(self.env, "PATH", g_proton.bin_dir, ":")
 
@@ -1658,6 +1687,7 @@ class Session:
         self.check_environment("PROTON_OLD_GL_STRING", "oldglstr")
         self.check_environment("PROTON_HIDE_NVIDIA_GPU", "hidenvgpu")
         self.check_environment("PROTON_HIDE_VANGOGH_GPU", "hidevggpu")
+        self.check_environment("PROTON_HIDE_INTEL_GPU", "hideintelgpu")
         self.check_environment("PROTON_SET_GAME_DRIVE", "gamedrive")
         self.check_environment("PROTON_SET_STEAM_DRIVE", "steamdrive")
         self.check_environment("PROTON_NO_XIM", "noxim")
@@ -1720,6 +1750,9 @@ class Session:
         if "hidevggpu" in self.compat_config:
             self.env["WINE_HIDE_VANGOGH_GPU"] = "1"
 
+        if "hideintelgpu" in self.compat_config:
+            self.env["WINE_HIDE_INTEL_GPU"] = "1"
+
         if "hidenvgpu" in self.compat_config and "forcenvapi" not in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
 
@@ -1741,14 +1774,22 @@ class Session:
         if "xalia" in self.compat_config and "PROTON_USE_XALIA" not in self.env:
             self.env["PROTON_USE_XALIA"] = "1"
 
+        if "nohardwarescheduling" in self.compat_config and "WINE_DISABLE_HARDWARE_SCHEDULING" not in self.env:
+            self.env["WINE_DISABLE_HARDWARE_SCHEDULING"] = "1"
+
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
-        # NVIDIA software may check NVIDIA_WINE_DLL_DIR as a search-path for
-        # driver-provided DLLs for use by Proton/Wine.
-        nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
-        if nvidia_wine_dll_dir:
-            self.env["NVIDIA_WINE_DLL_DIR"] = nvidia_wine_dll_dir
+        # NVIDIA software may check for the "DriverStore" by querying the
+        # NGXCore\NGXPath registry key via `D3DDDI_QUERYREGISTRY_SERVICEKEY` for
+        # a given adapter. In the case where this path cannot be found, the
+        # `NVIDIA_WINE_DLL_DIR` environment variable is read as a fallback.
+        #
+        # TODO: Add support for populating NGXCore\NGXPath so we can remove the
+        # NGX copies done in setup_prefix(), and this environment variable.
+        self.nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
+        if self.nvidia_wine_dll_dir:
+            self.env["NVIDIA_WINE_DLL_DIR"] = self.nvidia_wine_dll_dir
 
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             if self.setup_logging(append_forever=False):
