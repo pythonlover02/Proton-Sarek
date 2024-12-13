@@ -39,7 +39,7 @@ from random import randrange
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
-CURRENT_PREFIX_VERSION="Sarek"
+CURRENT_PREFIX_VERSION="Proton-Sarek"
 
 PFX="Proton: "
 ld_path_var = "LD_LIBRARY_PATH"
@@ -879,11 +879,17 @@ class CompatData:
                     "xinput*.dll," +
 
                     #vcruntime redist
-                    "atl*.dll," +
+                    "atl1*.dll," +
+                    "atl.dll," +
                     "concrt*.dll," +
-                    "msvcp*.dll," +
-                    "msvcr*.dll," +
-                    "msvcm*.dll," +
+                    "msvcp1*.dll," +
+                    "msvcrt*.dll," +
+                    "msvcp7*.dll," +
+                    "msvcp6*.dll," +
+                    "msvcp_win.dll," +
+                    "msvcr1*.dll," +
+                    "msvcrt*.dll," +
+                    "msvcr7*.dll," +
                     "vcamp1*.dll," +
                     "vcomp1*.dll," +
                     "vccorlib1*.dll," +
@@ -991,7 +997,7 @@ class CompatData:
                     vkd3d_protonfiles = []
                     wined3dfiles = ["d3d12", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 else:
-                    dxvkfiles = ["d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
+                    dxvkfiles = ["d3d11", "d3d10core", "d3d9"]
                     vkd3d_protonfiles = ["d3d12"]
                     wined3dfiles = []
 
@@ -1004,6 +1010,8 @@ class CompatData:
                     dxvkfiles.append("d3d8")
                 else:
                     wined3dfiles.append("d3d8")
+
+                icufiles = ["icuin68", "icuuc68", "icudt68"]
 
                 for f in wined3dfiles:
                     try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll", "drive_c/windows/system32",
@@ -1028,14 +1036,28 @@ class CompatData:
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
                     g_session.dlloverrides[f] = "n"
 
+                for f in icufiles:
+                    dst = "drive_c/windows/system32/" + f + ".dll"
+                    if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
+                        tracked_files.write(dst + '\n')
+                    self.create_symlink(self.prefix_dir + dst, g_proton.lib64_dir + "icu/" + f + ".dll")
+
+                    dst = "drive_c/windows/syswow64/" + f + ".dll"
+                    if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
+                        tracked_files.write(dst + '\n')
+                    self.create_symlink(self.prefix_dir + dst, g_proton.lib_dir + "icu/" + f + ".dll")
+
                 # If the user requested the NVAPI be available, copy it into place.
                 # If they didn't, clean up any stray nvapi DLLs.
                 if use_nvapi:
                     try_copy(g_proton.lib64_dir + "wine/nvapi/nvapi64.dll", "drive_c/windows/system32",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                    try_copy(g_proton.lib64_dir + "wine/nvapi/nvofapi64.dll", "drive_c/windows/system32",
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     try_copy(g_proton.lib_dir + "wine/nvapi/nvapi.dll", "drive_c/windows/syswow64",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     g_session.dlloverrides["nvapi64"] = "n"
+                    g_session.dlloverrides["nvofapi64"] = "n"
                     g_session.dlloverrides["nvapi"] = "n"
                     g_session.dlloverrides["nvcuda"] = "b"
                 else:
@@ -1052,11 +1074,14 @@ class CompatData:
 
                 # Try to detect known DLLs that ship with the NVIDIA Linux Driver
                 # and add them into the prefix
-                nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
-                if nvidia_wine_dll_dir:
+                if g_session.nvidia_wine_dll_dir:
                     for dll in ["_nvngx.dll", "nvngx.dll"]:
-                        try_copy(nvidia_wine_dll_dir + "/" + dll, "drive_c/windows/system32", optional=True,
-                                 prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                        try_copy(g_session.nvidia_wine_dll_dir + "/" + dll,
+                                 "drive_c/windows/system32",
+                                 optional=True,
+                                 prefix=self.prefix_dir,
+                                 track_file=tracked_files,
+                                 link_debug=True)
 
             setup_game_dir_drive()
             setup_steam_dir_drive()
@@ -1159,9 +1184,13 @@ def default_compat_config():
                 "460790", #Bayonetta
                 "273590", #Descent 3
                 "834530", #Yakuza Kiwami
+                "2526380", #Sword of Convallaria
+                "1088710", #Yakuza 3 Remastered
+                "1105500", #Yakuza 4 Remastered
                 "714010", #Aimlabs
                 "2249070", #Strip Fighter ZERO
-                "2526380", #Sword of Convallaria
+                "1845910", #Dragon Age: The Veilguard
+                "6030", #Star Wars - Jedi Knight II: Jedi Outcast
                 ]:
             ret.add("gamedrive")
 
@@ -1183,10 +1212,16 @@ def default_compat_config():
             ret.add("heapzeromemory")
 
         if appid in [
+                "71230", #Crazy Taxi
+                ]:
+            ret.add("heaptopdown")
+
+        if appid in [
                 "2630", #Call of Duty 2
                 "1060210", #Disaster Report 4: Summer Memories
                 "414740", #RAID: World War II
                 "201510", #Flatout 3
+                "1233880", #Disgaea 4 Complete+
                 ]:
             ret.add("nofsync")
             ret.add("noesync")
@@ -1206,6 +1241,10 @@ def default_compat_config():
                 "202750", #Alan Wake's American Nightmare
                 "255220", #GRID Autosport
                 "44350", #GRID 2
+                "2176900", #Fablecraft
+                "407810", #Hard Reset Redux
+                "2853730", #Skull and Bones
+                "233130", #Shadow Warrior
                 ]:
             ret.add("disablenvapi")
 
@@ -1224,14 +1263,20 @@ def default_compat_config():
         appid = os.environ["STEAM_COMPAT_APP_ID"]
         if appid in [
                 "7000", # Tomb Raider: Legend
+                "7200", # Trackmania United Forever
                 "8000", # Tomb Raider: Anniversary
+                "11020", # TrackMania Nations Forever
+                "15750", # Oddworld: Stranger's Wrath HD
                 "22300", # Fallout 3
                 "22370", # Fallout 3: Game of the Year Edition
+                "22380", # Fallout: New Vegas
                 "72850", # The Elder Scrolls V: Skyrim
                 "377160", # Fallout 4
                 "397950", # Clustertruck
                 "489830", # The Elder Scrolls V: Skyrim Special Edition
+                "610190", # WARRIORS ALL-STARS
                 "712180", # Mugsters
+                "1818750", # MultiVersus
                 ]:
             ret.add("xalia")
 
@@ -1239,6 +1284,12 @@ def default_compat_config():
                 "255960", #Bad Mojo Redux
                 ]:
             ret.add("gamedrive")
+
+        if appid in [
+                "275850", #No Man's Sky
+                "2012840", #Portal with RTX
+                ]:
+            ret.add("nohardwarescheduling")
 
     return ret
 
@@ -1542,6 +1593,9 @@ class Session:
         if "heapzeromemory" in self.compat_config:
             self.env["WINE_HEAP_ZERO_MEMORY"] = "1"
 
+        if "heaptopdown" in self.compat_config:
+            self.env["WINE_HEAP_TOP_DOWN"] = "1"
+
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
 
@@ -1573,8 +1627,22 @@ class Session:
         if "xalia" in self.compat_config and "PROTON_USE_XALIA" not in self.env:
             self.env["PROTON_USE_XALIA"] = "1"
 
+        if "nohardwarescheduling" in self.compat_config and "WINE_DISABLE_HARDWARE_SCHEDULING" not in self.env:
+            self.env["WINE_DISABLE_HARDWARE_SCHEDULING"] = "1"
+
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
+
+        # NVIDIA software may check for the "DriverStore" by querying the
+        # NGXCore\NGXPath registry key via `D3DDDI_QUERYREGISTRY_SERVICEKEY` for
+        # a given adapter. In the case where this path cannot be found, the
+        # `NVIDIA_WINE_DLL_DIR` environment variable is read as a fallback.
+        #
+        # TODO: Add support for populating NGXCore\NGXPath so we can remove the
+        # NGX copies done in setup_prefix(), and this environment variable.
+        self.nvidia_wine_dll_dir = find_nvidia_wine_dll_dir()
+        if self.nvidia_wine_dll_dir:
+            self.env["NVIDIA_WINE_DLL_DIR"] = self.nvidia_wine_dll_dir
 
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
             if self.setup_logging(append_forever=False):
@@ -1612,6 +1680,12 @@ class Session:
                 _soft_limit, hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
                 if hard_limit < 524288:
                     self.log_file.write(f"WARNING: Low file descriptor limit: {hard_limit} (see https://github.com/ValveSoftware/Proton/wiki/File-Descriptors)\n")
+
+                if os.path.exists("/proc/sys/vm/max_map_count"):
+                    with open("/proc/sys/vm/max_map_count", "r") as f:
+                        max_map_count = int(f.read())
+                        if max_map_count < 1048576:
+                            self.log_file.write(f"WARNING: Low /proc/sys/vm/max_map_count: {max_map_count} will prevent some games from working\n")
 
                 self.log_file.write("======================\n")
                 self.log_file.flush()
