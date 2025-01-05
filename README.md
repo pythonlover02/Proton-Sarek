@@ -1,10 +1,10 @@
 # Proton-For-Old-Vulkan or "Sarek"
 
-Sarek (Proton-For-Old-Vulkan): A custom Proton build with DXVK 1.10.3 for users with GPUs that support Vulkan 1.1+ but not Vulkan 1.3, or for those with non-Vulkan support who want a plug-and-play option featuring personal patches.
+Sarek (Proton-For-Old-Vulkan): A custom Proton build with [DXVK-Sarek](https://github.com/pythonlover02/DXVK-Sarek) for users with GPUs that support Vulkan 1.1+ but not Vulkan 1.3, or for those with non-Vulkan support who want a plug-and-play option featuring personal patches.
 
 **Why does this repository exist?**
 
-Because there are still users with GPUs that support Vulkan 1.1+ but not Vulkan 1.3, as well as others with non-Vulkan support. Those who can use DXVK often rely on older Proton versions, which suffer from lower compatibility and performance compared to newer builds. Meanwhile, users dependent on WineD3D frequently face poor gaming experiences. This repository provides patched versions of Proton and/or GE-Proton, offering better performance with DXVK v1.10.3 and WineD3D mainly through custom tweaks added to Proton, along with other enhancements, ensuring a smoother experience for both Vulkan and non-Vulkan setups.
+Because there are still users with GPUs that support Vulkan 1.1+ but not Vulkan 1.3, and others with non Vulkan support. Those who can use DXVK often rely on older versions of Proton, which suffer from lower compatibility and performance compared to newer builds. Meanwhile, users dependent on WineD3D often face a poor gaming experience. This repository provides patched versions of Proton and/or GE-Proton to try to solve these problems. This is done by using [DXVK-Sarek](https://github.com/pythonlover02/DXVK-Sarek) and adding tweaks and [Parameters](#Sarek) to Proton.
 
 Please be aware that this is a custom build of Proton and is **not** affiliated with Valve's Proton. If you encounter any issues specific to my Proton build from this repository that do not occur with Valve's version, kindly refrain from submitting a bug report to Valve's bug GitHub. Instead, please report the issue directly on this GitHub. Thank you for your understanding!
 
@@ -20,7 +20,6 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [Install](#Install)
 	- [Native](#Native)
 	- [Flatpak](#Flatpak)
-- [Roadmap](#Roadmap)
 - [GPU List](#GPU-List)
 	- [NVIDIA](#NVIDIA)
 	- [Intel && AMD](#Intel--AMD)
@@ -30,7 +29,6 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 		- [System](#System)
    		- [Sarek](#Sarek)
 		- [Additional Tips](#Additional-Tips)
-- [Testing](#Testing)
 - [Building](#Building)
 - [Credits](#Credits)
 
@@ -61,24 +59,6 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 
 5. Restart and thats it!!! Enjoy :P
 
-## Roadmap:
-Current status and upcoming changes for the Builds. The following features are categorized based on their current development status:
-
-| Feature Description                                         | Status             |
-|-------------------------------------------------------------|--------------------|
-| **DXVK 1.10.3 on Proton**                                   | <span style="color: green;">**Ready**</span>               |
-| **VKD3D-proton 2.6 on Proton**                              | <span style="color: green;">**Ready**</span>               |
-| **PROTON_TWEAKS Parameters on Proton** 		      | <span style="color: green;">**Ready**</span>               |
-| **PROTON_API_SOFTWARE Parameters on Proton** 		      | <span style="color: green;">**Ready**</span>               |
-| **DXVK Async on Proton**                                    | <span style="color: green;">**Async**</span>               |
-| **Gallium Nine on Proton**                                  | <span style="color: green;">**Work in Progress**</span>    |
-
-### Status Definitions:
-- **Ready**: The change is included in the Stable, Stable Async and Testing Builds.
-- **Async**: The change is available in the Async build.
-- **Testing**: The change is available in the Testing build.
-- **Work in Progress**: Currently being worked on, might be included in the next Testing Release.
-
 ## GPU List:
 Here its the GPU List of the ones on witch its recommended to use this Proton Build
 
@@ -97,21 +77,13 @@ This are set on the Launch Options of a game on Steam, example:
 
 The Optimzation variables are set on the same way on the launch options
 
-| Environment Variable                          | Description                                                                                                                                     |
-|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| `PROTON_USE_WINED3D=[0/1]`                   | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d9 to d3d11.                                                                     |
-| `PROTON_NO_D3D12=[0/1]`                      | Disables DX12.                                                                                                                                 |
-| `PROTON_NO_D3D11=[0/1]`                      | Disables DX11.                                                                                                                                 |
-| `PROTON_NO_D3D10=[0/1]`                      | Disables DX10.                                                                                                                                 |
-| `PROTON_NO_D3D9=[0/1]`                       | Disables DX9.                                                                                                                                  |
-| `PROTON_NO_ESYNC=[0/1]`                      | Do not use eventfd-based in-process synchronization primitives.                                                                                |
-| `PROTON_NO_FSYNC=[0/1]`                      | Do not use futex-based in-process synchronization primitives.                                                                                  |
-| `PROTON_FORCE_LARGE_ADDRESS_AWARE=[0/1]`    | Force Wine to enable the LARGE_ADDRESS_AWARE flag for all executables.                                                                        |
-| `PROTON_HEAP_DELAY_FREE=[0/1]`               | Delay freeing some memory, to work around application use-after-free bugs.                                                                     |
-| `PROTON_DISABLE_NVAPI=[0/1]`                  | Disable NVIDIA's NVAPI GPU support library.                                                                                                   |
-| `PROTON_OLD_GL_STRING=[0/1]`                 | Set some driver overrides to limit the length of the GL extension string, for old games that crash on very long extension strings.             |
-| `PROTON_USE_XALIA=[0/1]`                     | Enable Xalia, a program that can add a gamepad UI for some keyboard/mouse interfaces.                                                         |
-| `MESA_GL_VERSION_OVERRIDE=4.6 MESA_GLSL_VERSION_OVERRIDE=460`               | Only for Mesa, it changes the default string of the OpenGL version to OpenGL 4.6, faking it and making the game believe that your GPU supports that version. The game may open or not; if it doesn't open, your only solution is Software Rendering. |
+[Proton Launch Parameters](https://github.com/ValveSoftware/Proton/tree/proton_9.0?tab=readme-ov-file#runtime-config-options)
+
+[GE-Proton Launch Parameters](https://github.com/GloriousEggroll/proton-ge-custom?tab=readme-ov-file#modification)
+
+[Proton-Sarek Launch Parameters](#Sarek)
+
+**Note:** Because Proton-Sarek is based on GE-Proton and that one is based on Proton, the bast majority of launch parameters under both GE-Proton and Valve Proton will work on Proton-Sarek.
 
 ## Optimization:
 
@@ -175,7 +147,7 @@ A simple runtime that configures the game environment by adding environment vari
 
 **There its an fps increase if i use agg instead of the default?**
 
-Yes and no, the agg profile has been added mainly to workaround games that do not allow you to disable antialiasing, vsync, and anisotropic filtering as these settings negatively impact performance in wined3d a loot. 
+Yes and no, the agg profile has been added mainly to workaround games that do not allow you to disable antialiasing, vsync, and anisotropic filtering as these settings negatively impact performance in WineD3D a loot. 
 However, there are some adjustments that generally improve performance:
 
 **NVIDIA OpenGL:**
@@ -190,8 +162,11 @@ The overall performance gain from these changes is minimal, typically ranging fr
 **Sources for the Sarek Runtime:**
 
 [OpenGL Extensions Documentation](https://registry.khronos.org/OpenGL/extensions/EXT/)
+
 [Mesa Documentation](https://docs.mesa3d.org/envvars.html#environment-variables)
+
 [NVIDIA 470 Drivers Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/470.256.02/README/openglenvvariables.html)
+
 [NVIDIA 390 Drivers Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/390.157/README/openglenvvariables.html)
 
 ### Additional Tips:
@@ -225,17 +200,6 @@ The overall performance gain from these changes is minimal, typically ranging fr
    You can remove the `no_display` option (which hides the MangoHud HUD), change the `fps_limit` value to any number you like, and change the `fps_limit_method` to `early` (for smoother frametimes) or `late` (for the lowest latency).
 
    Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options.
-
-## Testing:
-Games that i have tested so far
-
-| Game                        | Status                                         | Issues/Notes                                                | Screenshot                                                            |
-|-----------------------------|------------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------------|
-| **ULTRAKILL**               | Playable with DXVK 1.10.3 and WineD3D       | No issues so far; experience is the same as with DXVK 2.4.0 | ![Screenshot](https://github.com/user-attachments/assets/e9ab1204-b95b-4b4d-9405-cf8de0cb4537) |
-| **Dark Souls III**          | Playable with DXVK 1.10.3 and WineD3D       | Higher GPU usage than v2.4.0; occasional stutters          | ![Screenshot](https://github.com/user-attachments/assets/d9aed291-588a-4ada-9846-e2ab60d1beb3) |
-| **Project Wingman**         | Unplayable with DXVK 1.10.3 or WineD3D      | Needs a patch; works with DXVK 2.4.0                      | ![Screenshot](https://github.com/user-attachments/assets/52ac464c-0ee7-408d-8031-27bf3361842a) |
-| **Red Orchestra 2**         | Playable with DXVK 1.10.3 and WineD3D       | Graphical glitches on sky; stutters at start               | ![Screenshot](https://github.com/user-attachments/assets/0b13b35e-ffef-4899-be2a-7097ae691303) |
-| **S.T.A.L.K.E.R Call Of The Zone** | Playable with DXVK 1.10.3 and WineD3D | No issues so far                                           | ![Screenshot](https://github.com/user-attachments/assets/c86f8e09-4e35-4bfd-af12-ff2531e52ab8) |
 
 ## Building:
 
