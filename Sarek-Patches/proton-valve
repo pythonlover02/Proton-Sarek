@@ -1465,7 +1465,12 @@ class Session:
         if "PROTON_VK_SOFTWARE" in self.env and nonzero(self.env["PROTON_VK_SOFTWARE"]):
             self.env["MESA_VK_DEVICE_SELECT"] = "10005:0!"
 
-        # sarek_runtime:
+        # OpenGL Threaded Optimizations Parameter:
+        if "PROTON_OGL_THREAD" in self.env and nonzero(self.env["PROTON_OGL_THREAD"]):
+            self.env["__GL_THREADED_OPTIMIZATIONS"] = "1"
+            self.env["mesa_glthread"] = "true"
+
+        # Sarek_Runtime:
         proton_tweaks = {
             "WINEDEBUG": "-all",
             "DXVK_LOG_LEVEL": "none",

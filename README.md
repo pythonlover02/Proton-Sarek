@@ -103,9 +103,10 @@ These are the custom parameters introduced in Sarek to provide fallback renderin
 
 | Environment Variable              | Description                                                                                                                     |
 |-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| `PROTON_SAREK_PROFILE`            | Changes the [Sarek Runtime](#Sarek-Runtime) behavior, it accepts the next values: `base`, `default` and `agg` |
-| `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3.                                                   |
+| `PROTON_SAREK_PROFILE`            | Changes the [Sarek Runtime](#Sarek-Runtime) behavior, it accepts the next values: `base`, `default` and `agg`.                  |
+| `PROTON_OGL_THREAD=[0/1]`         | Enables OpenGL Threaded Optimizations, might increase or decrease fps depending on the game.                                    |
 | `PROTON_OGL_SOFTWARE=[0/1]`       | Uses LLVMpipe for CPU-based rendering for OpenGL, supporting API version 4.6.                                                   |
+| `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3.                                                   |
 
 **Requirements for Using Lavapipe (Vulkan Software Rendering):**
 - **Mesa Version**: 20.3 or newer
