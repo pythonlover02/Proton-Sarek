@@ -1455,20 +1455,6 @@ class Session:
                 log("%s" % sys.exc_info()[1])
                 log("************************************************")
 
-        if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
-            self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+unwind,+threadname,+debugstr,+loaddll,+mscoree")
-            self.env.setdefault("DXVK_LOG_LEVEL", "info")
-            self.env.setdefault("DXVK_NVAPI_LOG_LEVEL", "info")
-            self.env.setdefault("VKD3D_DEBUG", "warn")
-            self.env.setdefault("VKD3D_SHADER_DEBUG", "fixme")
-            self.env.setdefault("WINE_MONO_TRACE", "E:System.NotImplementedException")
-
-            if self.env["PROTON_LOG"] != "1":
-                append_to_env_str(self.env, "WINEDEBUG", self.env["PROTON_LOG"], ",")
-
-        #disable XIM support until libx11 >= 1.7 is widespread
-        self.env.setdefault("WINE_ALLOW_XIM", "0")
-
         # <<Sarek Settings>>
 
         # Software Rendering Parameters:
@@ -1479,7 +1465,12 @@ class Session:
         if "PROTON_VK_SOFTWARE" in self.env and nonzero(self.env["PROTON_VK_SOFTWARE"]):
             self.env["MESA_VK_DEVICE_SELECT"] = "10005:0!"
 
-        # sarek_runtime:
+        # OpenGL Threaded Optimizations Parameter:
+        if "PROTON_OGL_THREAD" in self.env and nonzero(self.env["PROTON_OGL_THREAD"]):
+            self.env["__GL_THREADED_OPTIMIZATIONS"] = "1"
+            self.env["mesa_glthread"] = "true"
+
+        # Sarek_Runtime:
         proton_tweaks = {
             "WINEDEBUG": "-all",
             "DXVK_LOG_LEVEL": "none",
@@ -1535,6 +1526,20 @@ class Session:
             self.env.update(default_tweaks)
 
         # <<Sarek Settings>>
+
+        if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
+            self.env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+unwind,+threadname,+debugstr,+loaddll,+mscoree"
+            self.env["DXVK_LOG_LEVEL"] = "info"
+            self.env["DXVK_NVAPI_LOG_LEVEL"] = "info"
+            self.env["VKD3D_DEBUG"] = "warn"
+            self.env["VKD3D_SHADER_DEBUG"] = "fixme"
+            self.env["WINE_MONO_TRACE"] = "E:System.NotImplementedException"
+
+            if self.env["PROTON_LOG"] != "1":
+                append_to_env_str(self.env, "WINEDEBUG", self.env["PROTON_LOG"], ",")
+
+        #disable XIM support until libx11 >= 1.7 is widespread
+        self.env.setdefault("WINE_ALLOW_XIM", "0")
 
         if "wined3d11" in self.compat_config:
             self.compat_config.add("wined3d")
