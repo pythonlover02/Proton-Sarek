@@ -209,19 +209,19 @@ Follow these steps to add to your Proton Build the Sarek patches:
 ### 1. Download/Compile Proton
 - **Option 1:** Compile your Proton build from source.
 
-- **Option 2:** Download a precompiled Proton build (GE-Proton or Valve's stable release are the only ones officially supported).
+- **Option 2:** Download a precompiled Proton build (GE-Proton or Valve's Stable releases are the only ones officially supported).
 
 ### 2. Get the Sarek Patches
 - Clone or download the Sarek-Patches dir from this repository.
 
 ### 3. Rename the Proton Executable (if necessary)
 - If you're using **GE-Proton**, no need to rename anything, as the default `proton` file works out of the box.
-- For **Valve's Proton** builds:
+- For **Valve's Proton** Stable builds:
   - Rename `proton` (from the Sarek-Patches dir) to something else like `proton-ge`.
   - Rename the `proton-valve` file from the Sarek-Patches to `proton`.
 
-### 4. Modify Compatibilitytool.vdf and Proton Files
-- Edit both `compatibilitytool.vdf` and `proton` files to reflect the name of your build (replace "Sarek" with your custom build name).
+### 4. Modify Compatibilitytool.vdf, Version and Proton Files
+- Edit `compatibilitytool.vdf`, `version` and `proton` files to reflect the name of your build (replace "Proton-Sarek" with your custom build name).
 
 ### 5. Make the `make.sh` Script Executable
 - If you want a build with normal DXVK or DXVK-Async, make the appropriate script executable:
