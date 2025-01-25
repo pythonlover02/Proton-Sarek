@@ -1214,6 +1214,20 @@ def default_compat_config():
     ret = set()
     if "SteamAppId" in os.environ:
         appid = os.environ["SteamAppId"]
+
+        # <<Sarek Configs>>
+        # Needed to workaround DXVK-Sarek issues with game Videos:
+        if appid in [
+                "6550", #Devil May Cry 3 Special Edition
+                "329050", #Devil May Cry 4 Special Edition
+                "631510", #Devil May Cry HD Collection
+                "331600", #ONE PIECE PIRATE WARRIORS 3
+                "1372280", #MELTY BLOOD: TYPE LUMINA
+                "348550", #GUILTY GEAR XX ACCENT CORE PLUS R
+                "586140", #BlazBlue Centralfiction
+                ]:
+            ret.add("wined3d")
+
         if appid in [
                 #affected by CW bug 19126
                 "536280", #Disintegration
