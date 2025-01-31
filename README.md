@@ -104,9 +104,14 @@ These are the custom parameters introduced in Sarek to provide fallback renderin
 | Environment Variable              | Description                                                                                                                     |
 |-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
 | `PROTON_SAREK_PROFILE`            | Changes the [Sarek Runtime](#Sarek-Runtime) behavior, it accepts the next values: `base`, `default` and `agg`.                  |
+| `PROTON_USE_NINE`                 | Enables the use of Native D3D9. Requires a Mesa driver.                                                                   |
 | `PROTON_OGL_THREAD=[0/1]`         | Enables OpenGL Threaded Optimizations, might increase or decrease fps depending on the game.                                    |
 | `PROTON_OGL_SOFTWARE=[0/1]`       | Uses LLVMpipe for CPU-based rendering for OpenGL, supporting API version 4.6.                                                   |
 | `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3.                                                   |
+
+**Requirements for Using Gallium Nine (Native D3D9):**
+- **A Gallium based graphics driver**: Mesa 3D
+- **Mesa's Gallium Nine state tracker**: d3dadapter9.so (This is shipped with Proton-Sarek)
 
 **Requirements for Using Lavapipe (Vulkan Software Rendering):**
 - **Mesa Version**: 20.3 or newer
@@ -246,7 +251,7 @@ When prompted, provide the path to the Proton build you downloaded or compiled.
 - Thats all, enjoy *:)*
 
 ## Credits:
-This project also uses many 3rd party code and patches, i just do little patches so everything works well with an older DXVK, go support them, they are the ones that do the heavy work
+This project also uses many 3rd party code and patches, i just do little patches so everything works well, go support them, they are the ones that do the heavy work
 
 ### Valve:
 https://github.com/ValveSoftware/Proton && https://github.com/ValveSoftware/wine
@@ -272,6 +277,11 @@ This project incorporates work from Sporif's DXVK Async, which provides patched 
 https://github.com/HansKristian-Work/vkd3d-proton
 
 This project benefits from the incredible work of HansKristian-Work and his creation of VKD3D-proton, which plays a key role in Linux gaming, making Windows DX12 games run smoothly on Linux through Vulkan. We deeply appreciate his contributions and use VKD3D-proton in this project.
+
+### iXit Group : 
+https://github.com/iXit/wine-nine-standalone
+
+This project benefits from the incredible work of the iXit Group and his creation of Gallium Nine. We deeply appreciate their contributions and use Gallium Nine in this project.
 
 ### Also i want to thanks all of those reddit users that help me make the Supported GPU List:
 
