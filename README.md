@@ -11,8 +11,8 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 ----
 
 ![Badge Language](https://img.shields.io/github/languages/top/pythonlover02/Proton-Sarek)
-![Hello There](https://img.shields.io/badge/hello-_there-blue)
 [![Stars](https://img.shields.io/github/stars/pythonlover02/Proton-Sarek?style=social)](https://github.com/pythonlover02/Proton-Sarek/stargazers)
+[![Static Badge](https://img.shields.io/badge/Avaliable_on-ProtonPlus-blue)](https://github.com/Vysp3r/ProtonPlus)
 
 ----
 
