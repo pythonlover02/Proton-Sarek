@@ -861,7 +861,6 @@ class CompatData:
             steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
 
             use_wined3d = "wined3d" in g_session.compat_config
-            use_nine = "nine" in g_session.compat_config
             use_dxvk_dxgi = not use_wined3d and \
                     not ("WINEDLLOVERRIDES" in g_session.env and "dxgi=b" in g_session.env["WINEDLLOVERRIDES"])
             use_nvapi = 'disablenvapi' not in g_session.compat_config or 'forcenvapi' in g_session.compat_config
@@ -919,7 +918,6 @@ class CompatData:
                 g_proton.default_pfx_dir,
                 getmtimestr(g_proton.default_pfx_dir, 'system.reg'),
                 str(use_wined3d),
-                str(use_nine),
                 str(use_dxvk_dxgi),
                 builtin_dll_copy,
                 str(use_nvapi),
@@ -998,17 +996,10 @@ class CompatData:
                     dxvkfiles = []
                     vkd3d_protonfiles = []
                     wined3dfiles = ["d3d12", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
-                    ninefiles = []
-                elif use_nine:
-                    dxvkfiles = []
-                    vkd3d_protonfiles = []
-                    wined3dfiles = ["d3d12", "d3d11", "d3d10", "d3d10core", "d3d10_1"]
-                    ninefiles = ["d3d9"]
                 else:
                     dxvkfiles = ["d3d11", "d3d10core", "d3d9"]
                     vkd3d_protonfiles = ["d3d12"]
                     wined3dfiles = []
-                    ninefiles = []
 
                 if use_dxvk_dxgi:
                     dxvkfiles.append("dxgi")
@@ -1027,13 +1018,6 @@ class CompatData:
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     try_copy(g_proton.default_pfx_dir + "drive_c/windows/syswow64/" + f + ".dll", "drive_c/windows/syswow64",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-
-                for f in ninefiles:
-                    try_copy(g_proton.lib64_dir + "wine/nine/" + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                    try_copy(g_proton.lib_dir + "wine/nine/" + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                    g_session.dlloverrides[f] = "n"
 
                 for f in dxvkfiles:
                     try_copy(g_proton.lib64_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/system32",
@@ -1118,20 +1102,6 @@ def default_compat_config():
     ret = set()
     if "SteamAppId" in os.environ:
         appid = os.environ["SteamAppId"]
-
-        # <<Sarek Configs>>
-        # Needed to workaround DXVK-Sarek issues with game Videos:
-        if appid in [
-                "6550", #Devil May Cry 3 Special Edition
-                "329050", #Devil May Cry 4 Special Edition
-                "631510", #Devil May Cry HD Collection
-                "331600", #ONE PIECE PIRATE WARRIORS 3
-                "1372280", #MELTY BLOOD: TYPE LUMINA
-                "348550", #GUILTY GEAR XX ACCENT CORE PLUS R
-                "586140", #BlazBlue Centralfiction
-                ]:
-            ret.add("wined3d")
-
         if appid in [
                 #affected by CW bug 19126
                 "536280", #Disintegration
@@ -1499,11 +1469,6 @@ class Session:
         if "PROTON_OGL_THREAD" in self.env and nonzero(self.env["PROTON_OGL_THREAD"]):
             self.env["__GL_THREADED_OPTIMIZATIONS"] = "1"
             self.env["mesa_glthread"] = "true"
-
-        # Gallium Nine Parameter:
-        if "PROTON_USE_NINE" in self.env and nonzero(self.env["PROTON_USE_NINE"]):
-            self.compat_config.add("nine")
-            self.env["D3D_MODULE_PATH"] = g_proton.lib64_dir + "/wine/nine/d3dadapter9.so.1.0.0" + ":" + g_proton.lib_dir + "/wine/nine/d3dadapter9.so.1.0.0"
 
         # Sarek_Runtime:
         proton_tweaks = {

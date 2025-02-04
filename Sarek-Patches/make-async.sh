@@ -20,10 +20,10 @@ fi
 
 # Copy the dxvk-async files
 echo "Copying dxvk-async 32-bit files..."
-cp -r "$SCRIPT_DIR/dxvk-async/x32/"* "$protondir/files/lib/wine/dxvk/" || { echo "Failed to copy 32-bit dxvk-async files."; exit 1; }
+cp -r "$SCRIPT_DIR/dxvk-async/x32/"* "$protondir/files/lib/wine/dxvk/" || { echo "Failed to copy 32-bit dxvk files."; exit 1; }
 
 echo "Copying dxvk-async 64-bit files..."
-cp -r "$SCRIPT_DIR/dxvk-async/x64/"* "$protondir/files/lib64/wine/dxvk/" || { echo "Failed to copy 64-bit dxvk-async files."; exit 1; }
+cp -r "$SCRIPT_DIR/dxvk-async/x64/"* "$protondir/files/lib64/wine/dxvk/" || { echo "Failed to copy 64-bit dxvk files."; exit 1; }
 
 # Copy the vkd3d-proton-2.6 files
 echo "Copying vkd3d-proton-2.6 32-bit files..."
@@ -31,19 +31,6 @@ cp -r "$SCRIPT_DIR/vkd3d-proton-2.6/x86/"* "$protondir/files/lib/wine/vkd3d-prot
 
 echo "Copying vkd3d-proton-2.6 64-bit files..."
 cp -r "$SCRIPT_DIR/vkd3d-proton-2.6/x64/"* "$protondir/files/lib64/wine/vkd3d-proton/" || { echo "Failed to copy 64-bit vkd3d-proton files."; exit 1; }
-
-# Create the nine directories if they don't exist
-echo "Creating gallium-nine directories..."
-mkdir -p "$protondir/files/lib/wine/nine" || { echo "Failed to create 32-bit nine directory."; exit 1; }
-
-mkdir -p "$protondir/files/lib64/wine/nine" || { echo "Failed to create 64-bit nine directory."; exit 1; }
-
-# Copy the gallium-nine files
-echo "Copying gallium-nine 32-bit files..."
-cp -r "$SCRIPT_DIR/gallium-nine/x32/"* "$protondir/files/lib/wine/nine/" || { echo "Failed to copy 32-bit gallium-nine files."; exit 1; }
-
-echo "Copying gallium-nine 64-bit files..."
-cp -r "$SCRIPT_DIR/gallium-nine/x64/"* "$protondir/files/lib64/wine/nine/" || { echo "Failed to copy 64-bit gallium-nine files."; exit 1; }
 
 # Copy the Proton, Version and compatibilitytool files
 echo "Copying proton file..."
