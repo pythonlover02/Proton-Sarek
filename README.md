@@ -126,39 +126,40 @@ A simple runtime that configures the game environment by adding environment vari
 
 - **"default" (Default Value):**
   - Inherits all settings from the Base configuration.
-  - Introduces a set of fixes for OpenGL to both Mesa and NVIDIA proprietary drivers.
-  - Increases the maximum shader cache size on disk to **2GB per game**. This ensures that the driver maintains optimal performance without repeatedly regenerating previously created caches. It's unlikely to exceed **800MB** unless running graphically intensive games that require extensive caching.
+  - Introduces a set of fixes for OpenGL/Vulkan for old GPUs.
 
 - **"agg":**
   - Represents an aggressive performance tuning mode, incorporating all features from the default configuration, plus the following enhancements:
+  
+  **OpenGL/WineD3D:**
 
-  **NVIDIA OpenGL:**
+  **NVIDIA:**
   - Forces no Vsync to reduce input lag.
   - Forces rendering textures under performance settings instead of the default quality settings.
   - Forces no Full-Screen Anti-Aliasing (FSAA) and FXAA.
   - Prevents the usage of anisotropic filtering.
   - Disables Variable Refresh Rate (VRR).
 
-  **Mesa OpenGL:**
+  **Mesa:**
   - Forces no Vsync to minimize input lag.
   - Disables error checking within the API to avoid CPU performance losses.
   - Disables dithering.
   - Forces no Full-Screen Anti-Aliasing (FSAA) 
   - Prevents the usage of anisotropic filtering
+  
+  **DXVK:**
 
-**There its an fps increase if i use agg instead of the default?**
+  **NVIDIA && Mesa:**
+  - Disable vertical synchronization (vsync)
+  - Set the maximum tessellation factor to 8, limiting tessellation detail to improve performance in games that overuse it.
+  - Enables relaxed pipeline barriers for UAV (unordered access view) writes in D3D11, which can improve performance (with a risk of rendering glitches).
+  - Tell the driver to ignore certain graphics barriers around UAV writes from fragment shaders, aiming to reduce synchronization overhead on D3D11.
+  - Disable anisotropic filtering.
+  - Disable the declaration of vertex positions as invariant in D3D, which may reduce a small performance cost (at the potential risk of increased Z-fighting).
+  - Enables fast (but less precise) floating point quirk emulation in D3D9, which can speed up computations in games that rely on these operations.
 
-Yes and no, the agg profile has been added mainly to workaround games that do not allow you to disable antialiasing, vsync, and anisotropic filtering as these settings negatively impact performance in WineD3D a loot. 
-However, there are some adjustments that generally improve performance:
-
-**NVIDIA OpenGL:**
-- Forces rendering textures under performance settings instead of the default quality settings.
-
-**Mesa OpenGL:**
-- Disables error checking within the API to avoid CPU performance losses.
-- Disables dithering
-
-The overall performance gain from these changes is minimal, typically ranging from 0.5 to 5 FPS, tough it helps with stutters on weak graphics cards.
+> [!NOTE]
+> The agg profile is intended to be used on PCs with weak GPUs, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
 
 **Sources for the Sarek Runtime:**
 
@@ -169,6 +170,8 @@ The overall performance gain from these changes is minimal, typically ranging fr
 [NVIDIA 470 Drivers Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/470.256.02/README/openglenvvariables.html)
 
 [NVIDIA 390 Drivers Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/390.157/README/openglenvvariables.html)
+
+[DXVK-Sarek Config Documentation](https://github.com/pythonlover02/DXVK-Sarek/blob/1.10.x-Proton-Sarek/dxvk.conf)
 
 ### Additional Tips:
 
