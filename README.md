@@ -226,13 +226,7 @@ Follow these steps to add to your Proton Build the Sarek patches:
 ### 4. Modify Compatibilitytool.vdf, Version and Proton Files
 - Edit `compatibilitytool.vdf`, `version` and `proton` files to reflect the name of your build (replace "Proton-Sarek" with your custom build name).
 
-### 5. Make the `make.sh` Script Executable
-- If you want a build with normal DXVK or DXVK-Async, make the appropriate script executable:
-
-		chmod +x /path/to/make.sh       # For normal DXVK
-		chmod +x /path/to/make-async.sh  # For DXVK-Async
-
-### 6. Run the Build Script
+### 5. Run the Build Script
 
 - Execute the script with superuser privileges:
 
@@ -244,7 +238,7 @@ Follow these steps to add to your Proton Build the Sarek patches:
 
 When prompted, provide the path to the Proton build you downloaded or compiled.
 
-### 7. Enjoy Your Custom Proton Build!
+### 6. Enjoy Your Custom Proton Build!
 
 - Thats all, enjoy *:)*
 
