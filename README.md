@@ -89,20 +89,37 @@ My personal recomendation its to search a tutorial for the installation of the t
 ### Sarek:
 These are the custom parameters introduced in Sarek to provide fallback rendering options or controll over the build.
 
-| Environment Variable              | Description                                                                                                                     |
-|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| `PROTON_SAREK_PROFILE`            | Changes the [Sarek Runtime](#Sarek-Runtime) behavior, it accepts the next values: `base`, `default` and `agg`.                  |
-| `PROTON_OGL_THREAD=[0/1]`         | Enables OpenGL Threaded Optimizations, might increase or decrease fps depending on the game.                                    |
-| `PROTON_OGL_SOFTWARE=[0/1]`       | Uses LLVMpipe for CPU-based rendering for OpenGL, supporting API version 4.6.                                                   |
-| `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3.                                                   |
+| Environment Variable              | Description                                                                                                                                  |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `PROTON_SAREK_PROFILE`            | Changes the [Sarek Runtime](#Sarek-Runtime) behavior, it accepts the next values: `base`, `default` and `agg`.                               |
+| `PROTON_OGL_THREAD=[0/1]`         | Enables OpenGL Threaded Optimizations, might increase or decrease fps depending on the game.                                                 |
+| `PROTON_SOFTWARE_RENDER=[0/1]`    | Uses LLVMpipe and Lavapipe for CPU-based rendering for OpenGL and Vulkan, more info on the [Software Rendering](#Software-Rendering) section |
+
+### Software Rendering:
+
+Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, please check if you meet the requirements:
+
+**Requirements for Using LLVMpipe (OpenGL Software Rendering):**
+- **Mesa Version**: Any recent version (LLVMpipe is well supported in current Mesa releases)
+- **CPU**: Multi-core recommended for better performance
 
 **Requirements for Using Lavapipe (Vulkan Software Rendering):**
 - **Mesa Version**: 20.3 or newer
 - **CPU**: Multi-core recommended for better performance
 
-**Requirements for Using LLVMpipe (OpenGL Software Rendering):**
-- **Mesa Version**: Any recent version (LLVMpipe is well-supported in current Mesa releases)
-- **CPU**: Multi-core recommended for better performance
+#### Lavapipe Important Note:
+
+On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here's an easy way to check if it's included in your distribution's Mesa installation:
+
+```
+vulkaninfo | less
+```
+
+Look for an entry similar to this in the output:
+`GPU id : 1 (llvmpipe (<your LLVM version>, <bit width> bits)):`
+
+If there its no entry that mentions llvmpipe, you need to install additional packages specific to your distribution.
+
 
 ### Sarek Runtime:
 A simple runtime that configures the game environment by adding environment variables. Its behavior can be changed using the `PROTON_SAREK_PROFILE` parameter, which accepts the following values: `base`, `default`, and `agg`.
