@@ -1464,14 +1464,12 @@ class Session:
 
         # <<Sarek Settings>>
 
-        # Software Rendering Parameters:
-        if "PROTON_OGL_SOFTWARE" in self.env and nonzero(self.env["PROTON_OGL_SOFTWARE"]):
+        # Software Rendering Parameter:
+        if "PROTON_SOFTWARE_RENDER" in self.env and nonzero(self.env["PROTON_SOFTWARE_RENDER"]):
             self.env["LIBGL_ALWAYS_SOFTWARE"] = "1"
             self.env["__GLX_VENDOR_LIBRARY_NAME"] = "mesa"
-
-        if "PROTON_VK_SOFTWARE" in self.env and nonzero(self.env["PROTON_VK_SOFTWARE"]):
             self.env["MESA_VK_DEVICE_SELECT"] = "10005:0!"
-
+                    
         # OpenGL Threaded Optimizations Parameter:
         if "PROTON_OGL_THREAD" in self.env and nonzero(self.env["PROTON_OGL_THREAD"]):
             self.env["__GL_THREADED_OPTIMIZATIONS"] = "1"
