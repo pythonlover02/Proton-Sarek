@@ -20,9 +20,6 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [Install](#Install)
 	- [Native](#Native)
 	- [Flatpak](#Flatpak)
-- [GPU List](#GPU-List)
-	- [NVIDIA](#NVIDIA)
-	- [Intel && AMD](#Intel--AMD)
 - [Parameters](#Parameters)
 	- [Proton](#Proton)
 	- [Optimization](#Optimization)
@@ -58,15 +55,6 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 4. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
 
 5. Restart and thats it!!! Enjoy :P
-
-## GPU List:
-Here its the GPU List of the ones on witch its recommended to use this Proton Build
-
-### NVIDIA:
-On NVIDIA cards, it should be all the ones that are stuck on the 470 drivers, previous drivers like 440, 415, 390 and Nouveau users.
-
-### Intel && AMD:
-Any GPU or iGPU that is OpenGL only or has a Vulkan API lower than 1.3.
 
 ## Parameters:
 
@@ -159,7 +147,7 @@ A simple runtime that configures the game environment by adding environment vari
   - Enables fast (but less precise) floating point quirk emulation in D3D9, which can speed up computations in games that rely on these operations.
 
 > [!NOTE]
-> The agg profile is intended to be used on PCs with weak GPUs, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
+> The agg profile is intended to be used on PCs with weak GPUs or when software rendering its being used, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
 
 **Sources for the Sarek Runtime:**
 
@@ -215,7 +203,7 @@ Follow these steps to add to your Proton Build the Sarek patches:
 - **Option 2:** Download a precompiled Proton build (GE-Proton or Valve's Stable releases are the only ones officially supported).
 
 ### 2. Get the Sarek Patches
-- Clone or download the Sarek-Patches dir from this repository.
+- Clone or download the Sarek-Patches dir from this repository. 
 
 ### 3. Rename the Proton Executable (if necessary)
 - If you're using **GE-Proton**, no need to rename anything, as the default `proton` file works out of the box.
