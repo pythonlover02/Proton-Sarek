@@ -97,7 +97,7 @@ These are the custom parameters introduced in Sarek to provide fallback renderin
 
 ### Software Rendering:
 
-Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, please check if you meet the requirements:
+Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, ensure your system meets the software rasterizer requirements for the program/wrapper API:
 
 **Requirements for Using LLVMpipe (OpenGL Software Rendering):**
 - **Mesa Version**: Any recent version (LLVMpipe is well supported in current Mesa releases)
@@ -109,7 +109,7 @@ Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, please check if you
 
 #### Lavapipe Important Note:
 
-On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here's an easy way to check if it's included in your distribution's Mesa installation:
+On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
 
 ```
 vulkaninfo | less
@@ -118,7 +118,7 @@ vulkaninfo | less
 Look for an entry similar to this in the output:
 `GPU id : 1 (llvmpipe (<your LLVM version>, <bit width> bits)):`
 
-If there its no entry that mentions llvmpipe, you need to install additional packages specific to your distribution.
+If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
 
 
 ### Sarek Runtime:
