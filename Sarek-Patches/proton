@@ -1642,7 +1642,7 @@ class Session:
                 "__GL_IGNORE_GLSL_EXT_REQS": "1",
                 "MESA_GL_VERSION_OVERRIDE": "4.6",
                 "MESA_GLSL_VERSION_OVERRIDE": "460",
-                "MESA_VK_VERSION_OVERRIDE": "1.3",
+                "MESA_VK_VERSION_OVERRIDE": "1.4",
             }
 
             opengl_wined3d_tweaks = {
