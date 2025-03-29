@@ -1612,7 +1612,7 @@ class Session:
         if "PROTON_SOFTWARE_RENDER" in self.env and nonzero(self.env["PROTON_SOFTWARE_RENDER"]):
             self.env["LIBGL_ALWAYS_SOFTWARE"] = "1"
             self.env["__GLX_VENDOR_LIBRARY_NAME"] = "mesa"
-            self.env["MESA_VK_DEVICE_SELECT"] = "10005:0!"
+            self.env.setdefault("VK_ICD_FILENAMES", "/usr/share/vulkan/icd.d/lvp_icd.x86_64.json")
 
         # OpenGL Threaded Optimizations Parameter:
         if "PROTON_OGL_THREAD" in self.env and nonzero(self.env["PROTON_OGL_THREAD"]):
