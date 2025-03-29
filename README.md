@@ -107,9 +107,8 @@ Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, ensure your system 
 - **Mesa Version**: 20.3 or newer
 - **CPU**: Multi-core recommended for better performance
 
-#### Lavapipe Important Note:
-
-On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
+#### Lavapipe Important Notes:
+1 - On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
 
 ```
 vulkaninfo | less
@@ -120,6 +119,7 @@ Look for an entry similar to this in the output:
 
 If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
 
+2 - You may need to manually set the VK_ICD_FILENAMES to the Lavapipe icd.json (usually a variation of `lvp_icd.json`) if the default target for VK_ICD_FILENAMES is not the desired one, or it uses an incorrect path. The default path and target should work for most installations.
 
 ### Sarek Profile:
 The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which accepts the following values: `base`, `default`, and `agg`.
