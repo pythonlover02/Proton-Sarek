@@ -91,7 +91,7 @@ These are the custom parameters introduced in Sarek to provide fallback renderin
 
 | Environment Variable              | Description                                                                                                                                  |
 |-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| `PROTON_SAREK_PROFILE`            | Changes the [Sarek Runtime](#Sarek-Runtime) behavior, it accepts the next values: `base`, `default` and `agg`.                               |
+| `PROTON_SAREK_PROFILE`            | Changes the [Sarek Profile](#Sarek-Profile), it accepts the next values: `base`, `default` and `agg`.                               |
 | `PROTON_OGL_THREAD=[0/1]`         | Enables OpenGL Threaded Optimizations, might increase or decrease fps depending on the game.                                                 |
 | `PROTON_SOFTWARE_RENDER=[0/1]`    | Uses LLVMpipe and Lavapipe for CPU-based rendering for OpenGL and Vulkan, more info on the [Software Rendering](#Software-Rendering) section |
 
@@ -121,8 +121,8 @@ Look for an entry similar to this in the output:
 If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
 
 
-### Sarek Runtime:
-A simple runtime that configures the game environment by adding environment variables. Its behavior can be changed using the `PROTON_SAREK_PROFILE` parameter, which accepts the following values: `base`, `default`, and `agg`.
+### Sarek Profile:
+The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which accepts the following values: `base`, `default`, and `agg`.
 
 **Configuration Options**:
 
@@ -166,7 +166,7 @@ A simple runtime that configures the game environment by adding environment vari
 > [!NOTE]
 > The agg profile is intended to be used on PCs with weak GPUs or when software rendering its being used, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
 
-**Sources for the Sarek Runtime:**
+**Sources for the Code of The Sarek Profiles:**
 
 [OpenGL Extensions Documentation](https://registry.khronos.org/OpenGL/extensions/EXT/)
 
