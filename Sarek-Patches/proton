@@ -1656,23 +1656,25 @@ class Session:
                 "MESA_NO_DITHER": "1",
                 "vblank_mode": "0",
                 "MESA_EXTENSION_OVERRIDE": (
-                    "-GL_EXT_framebuffer_multisample,"
-                    "-GL_EXT_framebuffer_multisample_blit_scaled,"
+                    "-GL_EXT_framebuffer_multisample "
+                    "-GL_EXT_framebuffer_multisample_blit_scaled "
                     "-GL_EXT_texture_filter_anisotropic"
                 ),
             }
 
             dxvk_tweaks = {
-                "dxgi.syncInterval": "0",
-                "d3d9.presentInterval": "0",
-                "d3d11.maxTessFactor": "8",
-                "d3d11.relaxedBarriers": "True",
-                "d3d11.ignoreGraphicsBarriers": "True",
-                "d3d11.samplerAnisotropy": "0",
-                "d3d9.samplerAnisotropy": "0",
-                "d3d11.invariantPosition": "False",
-                "d3d9.invariantPosition": "False",
-                "d3d9.floatEmulation": "True",
+                "DXVK_CONFIG": (
+                    "dxgi.syncInterval = 0;"
+                    "d3d9.presentInterval = 0;"
+                    "d3d11.maxTessFactor = 8;"
+                    "d3d11.relaxedBarriers = True;"
+                    "d3d11.ignoreGraphicsBarriers = True;"
+                    "d3d11.samplerAnisotropy = 0;"
+                    "d3d9.samplerAnisotropy = 0;"
+                    "d3d11.invariantPosition = False;"
+                    "d3d9.invariantPosition = False;"
+                    "d3d9.floatEmulation = True"
+                )
             }
 
             default_tweaks = proton_tweaks | old_gpu_fixes
