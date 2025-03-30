@@ -1475,11 +1475,11 @@ class Session:
             self.env["__GL_THREADED_OPTIMIZATIONS"] = "1"
             self.env["mesa_glthread"] = "true"
 
-        # Sarek_Runtime:
+        # Sarek_Profiles:
         def update_sarek_env(env):
 
             """
-            Update the provided environment dictionary with Sarek runtime tweaks
+            Update the provided environment dictionary with Sarek Profiles tweaks
             based on the PROTON_SAREK_PROFILE setting.
             """
 
@@ -1530,21 +1530,25 @@ class Session:
                     "d3d11.invariantPosition = False;"
                     "d3d9.invariantPosition = False;"
                     "d3d9.floatEmulation = True"
-                )
+                ),
+            }
+
+            mesa_vulkan_tweaks = {
+                "MESA_VK_WSI_PRESENT_MODE" : "immediate",
             }
 
             default_tweaks = proton_tweaks | old_gpu_fixes
 
-            runtime_modes = {
+            profiles = {
                 "base": proton_tweaks,
                 "default": default_tweaks,
-                "agg": default_tweaks | opengl_wined3d_tweaks | dxvk_tweaks,
+                "agg": default_tweaks | opengl_wined3d_tweaks | dxvk_tweaks | mesa_vulkan_tweaks,
             }
 
             profile = env.get("PROTON_SAREK_PROFILE", "default")
-            env.update(runtime_modes.get(profile, default_tweaks))
+            env.update(profiles.get(profile, default_tweaks))
 
-        # Update the Sarek_Runtime.
+        # Update the Sarek_Profile.
         update_sarek_env(self.env)
 
         # <<Sarek Settings>>
