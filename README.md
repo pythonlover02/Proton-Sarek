@@ -108,7 +108,7 @@ Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, ensure your system 
 - **CPU**: Multi-core recommended for better performance
 
 #### Lavapipe Important Notes:
-1 - On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
+1. On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
 
 ```
 vulkaninfo | less
@@ -119,7 +119,7 @@ Look for an entry similar to this in the output:
 
 If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
 
-2 - You may need to manually set the VK_ICD_FILENAMES to the Lavapipe icd.json (usually a variation of `lvp_icd.json`) if the default target for VK_ICD_FILENAMES is not the desired one, or it uses an incorrect path. The default path and target should work for most installations.
+2. You may need to manually set the VK_ICD_FILENAMES to the Lavapipe icd.json (usually a variation of `lvp_icd.json`) if the default target for VK_ICD_FILENAMES is not the desired one, or it uses an incorrect path. The default path and target should work for most installations.
 
 ### Sarek Profile:
 The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which accepts the following values: `base`, `default`, and `agg`.
@@ -180,9 +180,9 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
 
 ### Additional Tips:
 
-1. If that of a above its not enought, you might want to check newer kernel versions or patched/customiced kernels(zen, liquorix, xanmod, cachyoskernel, clearkernel, etc), i personally recomend the vanilla kernel tought
+1. If that of a above its not enought, you might want to check newer kernel versions or patched/customiced kernels(zen, liquorix, xanmod, cachyoskernel, clearkernel, etc), i personally recomend the vanilla kernel tought.
 
-2. You might want to use the drop shader cache command of the linux kernel before playing a game, you should do:
+2. You might want to use the drop cache command of the linux kernel before playing a game to free some ram, you should do:
 
    ```
    sudo su
@@ -208,7 +208,9 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
 
    You can remove the `no_display` option (which hides the MangoHud HUD), change the `fps_limit` value to any number you like, and change the `fps_limit_method` to `early` (for smoother frametimes) or `late` (for the lowest latency).
 
-   Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options.
+   Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options, or just copy my current [MangoHud.conf](https://github.com/pythonlover02/Proton-Sarek/blob/onlyfixes/Extras/MangoHud.conf) file.
+
+4. Check the [Gaming](https://wiki.archlinux.org/title/Gaming) and [Improving performance](https://wiki.archlinux.org/title/Improving_performance) Arch Wiki pages for more tips.
 
 ## Building:
 
