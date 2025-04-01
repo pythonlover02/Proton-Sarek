@@ -203,14 +203,13 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
    fps_limit_method=early
    no_display
    ```
-
-   Also, remember that for MangoHud to work with OpenGL games, you should use `mangohud --dlsym` instead of just `mangohud` in the Steam Launch Parameters.
-
    You can remove the `no_display` option (which hides the MangoHud HUD), change the `fps_limit` value to any number you like, and change the `fps_limit_method` to `early` (for smoother frametimes) or `late` (for the lowest latency).
 
-   Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options, or just copy my current [MangoHud.conf](https://github.com/pythonlover02/Proton-Sarek/blob/onlyfixes/Extras/MangoHud.conf) file.
+   Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options. 
 
-4. Check the [Gaming](https://wiki.archlinux.org/title/Gaming) and [Improving performance](https://wiki.archlinux.org/title/Improving_performance) Arch Wiki pages for more tips.
+   As an example here its my current [MangoHud.conf](https://github.com/pythonlover02/Proton-Sarek/blob/onlyfixes/Extras/MangoHud.conf) file.
+
+5. Check the [Gaming](https://wiki.archlinux.org/title/Gaming) and [Improving performance](https://wiki.archlinux.org/title/Improving_performance) Arch Wiki pages for more tips.
 
 ## Building:
 
