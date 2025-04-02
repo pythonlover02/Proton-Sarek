@@ -1198,6 +1198,8 @@ def default_compat_config():
                 "3024040", #Stronghold Crusader: Definitive Edition
                 "2433890", #Stronghold: Definitive Edition Demo
                 "2140020", #Stronghold: Definitive Edition
+                "3314070", #The Sims 2 Legacy Collection
+                "2709570", #Supermarket Together
                 ]:
             ret.add("gamedrive")
 

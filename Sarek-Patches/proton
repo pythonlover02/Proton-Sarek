@@ -4,9 +4,7 @@
 
 import fcntl
 import array
-import filecmp
 import fnmatch
-import json
 import os
 import shutil
 import errno
@@ -15,7 +13,6 @@ import resource
 import stat
 import subprocess
 import sys
-import tarfile
 import shlex
 import uuid
 
@@ -1342,6 +1339,7 @@ def default_compat_config():
 
         if appid in [
                 "71230", #Crazy Taxi
+                "3328910", #MySims Kingdom
                 ]:
             ret.add("heaptopdown")
 
@@ -1768,6 +1766,18 @@ class Session:
         if os.environ.get("SteamGameId", 0) == "500810":
             self.dlloverrides["ddraw"] = "n,b"
 
+        if "PROTON_LIMIT_RESOLUTIONS" not in self.env:
+            if os.environ.get("SteamGameId", 0) in [
+                    "39540", #SpellForce: Platinum Edition
+                    ]:
+                self.env["PROTON_LIMIT_RESOLUTIONS"] = "16"
+            elif os.environ.get("SteamGameId", 0) in [
+                    "524220", #NieR: Automata
+                    "814380", #Sekiro: Shadows Die Twice
+                    "374320", #DARK SOULS III
+                    ]:
+                self.env["PROTON_LIMIT_RESOLUTIONS"] = "32"
+
         if "forcelgadd" in self.compat_config:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
         else:
@@ -1954,7 +1964,7 @@ class Session:
             log(sys.argv[2])
             if len(sys.argv) >=  3 and sys.argv[2].startswith('/'):
                 log("Executable a unix path, launching with /unix option.")
-                argv = [g_proton.wine64_bin, "c:\\windows\\system32\\start.exe", "/wait", "/unix"]
+                argv = [g_proton.wine64_bin, "c:\\windows\\system32\\start.exe", "/unix"]
             else:
                 log("Executable is inside wine prefix, launching normally.")
                 argv = [g_proton.wine64_bin]
