@@ -162,6 +162,11 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   - Disable anisotropic filtering.
   - Disable the declaration of vertex positions as invariant in D3D, which may reduce a small performance cost (at the potential risk of increased Z-fighting).
   - Enables fast (but less precise) floating point quirk emulation in D3D9, which can speed up computations in games that rely on these operations.
+ 
+  **Vulkan:**
+  
+  **Mesa:**
+  - Disable vertical synchronization (vsync)
 
 > [!NOTE]
 > The agg profile is intended to be used on PCs with weak GPUs or when software rendering its being used, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
