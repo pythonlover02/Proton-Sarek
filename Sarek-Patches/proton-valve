@@ -1198,6 +1198,8 @@ def default_compat_config():
                 "3024040", #Stronghold Crusader: Definitive Edition
                 "2433890", #Stronghold: Definitive Edition Demo
                 "2140020", #Stronghold: Definitive Edition
+                "3314070", #The Sims 2 Legacy Collection
+                "2709570", #Supermarket Together
                 ]:
             ret.add("gamedrive")
 
@@ -1464,24 +1466,22 @@ class Session:
 
         # <<Sarek Settings>>
 
-        # Software Rendering Parameters:
-        if "PROTON_OGL_SOFTWARE" in self.env and nonzero(self.env["PROTON_OGL_SOFTWARE"]):
+        # Software Rendering Parameter:
+        if "PROTON_SOFTWARE_RENDER" in self.env and nonzero(self.env["PROTON_SOFTWARE_RENDER"]):
             self.env["LIBGL_ALWAYS_SOFTWARE"] = "1"
             self.env["__GLX_VENDOR_LIBRARY_NAME"] = "mesa"
-
-        if "PROTON_VK_SOFTWARE" in self.env and nonzero(self.env["PROTON_VK_SOFTWARE"]):
-            self.env["MESA_VK_DEVICE_SELECT"] = "10005:0!"
+            self.env.setdefault("VK_ICD_FILENAMES", "/usr/share/vulkan/icd.d/lvp_icd.x86_64.json")
 
         # OpenGL Threaded Optimizations Parameter:
         if "PROTON_OGL_THREAD" in self.env and nonzero(self.env["PROTON_OGL_THREAD"]):
             self.env["__GL_THREADED_OPTIMIZATIONS"] = "1"
             self.env["mesa_glthread"] = "true"
 
-        # Sarek_Runtime:
+        # Sarek_Profiles:
         def update_sarek_env(env):
 
             """
-            Update the provided environment dictionary with Sarek runtime tweaks
+            Update the provided environment dictionary with Sarek Profiles tweaks
             based on the PROTON_SAREK_PROFILE setting.
             """
 
@@ -1500,7 +1500,7 @@ class Session:
                 "__GL_IGNORE_GLSL_EXT_REQS": "1",
                 "MESA_GL_VERSION_OVERRIDE": "4.6",
                 "MESA_GLSL_VERSION_OVERRIDE": "460",
-                "MESA_VK_VERSION_OVERRIDE": "1.3",
+                "MESA_VK_VERSION_OVERRIDE": "1.4",
             }
 
             opengl_wined3d_tweaks = {
@@ -1513,38 +1513,29 @@ class Session:
                 "MESA_NO_ERROR": "true",
                 "MESA_NO_DITHER": "1",
                 "vblank_mode": "0",
-                "MESA_EXTENSION_OVERRIDE": (
-                    "-GL_EXT_framebuffer_multisample,"
-                    "-GL_EXT_framebuffer_multisample_blit_scaled,"
-                    "-GL_EXT_texture_filter_anisotropic"
-                ),
+                "MESA_EXTENSION_OVERRIDE": "-GL_EXT_framebuffer_multisample -GL_EXT_framebuffer_multisample_blit_scaled -GL_EXT_texture_filter_anisotropic",
             }
 
             dxvk_tweaks = {
-                "dxgi.syncInterval": "0",
-                "d3d9.presentInterval": "0",
-                "d3d11.maxTessFactor": "8",
-                "d3d11.relaxedBarriers": "True",
-                "d3d11.ignoreGraphicsBarriers": "True",
-                "d3d11.samplerAnisotropy": "0",
-                "d3d9.samplerAnisotropy": "0",
-                "d3d11.invariantPosition": "False",
-                "d3d9.invariantPosition": "False",
-                "d3d9.floatEmulation": "True",
+                "DXVK_CONFIG": "dxgi.syncInterval = 0;d3d9.presentInterval = 0;d3d11.maxTessFactor = 8;d3d11.relaxedBarriers = True;d3d11.ignoreGraphicsBarriers = True;d3d11.samplerAnisotropy = 0;d3d9.samplerAnisotropy = 0;d3d11.invariantPosition = False;d3d9.invariantPosition = False;d3d9.floatEmulation = True",
+            }
+
+            mesa_vulkan_tweaks = {
+                "MESA_VK_WSI_PRESENT_MODE" : "immediate",
             }
 
             default_tweaks = proton_tweaks | old_gpu_fixes
 
-            runtime_modes = {
+            profiles = {
                 "base": proton_tweaks,
                 "default": default_tweaks,
-                "agg": default_tweaks | opengl_wined3d_tweaks | dxvk_tweaks,
+                "agg": default_tweaks | opengl_wined3d_tweaks | dxvk_tweaks | mesa_vulkan_tweaks,
             }
 
             profile = env.get("PROTON_SAREK_PROFILE", "default")
-            env.update(runtime_modes.get(profile, default_tweaks))
+            env.update(profiles.get(profile, default_tweaks))
 
-        # Update the Sarek_Runtime.
+        # Update the Sarek_Profile.
         update_sarek_env(self.env)
 
         # <<Sarek Settings>>

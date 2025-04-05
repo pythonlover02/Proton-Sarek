@@ -20,9 +20,6 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 - [Install](#Install)
 	- [Native](#Native)
 	- [Flatpak](#Flatpak)
-- [GPU List](#GPU-List)
-	- [NVIDIA](#NVIDIA)
-	- [Intel && AMD](#Intel--AMD)
 - [Parameters](#Parameters)
 	- [Proton](#Proton)
 	- [Optimization](#Optimization)
@@ -59,15 +56,6 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 
 5. Restart and thats it!!! Enjoy :P
 
-## GPU List:
-Here its the GPU List of the ones on witch its recommended to use this Proton Build
-
-### NVIDIA:
-On NVIDIA cards, it should be all the ones that are stuck on the 470 drivers, previous drivers like 440, 415, 390 and Nouveau users.
-
-### Intel && AMD:
-Any GPU or iGPU that is OpenGL only or has a Vulkan API lower than 1.3.
-
 ## Parameters:
 
 ### Proton:
@@ -101,23 +89,40 @@ My personal recomendation its to search a tutorial for the installation of the t
 ### Sarek:
 These are the custom parameters introduced in Sarek to provide fallback rendering options or controll over the build.
 
-| Environment Variable              | Description                                                                                                                     |
-|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| `PROTON_SAREK_PROFILE`            | Changes the [Sarek Runtime](#Sarek-Runtime) behavior, it accepts the next values: `base`, `default` and `agg`.                  |
-| `PROTON_OGL_THREAD=[0/1]`         | Enables OpenGL Threaded Optimizations, might increase or decrease fps depending on the game.                                    |
-| `PROTON_OGL_SOFTWARE=[0/1]`       | Uses LLVMpipe for CPU-based rendering for OpenGL, supporting API version 4.6.                                                   |
-| `PROTON_VK_SOFTWARE=[0/1]`        | Uses Lavapipe for CPU-based rendering for Vulkan, supporting API version 1.3.                                                   |
+| Environment Variable              | Description                                                                                                                                  |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `PROTON_SAREK_PROFILE`            | Changes the [Sarek Profile](#Sarek-Profile), it accepts the next values: `base`, `default` and `agg`.                               |
+| `PROTON_OGL_THREAD=[0/1]`         | Enables OpenGL Threaded Optimizations, might increase or decrease fps depending on the game.                                                 |
+| `PROTON_SOFTWARE_RENDER=[0/1]`    | Uses LLVMpipe and Lavapipe for CPU-based rendering for OpenGL and Vulkan, more info on the [Software Rendering](#Software-Rendering) section |
+
+### Software Rendering:
+
+Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, ensure your system meets the software rasterizer requirements for the program/wrapper API:
+
+**Requirements for Using LLVMpipe (OpenGL Software Rendering):**
+- **Mesa Version**: Any recent version (LLVMpipe is well supported in current Mesa releases)
+- **CPU**: Multi-core recommended for better performance
 
 **Requirements for Using Lavapipe (Vulkan Software Rendering):**
 - **Mesa Version**: 20.3 or newer
 - **CPU**: Multi-core recommended for better performance
 
-**Requirements for Using LLVMpipe (OpenGL Software Rendering):**
-- **Mesa Version**: Any recent version (LLVMpipe is well-supported in current Mesa releases)
-- **CPU**: Multi-core recommended for better performance
+#### Lavapipe Important Notes:
+1. On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
 
-### Sarek Runtime:
-A simple runtime that configures the game environment by adding environment variables. Its behavior can be changed using the `PROTON_SAREK_PROFILE` parameter, which accepts the following values: `base`, `default`, and `agg`.
+```
+vulkaninfo | less
+```
+
+Look for an entry similar to this in the output:
+`GPU id : 1 (llvmpipe (<your LLVM version>, <bit width> bits)):`
+
+If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
+
+2. You may need to manually set the VK_ICD_FILENAMES to the Lavapipe icd.json (usually a variation of `lvp_icd.json`) if the default target for VK_ICD_FILENAMES is not the desired one, or it uses an incorrect path. The default path and target should work for most installations.
+
+### Sarek Profile:
+The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which accepts the following values: `base`, `default`, and `agg`.
 
 **Configuration Options**:
 
@@ -157,11 +162,16 @@ A simple runtime that configures the game environment by adding environment vari
   - Disable anisotropic filtering.
   - Disable the declaration of vertex positions as invariant in D3D, which may reduce a small performance cost (at the potential risk of increased Z-fighting).
   - Enables fast (but less precise) floating point quirk emulation in D3D9, which can speed up computations in games that rely on these operations.
+ 
+  **Vulkan:**
+  
+  **Mesa:**
+  - Disable vertical synchronization (vsync)
 
 > [!NOTE]
-> The agg profile is intended to be used on PCs with weak GPUs, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
+> The agg profile is intended to be used on PCs with weak GPUs or when software rendering its being used, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
 
-**Sources for the Sarek Runtime:**
+**Sources for the Code of The Sarek Profiles:**
 
 [OpenGL Extensions Documentation](https://registry.khronos.org/OpenGL/extensions/EXT/)
 
@@ -175,9 +185,9 @@ A simple runtime that configures the game environment by adding environment vari
 
 ### Additional Tips:
 
-1. If that of a above its not enought, you might want to check newer kernel versions or patched/customiced kernels(zen, liquorix, xanmod, cachyoskernel, clearkernel, etc), i personally recomend the vanilla kernel tought
+1. If that of a above its not enought, you might want to check newer kernel versions or patched/customiced kernels(zen, liquorix, xanmod, cachyoskernel, clearkernel, etc), i personally recomend the vanilla kernel tought.
 
-2. You might want to use the drop shader cache command of the linux kernel before playing a game, you should do:
+2. You might want to use the drop cache command of the linux kernel before playing a game to free some ram, you should do:
 
    ```
    sudo su
@@ -198,12 +208,13 @@ A simple runtime that configures the game environment by adding environment vari
    fps_limit_method=early
    no_display
    ```
-
-   Also, remember that for MangoHud to work with OpenGL games, you should use `mangohud --dlsym` instead of just `mangohud` in the Steam Launch Parameters.
-
    You can remove the `no_display` option (which hides the MangoHud HUD), change the `fps_limit` value to any number you like, and change the `fps_limit_method` to `early` (for smoother frametimes) or `late` (for the lowest latency).
 
-   Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options.
+   Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options. 
+
+   As an example here its my current [MangoHud.conf](https://github.com/pythonlover02/Proton-Sarek/blob/onlyfixes/Extras/MangoHud.conf) file.
+
+5. Check the [Gaming](https://wiki.archlinux.org/title/Gaming) and [Improving performance](https://wiki.archlinux.org/title/Improving_performance) Arch Wiki pages for more tips.
 
 ## Building:
 
@@ -215,7 +226,7 @@ Follow these steps to add to your Proton Build the Sarek patches:
 - **Option 2:** Download a precompiled Proton build (GE-Proton or Valve's Stable releases are the only ones officially supported).
 
 ### 2. Get the Sarek Patches
-- Clone or download the Sarek-Patches dir from this repository.
+- Clone or download the Sarek-Patches dir from this repository. 
 
 ### 3. Rename the Proton Executable (if necessary)
 - If you're using **GE-Proton**, no need to rename anything, as the default `proton` file works out of the box.
