@@ -1608,14 +1608,14 @@ class Session:
 
         # Software Rendering Parameter:
         if "PROTON_SOFTWARE_RENDER" in self.env and nonzero(self.env["PROTON_SOFTWARE_RENDER"]):
-            self.env["LIBGL_ALWAYS_SOFTWARE"] = "1"
-            self.env["__GLX_VENDOR_LIBRARY_NAME"] = "mesa"
+            self.env.setdefault("LIBGL_ALWAYS_SOFTWARE", "1")
+            self.env.setdefault("__GLX_VENDOR_LIBRARY_NAME", "mesa")
             self.env.setdefault("VK_ICD_FILENAMES", "/usr/share/vulkan/icd.d/lvp_icd.x86_64.json")
 
         # OpenGL Threaded Optimizations Parameter:
         if "PROTON_OGL_THREAD" in self.env and nonzero(self.env["PROTON_OGL_THREAD"]):
-            self.env["__GL_THREADED_OPTIMIZATIONS"] = "1"
-            self.env["mesa_glthread"] = "true"
+            self.env.setdefault("__GL_THREADED_OPTIMIZATIONS", "1")
+            self.env.setdefault("mesa_glthread", "true")
 
         # Sarek_Profiles:
         def update_sarek_env(env):
@@ -1625,14 +1625,21 @@ class Session:
             based on the PROTON_SAREK_PROFILE setting.
             """
 
-            proton_tweaks = {
+            proton_valve = {
+                # Default Valve Settings.
                 "WINEDEBUG": "-all",
                 "DXVK_LOG_LEVEL": "none",
                 "VKD3D_DEBUG": "none",
                 "VKD3D_SHADER_DEBUG": "none",
             }
 
+            proton_fixes = {
+                # Doesnt make sense to have it disabled when it helps a lot with moding.
+                "PROTON_SET_GAME_DRIVE": "1",
+            }
+
             old_gpu_fixes = {
+                # Might fix some issues or make some games at least open on some old GPUs, those games being playable its another history...
                 "__GL_SHADER_DISK_CACHE": "1",
                 "__GL_SHADER_DISK_CACHE_SIZE": "2147483648",
                 "MESA_SHADER_CACHE_DISABLE": "false",
@@ -1643,7 +1650,8 @@ class Session:
                 "MESA_VK_VERSION_OVERRIDE": "1.4",
             }
 
-            opengl_wined3d_tweaks = {
+            ogl_vk_tweaks = {
+                # OpenGL/WineD3D:
                 "__GL_SYNC_TO_VBLANK": "0",
                 "__GL_OpenGLImageSettings": "3",
                 "__GL_FSAA_MODE": "0",
@@ -1654,26 +1662,29 @@ class Session:
                 "MESA_NO_DITHER": "1",
                 "vblank_mode": "0",
                 "MESA_EXTENSION_OVERRIDE": "-GL_EXT_framebuffer_multisample -GL_EXT_framebuffer_multisample_blit_scaled -GL_EXT_texture_filter_anisotropic",
-            }
 
-            dxvk_tweaks = {
+                # Vulkan/DXVK:
+                "MESA_VK_WSI_PRESENT_MODE" : "immediate",
                 "DXVK_CONFIG": "dxgi.syncInterval = 0;d3d9.presentInterval = 0;d3d11.maxTessFactor = 8;d3d11.relaxedBarriers = True;d3d11.ignoreGraphicsBarriers = True;d3d11.samplerAnisotropy = 0;d3d9.samplerAnisotropy = 0;d3d11.invariantPosition = False;d3d9.invariantPosition = False;d3d9.floatEmulation = True",
             }
 
-            mesa_vulkan_tweaks = {
-                "MESA_VK_WSI_PRESENT_MODE" : "immediate",
+            additional_tweaks = {
+                # Use Esync for the agg mode instead of Fsync, even if Fsync its an all rounder, working well on some very specific games where Esync doesnt
+                # It stills in my experience being a little worse performance wise than Esync.
+                "PROTON_NO_FSYNC": "1",
+                "PROTON_NO_ESYNC": "0",
             }
 
-            default_tweaks = proton_tweaks | old_gpu_fixes
+            default_tweaks = proton_valve | proton_fixes | old_gpu_fixes
 
             profiles = {
-                "base": proton_tweaks,
+                "base": proton_valve,
                 "default": default_tweaks,
-                "agg": default_tweaks | opengl_wined3d_tweaks | dxvk_tweaks | mesa_vulkan_tweaks,
+                "agg": default_tweaks | ogl_vk_tweaks | additional_tweaks,
             }
 
             profile = env.get("PROTON_SAREK_PROFILE", "default")
-            env.update(profiles.get(profile, default_tweaks))
+            env.setdefault(profiles.get(profile, default_tweaks))
 
         # Update the Sarek_Profile.
         update_sarek_env(self.env)
@@ -1681,12 +1692,12 @@ class Session:
         # <<Sarek Settings>>
 
         if "PROTON_LOG" in self.env and nonzero(self.env["PROTON_LOG"]):
-            self.env["WINEDEBUG"] = "+timestamp,+pid,+tid,+seh,+unwind,+threadname,+debugstr,+loaddll,+mscoree"
-            self.env["DXVK_LOG_LEVEL"] = "info"
-            self.env["DXVK_NVAPI_LOG_LEVEL"] = "info"
-            self.env["VKD3D_DEBUG"] = "warn"
-            self.env["VKD3D_SHADER_DEBUG"] = "fixme"
-            self.env["WINE_MONO_TRACE"] = "E:System.NotImplementedException"
+            self.env.setdefault("WINEDEBUG", "+timestamp,+pid,+tid,+seh,+unwind,+threadname,+debugstr,+loaddll,+mscoree")
+            self.env.setdefault("DXVK_LOG_LEVEL", "info")
+            self.env.setdefault("DXVK_NVAPI_LOG_LEVEL", "info")
+            self.env.setdefault("VKD3D_DEBUG", "warn")
+            self.env.setdefault("VKD3D_SHADER_DEBUG", "fixme")
+            self.env.setdefault("WINE_MONO_TRACE", "E:System.NotImplementedException")
 
             if self.env["PROTON_LOG"] != "1":
                 append_to_env_str(self.env, "WINEDEBUG", self.env["PROTON_LOG"], ",")
