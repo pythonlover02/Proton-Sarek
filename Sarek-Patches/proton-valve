@@ -1544,7 +1544,8 @@ class Session:
             }
 
             profile = env.get("PROTON_SAREK_PROFILE", "default")
-            env.setdefault(profiles.get(profile, default_tweaks))
+            for key, value in profiles.get(profile, default_tweaks).items():
+                env.setdefault(key, value)
 
         # Update the Sarek_Profile.
         update_sarek_env(self.env)
