@@ -111,11 +111,16 @@ Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, ensure your system 
 1. On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
 
 ```
-vulkaninfo | less
+vulkaninfo --summary | grep -i "llvmpipe"
 ```
 
-Look for an entry similar to this in the output:
-`GPU id : 1 (llvmpipe (<your LLVM version>, <bit width> bits)):`
+The output should be something similar to this:
+
+```	
+	deviceName         = llvmpipe (LLVM 19.1.7, 256 bits)
+	driverID           = DRIVER_ID_MESA_LLVMPIPE
+	driverName         = llvmpipe
+ ```
 
 If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
 
