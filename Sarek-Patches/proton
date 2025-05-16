@@ -15,6 +15,8 @@ import subprocess
 import sys
 import shlex
 import uuid
+import json
+import time
 
 from ctypes import CDLL
 from ctypes import CFUNCTYPE
@@ -179,12 +181,15 @@ def file_is_wine_builtin_dll(path):
     if os.path.islink(path):
         contents = os.readlink(path)
         if os.path.dirname(contents).endswith((
-                    '/lib/wine',
-                    '/lib64/wine',
-                    '/lib/wine/fakedlls',
-                    '/lib64/wine/fakedlls',
                     '/lib/wine/i386-unix',
                     '/lib/wine/i386-windows',
+                    '/lib/wine/x86_64-unix',
+                    '/lib/wine/x86_64-windows'
+                    # old paths
+                    '/lib/wine',
+                    '/lib/wine/fakedlls',
+                    '/lib64/wine',
+                    '/lib64/wine/fakedlls',
                     '/lib64/wine/x86_64-unix',
                     '/lib64/wine/x86_64-windows'
                 )):
@@ -421,6 +426,56 @@ def setup_game_dir_drive():
 def setup_steam_dir_drive():
         setup_dir_drive("steamdrive", "t:", try_get_steam_dir())
 
+
+def unix_to_nt_file_name(path):
+    return '\\??\\unix' + path
+
+def setup_openvr_paths():
+    if 'VR_PATHREG_OVERRIDE' in g_session.env:
+        openvr_paths = g_session.env['VR_PATHREG_OVERRIDE']
+        del g_session.env['VR_PATHREG_OVERRIDE']
+    elif 'XDG_CONFIG_HOME' in g_session.env:
+        openvr_paths = os.path.join(g_session.env['XDG_CONFIG_HOME'], 'openvr/openvrpaths.vrpath')
+    elif 'HOME' in g_session.env:
+        openvr_paths = os.path.join(g_session.env['HOME'], '.config/openvr/openvrpaths.vrpath')
+    else:
+        openvr_paths = None
+
+    if not openvr_paths or not file_exists(openvr_paths, follow_symlinks=True):
+        return
+
+    with open(openvr_paths, 'r') as file:
+        contents = json.load(file)
+
+    if 'runtime' not in contents or type(contents['runtime']) != list:
+        contents['runtime'] = []
+    if 'config' in contents and type(contents['config']) != list:
+        del contents['config']
+    if 'log' in contents and type(contents['log']) != list:
+        del contents['log']
+
+    if 'VR_OVERRIDE' in g_session.env:
+        g_session.env['PROTON_VR_RUNTIME'] = g_session.env['VR_OVERRIDE']
+        del g_session.env['VR_OVERRIDE']
+    elif len(contents['runtime']) > 0:
+        g_session.env['PROTON_VR_RUNTIME'] = contents['runtime'][0]
+
+    contents['runtime'] = ["C:\\vrclient\\", "C:\\vrclient"]
+
+    for i, path in enumerate(contents.get('config', [])):
+        contents['config'][i] = unix_to_nt_file_name(path)
+    for i, path in enumerate(contents.get('log', [])):
+        contents['log'][i] = unix_to_nt_file_name(path)
+
+    openvr_paths = os.path.join(g_compatdata.prefix_dir, "drive_c/users/steamuser/AppData/Local/openvr")
+    makedirs(openvr_paths)
+
+    openvr_paths = os.path.join(openvr_paths, "openvrpaths.vrpath")
+    with open(openvr_paths, 'w') as file:
+        json.dump(contents, file, indent=3)
+
+
+
 # Function to find the installed location of DLL files for use by Wine/Proton
 # from the NVIDIA Linux driver
 #
@@ -578,7 +633,6 @@ class Proton:
         self.dist_dir = self.path("files/")
         self.bin_dir = self.path("files/bin/")
         self.lib_dir = self.path("files/lib/")
-        self.lib64_dir = self.path("files/lib64/")
         self.fonts_dir = self.path("files/share/fonts/")
         self.media_dir = self.path("files/share/media/")
         self.wine_fonts_dir = self.path("files/share/wine/fonts/")
@@ -590,6 +644,12 @@ class Proton:
         self.wine64_bin = self.bin_dir + "wine64"
         self.wineserver_bin = self.bin_dir + "wineserver"
         self.dist_lock = FileLock(self.path("dist.lock"), timeout=-1)
+
+        if os.environ.get("PROTON_USE_WOW64", None) == "1" or not file_exists(self.wine_bin, follow_symlinks=True):
+            self.bin_dir = self.path("files/bin-wow64/")
+            self.wine_bin = self.bin_dir + "wine"
+            self.wine64_bin = self.bin_dir + "wine"
+            self.wineserver_bin = self.bin_dir + "wineserver"
 
     def path(self, d):
         return self.base_dir + d
@@ -641,6 +701,7 @@ class CompatData:
     def __init__(self, compatdata):
         self.base_dir = compatdata + "/"
         self.prefix_dir = self.path("pfx/")
+        self.creation_sync_guard = self.path("pfx/creation_sync_guard")
         self.version_file = self.path("version")
         self.config_info_file = self.path("config_info")
         self.tracked_files_file = self.path("tracked_files")
@@ -795,6 +856,13 @@ class CompatData:
                     log("Unable to write new registry file to " + sysreg_fp)
                     pass
 
+            if int(old_proton_maj) < 10 or (int(old_proton_maj) == 10 and
+                                            int(old_proton_min) == 0 and
+                                            int(old_prefix_ver) < 105):
+                with open(self.creation_sync_guard, "w"):
+                    pass
+                os.sync()
+
             stale_builtins = [self.prefix_dir + "/drive_c/windows/system32/amd_ags_x64.dll",
                               self.prefix_dir + "/drive_c/windows/syswow64/amd_ags_x64.dll",
                               self.prefix_dir + "/drive_c/windows/system32/ir50_32.dll",
@@ -804,15 +872,29 @@ class CompatData:
                     log("Removing stale builtin " + builtin)
                     os.remove(builtin)
 
+            stale_vkd3d = [self.prefix_dir + "/drive_c/windows/system32/libvkd3d-1.dll",
+                           self.prefix_dir + "/drive_c/windows/syswow64/libvkd3d-1.dll",
+                           self.prefix_dir + "/drive_c/windows/system32/libvkd3d-shader-1.dll",
+                           self.prefix_dir + "/drive_c/windows/syswow64/libvkd3d-shader-1.dll" ]
+            for dll in stale_vkd3d:
+                if file_exists(dll, follow_symlinks=False):
+                    log("Removing stale vkd3d dll " + dll)
+                    os.remove(dll)
+
         except ValueError:
             log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
             #Just let the Wine upgrade happen and hope it works...
+            with open(self.creation_sync_guard, "w"):
+                pass
+            os.sync()
             return
 
     def pfx_copy(self, src, dst, dll_copy=False):
         if os.path.islink(src):
             contents = os.readlink(src)
-            if os.path.dirname(contents).endswith(('/lib/wine/i386-unix', '/lib/wine/i386-windows', '/lib64/wine/x86_64-unix', '/lib64/wine/x86_64-windows')):
+            if os.path.dirname(contents).endswith(('/lib/wine/i386-unix', '/lib/wine/i386-windows', '/lib/wine/x86_64-unix', '/lib/wine/x86_64-windows',
+                                                   # old paths:
+                                                   '/lib64/wine/x86_64-unix', '/lib64/wine/x86_64-windows')):
                 # wine builtin dll
                 # make the destination an absolute symlink
                 contents = os.path.normpath(os.path.join(os.path.dirname(src), contents))
@@ -953,23 +1035,29 @@ class CompatData:
 
             self.upgrade_pfx(old_ver)
 
-            if not file_exists(self.prefix_dir, follow_symlinks=True):
+            if not file_exists(self.creation_sync_guard, follow_symlinks=False):
                 makedirs(self.prefix_dir + "/drive_c")
                 set_dir_casefold_bit(self.prefix_dir + "/drive_c")
 
-            if not file_exists(self.prefix_dir + "/user.reg", follow_symlinks=True):
                 self.copy_pfx()
                 machine_guid = self.old_machine_guid
                 if machine_guid is None:
                     machine_guid = "\"" + str(uuid.uuid4()) + "\""
                 get_replace_reg_value(self.prefix_dir + "system.reg", "Software\\\\Microsoft\\\\Cryptography", "MachineGuid", machine_guid)
+                os.sync()
+
+                with open(self.creation_sync_guard, "w"):
+                    pass
+                os.sync()
 
             self.migrate_user_paths()
 
             if not file_exists(self.prefix_dir + "/dosdevices/c:", follow_symlinks=False):
+                os.makedirs(f"{self.prefix_dir}/dosdevices", exist_ok=True)
                 os.symlink("../drive_c", self.prefix_dir + "/dosdevices/c:")
 
             if not file_exists(self.prefix_dir + "/dosdevices/z:", follow_symlinks=False):
+                os.makedirs(f"{self.prefix_dir}/dosdevices", exist_ok=True)
                 os.symlink("/", self.prefix_dir + "/dosdevices/z:")
 
             # collect configuration info
@@ -1025,7 +1113,6 @@ class CompatData:
                 CURRENT_PREFIX_VERSION,
                 g_proton.fonts_dir,
                 g_proton.lib_dir,
-                g_proton.lib64_dir,
                 steamdir,
                 getmtimestr(steamdir, 'legacycompat', 'steamclient.dll'),
                 getmtimestr(steamdir, 'legacycompat', 'steamclient64.dll'),
@@ -1085,26 +1172,16 @@ class CompatData:
                 makedirs(self.prefix_dir + "/drive_c/vrclient/bin")
                 try_copy(g_proton.lib_dir + "wine/i386-windows/vrclient.dll", "drive_c/vrclient/bin",
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                try_copy(g_proton.lib64_dir + "wine/x86_64-windows/vrclient_x64.dll", "drive_c/vrclient/bin",
+                try_copy(g_proton.lib_dir + "wine/x86_64-windows/vrclient_x64.dll", "drive_c/vrclient/bin",
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
-                try_copy(g_proton.lib_dir + "wine/dxvk/openvr_api_dxvk.dll", "drive_c/windows/syswow64",
+                try_copy(g_proton.lib_dir + "wine/dxvk/x86_64-windows/openvr_api_dxvk.dll", "drive_c/windows/syswow64",
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                try_copy(g_proton.lib64_dir + "wine/dxvk/openvr_api_dxvk.dll", "drive_c/windows/system32",
+                try_copy(g_proton.lib_dir + "wine/dxvk/i386-windows/openvr_api_dxvk.dll", "drive_c/windows/system32",
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
                 makedirs(self.prefix_dir + "/drive_c/openxr")
                 try_copy(g_proton.default_pfx_dir + "drive_c/openxr/wineopenxr64.json", "drive_c/openxr",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-
-                #copy vkd3d files into place
-                try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-1.dll", "drive_c/windows/system32",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-1.dll", "drive_c/windows/syswow64",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                try_copy(g_proton.lib64_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/system32",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                try_copy(g_proton.lib_dir + "vkd3d/libvkd3d-shader-1.dll", "drive_c/windows/syswow64",
                         prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
                 if use_wined3d:
@@ -1135,38 +1212,41 @@ class CompatData:
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
                 for f in dxvkfiles:
-                    try_copy(g_proton.lib64_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/system32",
+                    try_copy(g_proton.lib_dir + "wine/dxvk/x86_64-windows/" + f + ".dll", "drive_c/windows/system32",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                    try_copy(g_proton.lib_dir + "wine/dxvk/" + f + ".dll", "drive_c/windows/syswow64",
+                    try_copy(g_proton.lib_dir + "wine/dxvk/i386-windows/" + f + ".dll", "drive_c/windows/syswow64",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     g_session.dlloverrides[f] = "n"
 
                 for f in vkd3d_protonfiles:
-                    try_copy(g_proton.lib64_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                    try_copy(g_proton.lib_dir + "wine/vkd3d-proton/" + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                    optional = False
+                    if f == "d3d12core":
+                        optional = True
+                    try_copy(g_proton.lib_dir + "wine/vkd3d-proton/x86_64-windows/" + f + ".dll", "drive_c/windows/system32",
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
+                    try_copy(g_proton.lib_dir + "wine/vkd3d-proton/i386-windows/" + f + ".dll", "drive_c/windows/syswow64",
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
                     g_session.dlloverrides[f] = "n"
 
                 for f in icufiles:
                     dst = "drive_c/windows/system32/" + f + ".dll"
                     if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
                         tracked_files.write(dst + '\n')
-                    self.create_symlink(self.prefix_dir + dst, g_proton.lib64_dir + "icu/" + f + ".dll")
+                    self.create_symlink(self.prefix_dir + dst, g_proton.lib_dir + "wine/icu/x86_64-windows/" + f + ".dll")
 
                     dst = "drive_c/windows/syswow64/" + f + ".dll"
                     if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
                         tracked_files.write(dst + '\n')
-                    self.create_symlink(self.prefix_dir + dst, g_proton.lib_dir + "icu/" + f + ".dll")
+                    self.create_symlink(self.prefix_dir + dst, g_proton.lib_dir + "wine/icu/i386-windows/" + f + ".dll")
 
                 # If the user requested the NVAPI be available, copy it into place.
                 # If they didn't, clean up any stray nvapi DLLs.
                 if use_nvapi:
-                    try_copy(g_proton.lib64_dir + "wine/nvapi/nvapi64.dll", "drive_c/windows/system32",
+                    try_copy(g_proton.lib_dir + "wine/nvapi/x86_64-windows/nvapi64.dll", "drive_c/windows/system32",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                    try_copy(g_proton.lib64_dir + "wine/nvapi/nvofapi64.dll", "drive_c/windows/system32",
+                    try_copy(g_proton.lib_dir + "wine/nvapi/x86_64-windows/nvofapi64.dll", "drive_c/windows/system32",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-                    try_copy(g_proton.lib_dir + "wine/nvapi/nvapi.dll", "drive_c/windows/syswow64",
+                    try_copy(g_proton.lib_dir + "wine/nvapi/i386-windows/nvapi.dll", "drive_c/windows/syswow64",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
                     g_session.dlloverrides["nvapi64"] = "n"
                     g_session.dlloverrides["nvofapi64"] = "n"
@@ -1197,6 +1277,10 @@ class CompatData:
 
             setup_game_dir_drive()
             setup_steam_dir_drive()
+            setup_openvr_paths()
+
+            # add Steam ffmpeg libraries to path
+            prepend_to_env_str(g_session.env, ld_path_var, steamdir + "/ubuntu12_64/video/:" + steamdir + "/ubuntu12_32/video/", ":")
 
 def comma_escaped(s):
     escaped = False
@@ -1212,29 +1296,17 @@ def default_compat_config():
     if "SteamAppId" in os.environ:
         appid = os.environ["SteamAppId"]
         if appid in [
-                #affected by CW bug 19126
-                "536280", #Disintegration
-                "707030", #POSTAL 4: No Regerts
-                "1331440", #FUSER
-                "1359980", #POSTAL: Brain Damaged
-                "1766430", #POSTAL Brain Damaged Demo
+                #affected by CW bug 22265
                 "692890", #Roboquest
-                "794260", #Outward: Definitive Edition
-                "1328350", #Turbo Overkill
-                "2001540", #Slayers X Demo
 
                 #affected by CW bug 19741
                 "1017900", #Age of Empires: Definitive Edition
 
-                #affected by CW bug 23184
-                "2229490", #Iragon: Prologue
-                "1522260", #Iragon: Prologue 18+
-                "2229300", #Iragon
-                "1097480", #Iragon 18+
-                #CW bug 23986
-                "1928420", #Farlight 84
+                #affected by CW bug 20240
+                "1331440", #FUSER
+
                 #CW bug 24913
-                "2620730", #Deviator
+                "2620730",
                 ]:
             ret.add("nomfdxgiman")
 
@@ -1289,6 +1361,11 @@ def default_compat_config():
             ret.add("hidevggpu")
 
         if appid in [
+                "1977170", #Jusant
+                ]:
+            ret.add("hideintelgpu")
+
+        if appid in [
                 "1341820", #As Dusk falls
                 "280790", #Creativerse
                 "306130", #The Elder Scrolls Online
@@ -1301,13 +1378,13 @@ def default_compat_config():
                 "460790", #Bayonetta
                 "273590", #Descent 3
                 "834530", #Yakuza Kiwami
+                "2526380", #Sword of Convallaria
                 "1088710", #Yakuza 3 Remastered
                 "1105500", #Yakuza 4 Remastered
                 "714010", #Aimlabs
                 "2249070", #Strip Fighter ZERO
-                "2526380", #Sword of Convallaria
-                "6030", #Star Wars - Jedi Knight II: Jedi Outcast
                 "1845910", #Dragon Age: The Veilguard
+                "6030", #Star Wars - Jedi Knight II: Jedi Outcast
                 "2842040", #Star Wars Outlaws
                 "245300", #Disney Epic Mickey 2: The Power of Two
                 "2594920", #Atelier Resleriana: Forgotten Alchemy and the Polar Night Liberator
@@ -1317,6 +1394,7 @@ def default_compat_config():
                 "2140020", #Stronghold: Definitive Edition
                 "3314070", #The Sims 2 Legacy Collection
                 "2709570", #Supermarket Together
+                "2623190", #The Elder Scrolls IV: Oblivion Remastered
                 ]:
             ret.add("gamedrive")
 
@@ -1327,6 +1405,7 @@ def default_compat_config():
                 "1404090", #Trivia Tricks
                 "2052410", #WITCH ON THE HOLY NIGHT
                 "789910", #Planet of the Apes: Last Frontier
+                "1183470", #Imperiums: Greek Wars
                 ]:
             ret.add("heapdelayfree")
 
@@ -1369,9 +1448,6 @@ def default_compat_config():
                 "108710", #Alan Wake
                 "435150", #Divinity: Original Sin 2 - Definitive Edition
                 "505170", #Carmageddon: Max Damage
-                "109600", #Neverwinter
-                "9900", #Star Trek Online
-                "9880", #Champions Online
                 "202750", #Alan Wake's American Nightmare
                 "255220", #GRID Autosport
                 "44350", #GRID 2
@@ -1382,6 +1458,7 @@ def default_compat_config():
                 "2067160", #Simulakros
                 "2621010", #Simulakros Demo
                 "368500", #Assassin's Creed Syndicate
+                "2531310",
                 ]:
             ret.add("disablenvapi")
 
@@ -1422,19 +1499,20 @@ def default_compat_config():
                 "931690", # Himno
                 "1050680", # Survirus
                 "3143980", # The Adventure of Ninomae Ina'nis
+                "1903340", # Clair Obscur: Expedition 33
                 ]:
             ret.add("xalia")
+
+        if appid in [
+                "255960", #Bad Mojo Redux
+                ]:
+            ret.add("gamedrive")
 
         if appid in [
                 "275850", #No Man's Sky
                 "2012840", #Portal with RTX
                 ]:
             ret.add("nohardwarescheduling")
-
-        if appid in [
-                "255960", #Bad Mojo Redux
-                ]:
-            ret.add("gamedrive")
 
     # hack to force gamedrive compat_config always for umu
     if os.environ.get('UMU_ID', ''):
@@ -1472,6 +1550,9 @@ class Session:
         # CW Bug 21737. Locoland executable happens to be steam.exe.
         if os.environ.get("SteamGameId", 0) == "352130":
             del self.dlloverrides["steam.exe"]
+
+        if os.environ.get("SteamGameId", 0) not in ["2767030"]:
+            self.dlloverrides["opencl"] = "n,d"
 
         self.compat_config = default_compat_config()
         self.cmdlineappend = []
@@ -1519,13 +1600,12 @@ class Session:
             # Allow wine to restore this when calling an external app.
             self.env['ORIG_'+ld_path_var] = os.environ.get(ld_path_var, '')
 
-        prepend_to_env_str(self.env, ld_path_var, g_proton.lib64_dir + ":" + g_proton.lib_dir, ":")
+        prepend_to_env_str(self.env, ld_path_var, g_proton.lib_dir + "x86_64-linux-gnu:" + g_proton.lib_dir + "i386-linux-gnu", ":")
 
-        self.env["WINEDLLPATH"] = g_proton.lib64_dir + "/wine:" + g_proton.lib_dir + "/wine"
+        self.env["WINEDLLPATH"] = ':'.join([g_proton.lib_dir + "vkd3d", g_proton.lib_dir + "wine"])
 
-        self.env["GST_PLUGIN_SYSTEM_PATH_1_0"] = g_proton.lib64_dir + "gstreamer-1.0" + ":" + g_proton.lib_dir + "gstreamer-1.0"
+        self.env["GST_PLUGIN_SYSTEM_PATH_1_0"] = g_proton.lib_dir + "x86_64-linux-gnu/gstreamer-1.0" + ":" + g_proton.lib_dir + "i386-linux-gnu/gstreamer-1.0"
         self.env["WINE_GST_REGISTRY_DIR"] = g_compatdata.path("gstreamer-1.0/")
-        self.env["GST_GL_WINDOW"] = "surfaceless"
 
         if "STEAM_COMPAT_MEDIA_PATH" in os.environ:
             old_audiofoz_path = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/audio.foz"
@@ -1713,7 +1793,8 @@ class Session:
         if not self.check_environment("PROTON_USE_WINED3D", "wined3d"):
             self.check_environment("PROTON_USE_WINED3D11", "wined3d")
         self.check_environment("PROTON_NO_WM_DECORATION", "nowmdecoration")
-        self.check_environment("PROTON_PREFER_SDL", "prefersdl")
+        self.check_environment("PROTON_ENABLE_WAYLAND", "enablewayland")
+        self.check_environment("PROTON_ENABLE_HDR", "enablehdr")
         self.check_environment("PROTON_DXVK_D3D8", "dxvkd3d8")
         self.check_environment("PROTON_NO_D3D11", "nod3d11")
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
@@ -1741,8 +1822,13 @@ class Session:
         if "nowmdecoration" in self.compat_config:
             self.env["WINE_NO_WM_DECORATION"] = "1"
 
-        if "prefersdl" in self.compat_config:
-            self.env["PROTON_PREFER_SDL"] = "1"
+        if "enablewayland" in self.compat_config:
+            if self.env.get("WAYLAND_DISPLAY", False):
+                self.dlloverrides["winex11.drv"] = "d"
+                self.dlloverrides["winewayland.drv"] = "b"
+                if "enablehdr" in self.compat_config:
+                    self.env["DXVK_HDR"] = "1"
+                    self.env["ENABLE_HDR_WSI"] = "1"
 
         if "noxim" not in self.compat_config:
             self.env.pop("WINE_ALLOW_XIM")
@@ -1758,8 +1844,12 @@ class Session:
             #nvidia override
             self.env["__GL_ExtensionStringVersion"] = "17700"
 
-        if os.environ.get("SteamGameId", 0) == "444930":
-            self.env["MESA_EXTENSION_OVERRIDE"] = "-GL_ARB_bindless_texture"
+        if os.environ.get("SteamGameId", 0) in [
+                "661920",
+                "558260",
+                "386360",
+                ]:
+            self.env["OPENSSL_ia32cap"] = "~0x20000000"
 
         if os.environ.get("SteamGameId", 0) == "500810":
             self.dlloverrides["ddraw"] = "n,b"
@@ -1806,6 +1896,9 @@ class Session:
 
         if "hidenvgpu" in self.compat_config and "forcenvapi" not in self.compat_config:
             self.env["WINE_HIDE_NVIDIA_GPU"] = "1"
+
+        if "hideintelgpu" in self.compat_config:
+            self.env["WINE_HIDE_INTEL_GPU"] = "1"
 
         if "hideapu" in self.compat_config:
             self.env["WINE_HIDE_APU"] = "1"
@@ -1864,6 +1957,7 @@ class Session:
                 self.log_file.write("Language: LC_ALL " + str(self.env.get("HOST_LC_ALL", None)) +
                                     ", LC_MESSAGES " + str(self.env.get("LC_MESSAGES", None)) +
                                     ", LC_CTYPE " + str(self.env.get("LC_CTYPE", None)) + "\n")
+                self.log_file.write("PATH: " + str(self.env.get("PATH", None)) + "\n")
 
                 #dump some important variables into the log header
                 for var in ["WINEDLLOVERRIDES", "WINEDEBUG"]:
@@ -2006,6 +2100,9 @@ if __name__ == "__main__":
 
     g_session.init_session(sys.argv[1] != "runinprefix")
 
+    import protonfixes
+    protonfixes.setup(g_session.env, "PATH", ld_path_var, prepend_to_env_str)
+
     # Allow umu clients to run winetricks verbs and be the frontend for them
     if (
         g_session.env.get("UMU_ID")
@@ -2024,7 +2121,7 @@ if __name__ == "__main__":
 
         sys.exit(rc)
 
-    import protonfixes
+    protonfixes.execute()
 
     #determine mode
     rc = 0
