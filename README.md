@@ -149,21 +149,22 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
 - **"default" (Default Value):**
   - Inherits all settings from the Base configuration.
   - Introduces a set of fixes for OpenGL/Vulkan for old GPUs.
+  - Set `PROTON_SET_GAME_DRIVE=1` to help with moding.
 
 - **"agg":**
-  - Represents an aggressive performance tuning mode, incorporating all features from the default configuration, plus the following enhancements:
+  - Represents an aggressive performance tuning mode, incorporating all features from the default configuration, plus the following:
   
   **OpenGL/WineD3D:**
 
   **NVIDIA:**
-  - Forces no Vsync to reduce input lag.
+  - Forces no Vsync.
   - Forces rendering textures under performance settings instead of the default quality settings.
   - Forces no Full-Screen Anti-Aliasing (FSAA) and FXAA.
   - Prevents the usage of anisotropic filtering.
   - Disables Variable Refresh Rate (VRR).
 
   **Mesa:**
-  - Forces no Vsync to minimize input lag.
+  - Forces no Vsync.
   - Disables error checking within the API to avoid CPU performance losses.
   - Disables dithering.
   - Forces no Full-Screen Anti-Aliasing (FSAA) 
@@ -184,6 +185,9 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   
   **Mesa:**
   - Disable vertical synchronization (vsync)
+
+  **Extras:**
+  - Use Esync for the agg mode instead of Fsync, even if Fsync its an all rounder, working well on some very specific games where Esync doesnt, it stills in my experience being a little worse performance wise than Esync.
 
 > [!NOTE]
 > The agg profile is intended to be used on PCs with weak GPUs or when software rendering its being used, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
