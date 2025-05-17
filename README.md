@@ -108,7 +108,8 @@ Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, ensure your system 
 - **CPU**: Multi-core recommended for better performance
 
 #### Lavapipe Important Notes:
-1. On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
+##### Note 1: 
+On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
 
 ```
 vulkaninfo --summary | grep -i "llvmpipe"
@@ -124,7 +125,18 @@ The output should be something similar to this:
 
 If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
 
-2. You may need to manually set the `VK_ICD_FILENAMES` to the Lavapipe icd.json (usually a variation of `lvp_icd.json`) if the default target for `VK_ICD_FILENAMES` is not the desired one, or it uses an incorrect path. The default path and target should work for most installations.
+##### Note 2: 
+For DXVK games you can just add `PROTON_SOFTWARE_RENDER=1` to the launch options.
+
+##### Note 3: 
+For Vulkan and D3D12 games, you may need to manually set the `VK_DRIVER_FILES` to the Lavapipe icd.json file (usually a variation of lvp_icd.json) if the default target is incorrect, uses an incorrect path or if the system is preventing Proton-Sarek from changing the environment variable. 
+
+Try using the following command: 
+```
+PROTON_SOFTWARE_RENDER=1 VK_DRIVER_FILES="/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json"
+``` 
+
+In other cases, you might need to modify the value of `VK_DRIVER_FILES` to correctly point to the multiple lvp_icd.json in your system.
 
 ### Sarek Profile:
 The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which accepts the following values: `base`, `default`, and `agg`.
