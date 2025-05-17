@@ -1615,6 +1615,7 @@ class Session:
                 # Vulkan/DXVK:
                 "MESA_VK_WSI_PRESENT_MODE" : "immediate",
                 "DXVK_CONFIG": "dxgi.syncInterval = 0;d3d9.presentInterval = 0;d3d11.maxTessFactor = 8;d3d11.relaxedBarriers = True;d3d11.ignoreGraphicsBarriers = True;d3d11.samplerAnisotropy = 0;d3d9.samplerAnisotropy = 0;d3d11.invariantPosition = False;d3d9.invariantPosition = False;d3d9.floatEmulation = True",
+                "DXVK_ALL_CORES" : "1",
             }
 
             additional_tweaks = {
