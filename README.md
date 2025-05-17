@@ -125,6 +125,7 @@ The output should be something similar to this:
 
 If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
 
+
 ##### Note 2: 
 For DXVK games you can just add `PROTON_SOFTWARE_RENDER=1` to the launch options.
 
