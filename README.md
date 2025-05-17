@@ -108,18 +108,36 @@ Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, ensure your system 
 - **CPU**: Multi-core recommended for better performance
 
 #### Lavapipe Important Notes:
-1. On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
+##### Note 1: 
+On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
 
 ```
-vulkaninfo | less
+vulkaninfo --summary | grep -i "llvmpipe"
 ```
 
-Look for an entry similar to this in the output:
-`GPU id : 1 (llvmpipe (<your LLVM version>, <bit width> bits)):`
+The output should be something similar to this:
+
+```	
+	deviceName         = llvmpipe (LLVM 19.1.7, 256 bits)
+	driverID           = DRIVER_ID_MESA_LLVMPIPE
+	driverName         = llvmpipe
+ ```
 
 If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
 
-2. You may need to manually set the `VK_ICD_FILENAMES` to the Lavapipe icd.json (usually a variation of `lvp_icd.json`) if the default target for `VK_ICD_FILENAMES` is not the desired one, or it uses an incorrect path. The default path and target should work for most installations.
+
+##### Note 2: 
+For DXVK games you can just add `PROTON_SOFTWARE_RENDER=1` to the launch options.
+
+##### Note 3: 
+For Vulkan and D3D12 games, you may need to manually set the `VK_DRIVER_FILES` to the Lavapipe icd.json file (usually a variation of lvp_icd.json) if the default target is incorrect, uses an incorrect path or if the system is preventing Proton-Sarek from changing the environment variable. 
+
+Try using the following command: 
+```
+PROTON_SOFTWARE_RENDER=1 VK_DRIVER_FILES="/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json"
+``` 
+
+In other cases, you might need to modify the value of `VK_DRIVER_FILES` to correctly point to the multiple lvp_icd.json in your system.
 
 ### Sarek Profile:
 The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which accepts the following values: `base`, `default`, and `agg`.
@@ -132,21 +150,22 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
 - **"default" (Default Value):**
   - Inherits all settings from the Base configuration.
   - Introduces a set of fixes for OpenGL/Vulkan for old GPUs.
+  - Set `PROTON_SET_GAME_DRIVE=1` to help with moding.
 
 - **"agg":**
-  - Represents an aggressive performance tuning mode, incorporating all features from the default configuration, plus the following enhancements:
+  - Represents an aggressive performance tuning mode, incorporating all features from the default configuration, plus the following:
   
   **OpenGL/WineD3D:**
 
   **NVIDIA:**
-  - Forces no Vsync to reduce input lag.
+  - Forces no Vsync.
   - Forces rendering textures under performance settings instead of the default quality settings.
   - Forces no Full-Screen Anti-Aliasing (FSAA) and FXAA.
   - Prevents the usage of anisotropic filtering.
   - Disables Variable Refresh Rate (VRR).
 
   **Mesa:**
-  - Forces no Vsync to minimize input lag.
+  - Forces no Vsync.
   - Disables error checking within the API to avoid CPU performance losses.
   - Disables dithering.
   - Forces no Full-Screen Anti-Aliasing (FSAA) 
@@ -162,11 +181,15 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   - Disable anisotropic filtering.
   - Disable the declaration of vertex positions as invariant in D3D, which may reduce a small performance cost (at the potential risk of increased Z-fighting).
   - Enables fast (but less precise) floating point quirk emulation in D3D9, which can speed up computations in games that rely on these operations.
+  - Set `DXVK_ALL_CORES=1` to use all the CPU cores for shader compilation.
  
   **Vulkan:**
   
   **Mesa:**
   - Disable vertical synchronization (vsync)
+
+  **Extras:**
+  - Use Esync for the agg mode instead of Fsync, even if Fsync its an all rounder, working well on some very specific games where Esync doesnt, it stills in my experience being a little worse performance wise than Esync.
 
 > [!NOTE]
 > The agg profile is intended to be used on PCs with weak GPUs or when software rendering its being used, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.

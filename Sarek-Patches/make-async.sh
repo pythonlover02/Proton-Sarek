@@ -20,17 +20,17 @@ fi
 
 # Copy the dxvk-async files
 echo "Copying dxvk-async 32-bit files..."
-cp -r "$SCRIPT_DIR/dxvk-async/x32/"* "$protondir/files/lib/wine/dxvk/" || { echo "Failed to copy 32-bit dxvk files."; exit 1; }
+cp -r "$SCRIPT_DIR/dxvk-async/x32/"* "$protondir/files/lib/wine/dxvk/i386-windows/" || { echo "Failed to copy 32-bit dxvk files."; exit 1; }
 
 echo "Copying dxvk-async 64-bit files..."
-cp -r "$SCRIPT_DIR/dxvk-async/x64/"* "$protondir/files/lib64/wine/dxvk/" || { echo "Failed to copy 64-bit dxvk files."; exit 1; }
+cp -r "$SCRIPT_DIR/dxvk-async/x64/"* "$protondir/files/lib/wine/dxvk/x86_64-windows/" || { echo "Failed to copy 64-bit dxvk files."; exit 1; }
 
 # Copy the vkd3d-proton-2.6 files
 echo "Copying vkd3d-proton-2.6 32-bit files..."
-cp -r "$SCRIPT_DIR/vkd3d-proton-2.6/x86/"* "$protondir/files/lib/wine/vkd3d-proton/" || { echo "Failed to copy 32-bit vkd3d-proton files."; exit 1; }
+cp -r "$SCRIPT_DIR/vkd3d-proton-2.6/x86/"* "$protondir/files/lib/vkd3d/i386-windows/" || { echo "Failed to copy 32-bit vkd3d-proton files."; exit 1; }
 
 echo "Copying vkd3d-proton-2.6 64-bit files..."
-cp -r "$SCRIPT_DIR/vkd3d-proton-2.6/x64/"* "$protondir/files/lib64/wine/vkd3d-proton/" || { echo "Failed to copy 64-bit vkd3d-proton files."; exit 1; }
+cp -r "$SCRIPT_DIR/vkd3d-proton-2.6/x64/"* "$protondir/files/lib/vkd3d/x86_64-windows/" || { echo "Failed to copy 64-bit vkd3d-proton files."; exit 1; }
 
 # Copy the Proton, Version and compatibilitytool files
 echo "Copying proton file..."
