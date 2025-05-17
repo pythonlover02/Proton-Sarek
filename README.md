@@ -180,6 +180,7 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   - Disable anisotropic filtering.
   - Disable the declaration of vertex positions as invariant in D3D, which may reduce a small performance cost (at the potential risk of increased Z-fighting).
   - Enables fast (but less precise) floating point quirk emulation in D3D9, which can speed up computations in games that rely on these operations.
+  - Set `DXVK_ALL_CORES=1` to use all the CPU cores for shader compilation.
  
   **Vulkan:**
   
