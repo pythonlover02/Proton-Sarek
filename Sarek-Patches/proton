@@ -1797,6 +1797,7 @@ class Session:
             if self.env.get("WAYLAND_DISPLAY", False):
                 self.dlloverrides["winex11.drv"] = "d"
                 self.dlloverrides["winewayland.drv"] = "b"
+                self.env["WINE_WAYLAND_HACKS"] = "1"
                 if "enablehdr" in self.compat_config:
                     self.env["DXVK_HDR"] = "1"
 
