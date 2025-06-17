@@ -1675,9 +1675,9 @@ class Session:
             self.env.setdefault("VK_DRIVER_FILES", "/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json")
 
         # OpenGL Threaded Optimizations Parameter:
-        if "PROTON_OGL_THREAD" in self.env and nonzero(self.env["PROTON_OGL_THREAD"]):
-            self.env.setdefault("__GL_THREADED_OPTIMIZATIONS", "1")
-            self.env.setdefault("mesa_glthread", "true")
+        if "DISABLE_OGL_THREAD" in self.env and nonzero(self.env["DISABLE_OGL_THREAD"]):
+            self.env["__GL_THREADED_OPTIMIZATIONS"] = "0"
+            self.env["mesa_glthread"] = "false"
 
         # Sarek_Profiles:
         def update_sarek_env(env):
@@ -1698,6 +1698,9 @@ class Session:
             proton_fixes = {
                 # Doesnt make sense to have it disabled when it helps a lot with moding.
                 "PROTON_SET_GAME_DRIVE": "1",
+                # Helps with the wined3d stutters, tough it might hurt opengl games performance.
+                "__GL_THREADED_OPTIMIZATIONS": "1",
+                "mesa_glthread": "true",
             }
 
             old_gpu_fixes = {
@@ -1724,7 +1727,6 @@ class Session:
                 "MESA_NO_DITHER": "1",
                 "vblank_mode": "0",
                 "MESA_EXTENSION_OVERRIDE": "-GL_EXT_framebuffer_multisample -GL_EXT_framebuffer_multisample_blit_scaled -GL_EXT_texture_filter_anisotropic",
-
                 # Vulkan/DXVK:
                 "MESA_VK_WSI_PRESENT_MODE" : "immediate",
                 "DXVK_CONFIG": "dxgi.syncInterval = 0;d3d9.presentInterval = 0;d3d11.maxTessFactor = 8;d3d11.relaxedBarriers = True;d3d11.ignoreGraphicsBarriers = True;d3d11.samplerAnisotropy = 0;d3d9.samplerAnisotropy = 0;d3d11.invariantPosition = False;d3d9.invariantPosition = False;d3d9.floatEmulation = True",

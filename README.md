@@ -92,7 +92,7 @@ These are the custom parameters introduced in Sarek to provide fallback renderin
 | Environment Variable              | Description                                                                                                                                  |
 |-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
 | `PROTON_SAREK_PROFILE`            | Changes the [Sarek Profile](#Sarek-Profile), it accepts the next values: `base`, `default` and `agg`.                               |
-| `PROTON_OGL_THREAD=[0/1]`         | Enables OpenGL Threaded Optimizations, might increase or decrease fps depending on the game.                                                 |
+| `DISABLE_OGL_THREAD=[0/1]`         | Disables OpenGL Threaded Optimizations, might increase or decrease fps depending on the game.                                                 |
 | `PROTON_SOFTWARE_RENDER=[0/1]`    | Uses LLVMpipe and Lavapipe for CPU-based rendering for OpenGL and Vulkan, more info on the [Software Rendering](#Software-Rendering) section |
 
 ### Software Rendering:
@@ -151,9 +151,11 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   - Inherits all settings from the Base configuration.
   - Introduces a set of fixes for OpenGL/Vulkan for old GPUs.
   - Set `PROTON_SET_GAME_DRIVE=1` to help with moding.
+  - Use Mesa and NVIDIA OpenGL Thread Optimization, to try to mittigate WineD3D stutters while using the OpenGL backend.
+    - Note: This might have a negative performance hit for games that use OpenGL instead of the DirectX family. You can disable it with the `DISABLE_OGL_THREAD=1` env var.
 
 - **"agg":**
-  - Represents an aggressive performance tuning mode, incorporating all features from the default configuration, plus the following:
+  - Represents an aggressive performance mode, with all features from the default configuration, plus the next:
   
   **OpenGL/WineD3D:**
 
