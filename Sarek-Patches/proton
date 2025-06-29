@@ -1095,6 +1095,7 @@ class CompatData:
                     "vcomp1*.dll," +
                     "vccorlib1*.dll," +
                     "vcruntime1*.dll," +
+                    "ucrtbase.dll," +
 
                     #some games balk at ntdll symlink(?)
                     "ntdll.dll," +
@@ -1403,6 +1404,11 @@ def default_compat_config():
                 "3314070", #The Sims 2 Legacy Collection
                 "2709570", #Supermarket Together
                 "2623190", #The Elder Scrolls IV: Oblivion Remastered
+                "2139460", #Once Human
+                "632360", #Risk of Rain 2
+                "2531310", #The Last of Us Part II Remastered
+                "2564460", #Banter
+                "2680010", #The First Berserker: Khazan
                 ]:
             ret.add("gamedrive")
 
@@ -1414,6 +1420,7 @@ def default_compat_config():
                 "2052410", #WITCH ON THE HOLY NIGHT
                 "789910", #Planet of the Apes: Last Frontier
                 "1183470", #Imperiums: Greek Wars
+                "876340", #VR Slots 3D
                 ]:
             ret.add("heapdelayfree")
 
@@ -1466,7 +1473,6 @@ def default_compat_config():
                 "2067160", #Simulakros
                 "2621010", #Simulakros Demo
                 "368500", #Assassin's Creed Syndicate
-                "2531310",
                 ]:
             ret.add("disablenvapi")
 
@@ -1526,6 +1532,7 @@ class Session:
                 "dotnetfx35setup.exe": "b",
                 "beclient.dll": "b,n",
                 "beclient_x64.dll": "b,n",
+                "winebth.sys": "d", #disable winebth.sys as it crashes winedevice.exe
         }
 
         # CW Bug 21737. Locoland executable happens to be steam.exe.
