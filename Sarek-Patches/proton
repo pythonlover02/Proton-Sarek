@@ -1679,14 +1679,16 @@ class Session:
             self.env["__GL_THREADED_OPTIMIZATIONS"] = "0"
             self.env["mesa_glthread"] = "false"
 
+        # Env var to enable nvapi:
+        if "USE_NVAPI" in self.env and nonzero(self.env["USE_NVAPI"]):
+            self.env["PROTON_DISABLE_NVAPI"] = "0"
+
         # Sarek_Profiles:
         def update_sarek_env(env):
-
             """
             Update the provided environment dictionary with Sarek Profiles tweaks
             based on the PROTON_SAREK_PROFILE setting.
             """
-
             proton_valve = {
                 # Default Valve Settings.
                 "WINEDEBUG": "-all",
@@ -1701,6 +1703,8 @@ class Session:
                 # Helps with the wined3d stutters, tough it might hurt opengl games performance.
                 "__GL_THREADED_OPTIMIZATIONS": "1",
                 "mesa_glthread": "true",
+                # Makes sense to disable it here to avoid changing the file to much from upstream
+                "PROTON_DISABLE_NVAPI": "1", 
             }
 
             old_gpu_fixes = {

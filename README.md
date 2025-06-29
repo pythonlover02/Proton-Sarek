@@ -94,6 +94,7 @@ These are the custom parameters introduced in Sarek to provide fallback renderin
 | `PROTON_SAREK_PROFILE`            | Changes the [Sarek Profile](#Sarek-Profile), it accepts the next values: `base`, `default` and `agg`.                               |
 | `DISABLE_OGL_THREAD=[0/1]`         | Disables OpenGL Threaded Optimizations, might increase or decrease fps depending on the game.                                                 |
 | `PROTON_SOFTWARE_RENDER=[0/1]`    | Uses LLVMpipe and Lavapipe for CPU-based rendering for OpenGL and Vulkan, more info on the [Software Rendering](#Software-Rendering) section |
+| `USE_NVAPI=[0/1]`    | Enables the use of NVAPI. It is disabled by default on Proton-Sarek to avoid possible issues with NVIDIA GPUs in games that use NVAPI features not supported by DXVK-Sarek.|
 
 ### Software Rendering:
 
@@ -151,6 +152,7 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   - Inherits all settings from the Base configuration.
   - Introduces a set of fixes for OpenGL/Vulkan for old GPUs.
   - Set `PROTON_SET_GAME_DRIVE=1` to help with moding.
+  - Set `PROTON_DISABLE_NVAPI=1` to avoid possible issues with NVIDIA GPUs in games that use NVAPI features not supported by DXVK-Sarek
   - Use Mesa and NVIDIA OpenGL Thread Optimization, to try to mittigate WineD3D stutters while using the OpenGL backend.
     - Note: This might have a negative performance hit for games that use OpenGL instead of the DirectX family. You can disable it with the `DISABLE_OGL_THREAD=1` env var.
 
