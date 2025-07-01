@@ -1790,6 +1790,7 @@ class Session:
         self.check_environment("PROTON_NO_WM_DECORATION", "nowmdecoration")
         self.check_environment("PROTON_ENABLE_WAYLAND", "enablewayland")
         self.check_environment("PROTON_ENABLE_HDR", "enablehdr")
+        self.check_environment("PROTON_PREFER_SDL", "sdlinput")
         self.check_environment("PROTON_DXVK_D3D8", "dxvkd3d8")
         self.check_environment("PROTON_NO_D3D11", "nod3d11")
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
@@ -1972,6 +1973,12 @@ class Session:
 
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
+
+        if "sdlinput" in self.compat_config:
+            self.env["PROTON_DISABLE_HIDRAW"] = "1"
+            self.env["PROTON_NO_STEAMINPUT"] = "1"
+            if "SDL_GAMECONTROLLER_IGNORE_DEVICES" in self.env:
+                del self.env["SDL_GAMECONTROLLER_IGNORE_DEVICES"]
 
         # NVIDIA software may check for the "DriverStore" by querying the
         # NGXCore\NGXPath registry key via `D3DDDI_QUERYREGISTRY_SERVICEKEY` for
