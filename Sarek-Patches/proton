@@ -1095,6 +1095,7 @@ class CompatData:
                     "vcomp1*.dll," +
                     "vccorlib1*.dll," +
                     "vcruntime1*.dll," +
+                    "ucrtbase.dll," +
 
                     #some games balk at ntdll symlink(?)
                     "ntdll.dll," +
@@ -1403,6 +1404,11 @@ def default_compat_config():
                 "3314070", #The Sims 2 Legacy Collection
                 "2709570", #Supermarket Together
                 "2623190", #The Elder Scrolls IV: Oblivion Remastered
+                "2139460", #Once Human
+                "632360", #Risk of Rain 2
+                "2531310", #The Last of Us Part II Remastered
+                "2564460", #Banter
+                "2680010", #The First Berserker: Khazan
                 ]:
             ret.add("gamedrive")
 
@@ -1414,6 +1420,7 @@ def default_compat_config():
                 "2052410", #WITCH ON THE HOLY NIGHT
                 "789910", #Planet of the Apes: Last Frontier
                 "1183470", #Imperiums: Greek Wars
+                "876340", #VR Slots 3D
                 ]:
             ret.add("heapdelayfree")
 
@@ -1466,7 +1473,6 @@ def default_compat_config():
                 "2067160", #Simulakros
                 "2621010", #Simulakros Demo
                 "368500", #Assassin's Creed Syndicate
-                "2531310",
                 ]:
             ret.add("disablenvapi")
 
@@ -1526,6 +1532,7 @@ class Session:
                 "dotnetfx35setup.exe": "b",
                 "beclient.dll": "b,n",
                 "beclient_x64.dll": "b,n",
+                "winebth.sys": "d", #disable winebth.sys as it crashes winedevice.exe
         }
 
         # CW Bug 21737. Locoland executable happens to be steam.exe.
@@ -1675,18 +1682,20 @@ class Session:
             self.env.setdefault("VK_DRIVER_FILES", "/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json")
 
         # OpenGL Threaded Optimizations Parameter:
-        if "PROTON_OGL_THREAD" in self.env and nonzero(self.env["PROTON_OGL_THREAD"]):
-            self.env.setdefault("__GL_THREADED_OPTIMIZATIONS", "1")
-            self.env.setdefault("mesa_glthread", "true")
+        if "DISABLE_OGL_THREAD" in self.env and nonzero(self.env["DISABLE_OGL_THREAD"]):
+            self.env["__GL_THREADED_OPTIMIZATIONS"] = "0"
+            self.env["mesa_glthread"] = "false"
+
+        # Env var to enable nvapi:
+        if "USE_NVAPI" in self.env and nonzero(self.env["USE_NVAPI"]):
+            self.env["PROTON_DISABLE_NVAPI"] = "0"
 
         # Sarek_Profiles:
         def update_sarek_env(env):
-
             """
             Update the provided environment dictionary with Sarek Profiles tweaks
             based on the PROTON_SAREK_PROFILE setting.
             """
-
             proton_valve = {
                 # Default Valve Settings.
                 "WINEDEBUG": "-all",
@@ -1698,6 +1707,11 @@ class Session:
             proton_fixes = {
                 # Doesnt make sense to have it disabled when it helps a lot with moding.
                 "PROTON_SET_GAME_DRIVE": "1",
+                # Helps with the wined3d stutters, tough it might hurt opengl games performance.
+                "__GL_THREADED_OPTIMIZATIONS": "1",
+                "mesa_glthread": "true",
+                # Makes sense to disable it here to avoid changing the file to much from upstream
+                "PROTON_DISABLE_NVAPI": "1", 
             }
 
             old_gpu_fixes = {
@@ -1724,7 +1738,6 @@ class Session:
                 "MESA_NO_DITHER": "1",
                 "vblank_mode": "0",
                 "MESA_EXTENSION_OVERRIDE": "-GL_EXT_framebuffer_multisample -GL_EXT_framebuffer_multisample_blit_scaled -GL_EXT_texture_filter_anisotropic",
-
                 # Vulkan/DXVK:
                 "MESA_VK_WSI_PRESENT_MODE" : "immediate",
                 "DXVK_CONFIG": "dxgi.syncInterval = 0;d3d9.presentInterval = 0;d3d11.maxTessFactor = 8;d3d11.relaxedBarriers = True;d3d11.ignoreGraphicsBarriers = True;d3d11.samplerAnisotropy = 0;d3d9.samplerAnisotropy = 0;d3d11.invariantPosition = False;d3d9.invariantPosition = False;d3d9.floatEmulation = True",
@@ -1777,6 +1790,7 @@ class Session:
         self.check_environment("PROTON_NO_WM_DECORATION", "nowmdecoration")
         self.check_environment("PROTON_ENABLE_WAYLAND", "enablewayland")
         self.check_environment("PROTON_ENABLE_HDR", "enablehdr")
+        self.check_environment("PROTON_PREFER_SDL", "sdlinput")
         self.check_environment("PROTON_DXVK_D3D8", "dxvkd3d8")
         self.check_environment("PROTON_NO_D3D11", "nod3d11")
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
@@ -1811,6 +1825,16 @@ class Session:
                 self.env["WINE_WAYLAND_HACKS"] = "1"
                 if "enablehdr" in self.compat_config:
                     self.env["DXVK_HDR"] = "1"
+                """
+                    It is not possible for winewayland to support xalia since
+                    there is no way to position toplevel surfaces dynamically in wayland
+                """
+                self.env["PROTON_USE_XALIA"] = "0"
+                # Steam input does not work on wayland
+                self.env["PROTON_NO_STEAMINPUT"] = "1"
+                # Make sure SDL will still work with the controllers, steam sets this for some dumb reason
+                if "SDL_GAMECONTROLLER_IGNORE_DEVICES" in self.env:
+                    del self.env["SDL_GAMECONTROLLER_IGNORE_DEVICES"]
 
         if "noxim" not in self.compat_config:
             self.env.pop("WINE_ALLOW_XIM")
@@ -1959,6 +1983,12 @@ class Session:
 
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
+
+        if "sdlinput" in self.compat_config:
+            self.env["PROTON_DISABLE_HIDRAW"] = "1"
+            self.env["PROTON_NO_STEAMINPUT"] = "1"
+            if "SDL_GAMECONTROLLER_IGNORE_DEVICES" in self.env:
+                del self.env["SDL_GAMECONTROLLER_IGNORE_DEVICES"]
 
         # NVIDIA software may check for the "DriverStore" by querying the
         # NGXCore\NGXPath registry key via `D3DDDI_QUERYREGISTRY_SERVICEKEY` for
