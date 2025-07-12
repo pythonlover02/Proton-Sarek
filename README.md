@@ -172,8 +172,7 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   - Forces no Vsync.
   - Disables error checking within the API to avoid CPU performance losses.
   - Disables dithering.
-  - Forces no Full-Screen Anti-Aliasing (FSAA) 
-  - Prevents the usage of anisotropic filtering
+  - Disables MSAA 
   
   **DXVK:**
 
