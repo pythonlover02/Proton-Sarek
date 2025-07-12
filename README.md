@@ -166,7 +166,6 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   - Forces rendering textures under performance settings instead of the default quality settings.
   - Forces no Full-Screen Anti-Aliasing (FSAA) and FXAA.
   - Prevents the usage of anisotropic filtering.
-  - Disables Variable Refresh Rate (VRR).
 
   **Mesa:**
   - Forces no Vsync.

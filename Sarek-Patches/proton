@@ -1733,7 +1733,6 @@ class Session:
                 "__GL_FSAA_MODE": "0",
                 "__GL_ALLOW_FXAA_USAGE": "0",
                 "__GL_LOG_MAX_ANISO": "0",
-                "__GL_VRR_ALLOWED": "0",
                 "MESA_NO_ERROR": "true",
                 "MESA_NO_DITHER": "1",
                 "vblank_mode": "0",
