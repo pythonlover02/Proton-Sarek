@@ -196,17 +196,16 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
 > [!NOTE]
 > The agg profile is intended to be used on PCs with weak GPUs or when software rendering its being used, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
 
-**Sources for the Code of The Sarek Profiles:**
+## Technical References:
 
-[OpenGL Extensions Documentation](https://registry.khronos.org/OpenGL/extensions/EXT/)
+Documentation used:
 
-[Mesa Documentation](https://docs.mesa3d.org/envvars.html#environment-variables)
-
-[NVIDIA 470 Drivers Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/470.256.02/README/openglenvvariables.html)
-
-[NVIDIA 390 Drivers Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/390.157/README/openglenvvariables.html)
-
-[DXVK-Sarek Config Documentation](https://github.com/pythonlover02/DXVK-Sarek/blob/1.10.x-Proton-Sarek/dxvk.conf)
+- [OpenGL Extensions Documentation](https://registry.khronos.org/OpenGL/extensions/EXT/)
+- [Mesa Documentation - Environment Variables](https://docs.mesa3d.org/envvars.html#environment-variables)
+- [FreeDesktop - Dri Configuration Options](https://dri.freedesktop.org/wiki/ConfigurationOptions/)
+- [NVIDIA 470 Drivers - Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/470.256.02/README/openglenvvariables.html)
+- [NVIDIA 390 Drivers - Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/390.157/README/openglenvvariables.html)
+- [DXVK-Sarek Config Documentation](https://github.com/pythonlover02/DXVK-Sarek/blob/1.10.x-Proton-Sarek/dxvk.conf)
 
 ### Additional Tips:
 
