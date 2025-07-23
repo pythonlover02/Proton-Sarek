@@ -1623,19 +1623,12 @@ class Session:
                 "DXVK_ALL_CORES" : "1",
             }
 
-            additional_tweaks = {
-                # Use Esync for the agg mode instead of Fsync, even if Fsync its an all rounder, working well on some very specific games where Esync doesnt
-                # It stills in my experience being a little worse performance wise than Esync.
-                "PROTON_NO_FSYNC": "1",
-                "PROTON_NO_ESYNC": "0",
-            }
-
             default_tweaks = proton_valve | proton_fixes | old_gpu_fixes
 
             profiles = {
                 "base": proton_valve,
                 "default": default_tweaks,
-                "agg": default_tweaks | ogl_vk_tweaks | additional_tweaks,
+                "agg": default_tweaks | ogl_vk_tweaks,
             }
 
             profile = env.get("PROTON_SAREK_PROFILE", "default")
