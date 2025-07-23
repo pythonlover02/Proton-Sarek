@@ -17,6 +17,7 @@ import shlex
 import uuid
 import json
 import time
+import urllib.request
 
 from ctypes import CDLL
 from ctypes import CFUNCTYPE
@@ -404,24 +405,8 @@ def setup_dir_drive(compat_option, drive_name, dest_dir):
         elif file_exists(drive_path, follow_symlinks=False):
             os.remove(drive_path)
 
-def is_directory_empty(dir_path):
-    # Check if the directory is empty
-    return not any(os.scandir(dir_path))
-
 def setup_game_dir_drive():
-        if os.environ.get('UMU_ID', ''):
-            drive_map = {
-                "/media": "u:",
-                "/run/media": "v:",
-                "/mnt": "w:",
-                os.path.expanduser("~"): "x:"  # Current user's home directory
-            }
-
-            for directory in drive_map.keys():
-                if os.path.exists(directory) and not is_directory_empty(directory):
-                    setup_dir_drive("gamedrive", drive_map[directory], directory)
-        else:
-            setup_dir_drive("gamedrive", "s:", try_get_game_library_dir())
+        setup_dir_drive("gamedrive", "s:", try_get_game_library_dir())
 
 def setup_steam_dir_drive():
         setup_dir_drive("steamdrive", "t:", try_get_steam_dir())
@@ -748,6 +733,9 @@ class CompatData:
             #How can this happen??
             log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
             #If it does, just let the Wine upgrade happen and hope it works...
+            with open(self.creation_sync_guard, "w"):
+                pass
+            os.sync()
             return
 
         try:
@@ -1025,6 +1013,19 @@ class CompatData:
                 os.remove(old)
                 os.symlink(src=link, dst=old)
 
+    def setup_fsr4(self):
+        fsr4files = ["amdxcffx64"]
+
+        for f in fsr4files:
+            dst = "drive_c/windows/system32/" + f + ".dll"
+            if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
+                try:
+                    tracked_files.write(dst + '\n')
+                except Exception:
+                    pass
+            if file_exists(g_proton.lib_dir + "wine/amdprop/" + f + ".dll", follow_symlinks=False):
+                self.create_symlink(self.prefix_dir + dst, g_proton.lib_dir + "wine/amdprop/" + f + ".dll")
+
     def setup_prefix(self):
         with self.prefix_lock:
             if file_exists(self.version_file, follow_symlinks=True):
@@ -1251,6 +1252,8 @@ class CompatData:
                         tracked_files.write(dst + '\n')
                     self.create_symlink(self.prefix_dir + dst, g_proton.lib_dir + "wine/icu/i386-windows/" + f + ".dll")
 
+                self.setup_fsr4()
+
                 # If the user requested the NVAPI be available, copy it into place.
                 # If they didn't, clean up any stray nvapi DLLs.
                 if use_nvapi:
@@ -1358,6 +1361,7 @@ def default_compat_config():
                 # Other issues arising from OWPR code path in apps, e. g., hitting unimplemented bits in
                 # d3dcompiler.
                 "230410", #Warframe
+                "3513350", #Wuthering Waves
                 ]:
             ret.add("noopwr")
 
@@ -1491,6 +1495,11 @@ def default_compat_config():
         appid = os.environ["STEAM_COMPAT_APP_ID"]
 
         if appid in [
+                "3513350", #Wuthering Waves
+                ]:
+            ret.add("noxalia")
+
+        if appid in [
                 "255960", #Bad Mojo Redux
                 ]:
             ret.add("gamedrive")
@@ -1622,6 +1631,13 @@ class Session:
             self.compat_config.discard(config_name)
         return True
 
+    def download_file(self, uri, dst):
+        try:
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            urllib.request.urlretrieve(uri, dst)
+        except Exception:
+            pass
+
     def try_log_slr_versions(self):
         try:
             if "PRESSURE_VESSEL_RUNTIME_BASE" in self.env:
@@ -1743,12 +1759,19 @@ class Session:
                 "DXVK_ALL_CORES" : "1",
             }
 
+            additional_tweaks = {
+                # Use Esync for the agg mode instead of Fsync, even if Fsync its an all rounder, working well on some very specific games where Esync doesnt
+                # It stills in my experience being a little worse performance wise than Esync.
+                "PROTON_NO_FSYNC": "1",
+                "PROTON_NO_ESYNC": "0",
+            }
+
             default_tweaks = proton_valve | proton_fixes | old_gpu_fixes
 
             profiles = {
                 "base": proton_valve,
                 "default": default_tweaks,
-                "agg": default_tweaks | ogl_vk_tweaks,
+                "agg": default_tweaks | ogl_vk_tweaks | additional_tweaks,
             }
 
             profile = env.get("PROTON_SAREK_PROFILE", "default")
@@ -1780,9 +1803,6 @@ class Session:
         if not self.check_environment("PROTON_USE_WINED3D", "wined3d"):
             self.check_environment("PROTON_USE_WINED3D11", "wined3d")
         self.check_environment("PROTON_NO_WM_DECORATION", "nowmdecoration")
-        self.check_environment("PROTON_ENABLE_WAYLAND", "enablewayland")
-        self.check_environment("PROTON_ENABLE_HDR", "enablehdr")
-        self.check_environment("PROTON_PREFER_SDL", "sdlinput")
         self.check_environment("PROTON_DXVK_D3D8", "dxvkd3d8")
         self.check_environment("PROTON_NO_D3D11", "nod3d11")
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
@@ -1801,6 +1821,27 @@ class Session:
         self.check_environment("PROTON_DISABLE_NVAPI", "disablenvapi")
         self.check_environment("PROTON_FORCE_NVAPI", "forcenvapi")
         self.check_environment("PROTON_HIDE_APU", "hideapu")
+        self.check_environment("PROTON_ENABLE_WAYLAND", "wayland")
+        self.check_environment("PROTON_USE_WAYLAND", "wayland")
+        self.check_environment("PROTON_PREFER_SDL", "sdlinput")
+        self.check_environment("PROTON_USE_SDL", "sdlinput")
+        self.check_environment("PROTON_FSR4_UPGRADE", "fsr4")
+        self.check_environment("PROTON_NATIVE_AGS", "nativeags")
+        self.check_environment("PROTON_ENABLE_HDR", "hdr")
+        self.check_environment("PROTON_NO_NTSYNC", "nontsync")
+
+        if "PROTON_ADD_CONFIG" in self.env:
+            try:
+                configs = self.env["PROTON_ADD_CONFIG"].split(',')
+                for c in configs:
+                    self.compat_config.add(c)
+            except:
+                pass
+
+        if "nontsync" in self.compat_config:
+            self.env.pop("WINENTSYNC", "")
+        else:
+            self.env["WINENTSYNC"] = "1"
 
         if "noesync" in self.compat_config:
             self.env.pop("WINEESYNC", "")
@@ -1809,24 +1850,6 @@ class Session:
 
         if "nowmdecoration" in self.compat_config:
             self.env["WINE_NO_WM_DECORATION"] = "1"
-
-        if "enablewayland" in self.compat_config:
-            if self.env.get("WAYLAND_DISPLAY", False):
-                self.dlloverrides["winex11.drv"] = "d"
-                self.dlloverrides["winewayland.drv"] = "b"
-                self.env["WINE_WAYLAND_HACKS"] = "1"
-                if "enablehdr" in self.compat_config:
-                    self.env["DXVK_HDR"] = "1"
-                """
-                    It is not possible for winewayland to support xalia since
-                    there is no way to position toplevel surfaces dynamically in wayland
-                """
-                self.env["PROTON_USE_XALIA"] = "0"
-                # Steam input does not work on wayland
-                self.env["PROTON_NO_STEAMINPUT"] = "1"
-                # Make sure SDL will still work with the controllers, steam sets this for some dumb reason
-                if "SDL_GAMECONTROLLER_IGNORE_DEVICES" in self.env:
-                    del self.env["SDL_GAMECONTROLLER_IGNORE_DEVICES"]
 
         if "noxim" not in self.compat_config:
             self.env.pop("WINE_ALLOW_XIM")
@@ -1959,6 +1982,11 @@ class Session:
         if "disablelibglesv2" in self.compat_config:
             self.dlloverrides["libglesv2"] = "d"
 
+        if "nativeags" in self.compat_config:
+            self.dlloverrides["atiadlxx"] = "b"
+            self.dlloverrides["atidxx64"] = "b"
+            self.dlloverrides["amd_ags_x64"] = "n"
+
         if "nomfdxgiman" in self.compat_config:
             self.env["WINE_DO_NOT_CREATE_DXGI_DEVICE_MANAGER"] = "1"
 
@@ -1966,9 +1994,12 @@ class Session:
             self.env["WINE_DISABLE_VULKAN_OPWR"] = "1"
 
         if "PROTON_USE_XALIA" not in self.env:
-            self.env["PROTON_USE_XALIA"] = "1"
-            if "xalia" not in self.compat_config:
-                self.env["XALIA_SUPPORTED_ONLY"] = "1"
+            if "noxalia" in self.compat_config:
+                self.env["PROTON_USE_XALIA"] = "0"
+            else:
+                self.env["PROTON_USE_XALIA"] = "1"
+                if "xalia" not in self.compat_config:
+                    self.env["XALIA_SUPPORTED_ONLY"] = "1"
 
         if "nohardwarescheduling" in self.compat_config and "WINE_DISABLE_HARDWARE_SCHEDULING" not in self.env:
             self.env["WINE_DISABLE_HARDWARE_SCHEDULING"] = "1"
@@ -1981,6 +2012,44 @@ class Session:
             self.env["PROTON_NO_STEAMINPUT"] = "1"
             if "SDL_GAMECONTROLLER_IGNORE_DEVICES" in self.env:
                 del self.env["SDL_GAMECONTROLLER_IGNORE_DEVICES"]
+
+        if "fsr4" in self.compat_config:
+            self.env["FSR4_UPGRADE"] = "1"
+            versions = ["67D435F7d97000", "67A4D2BC10ad000"]
+            version_match = True
+
+            # TODO: make the following code more efficent
+
+            # 0. Check downloaded version
+            if file_exists(g_proton.lib_dir + "wine/amdprop/amdxcffx64_version", follow_symlinks=False):
+                with open(g_proton.lib_dir + "wine/amdprop/amdxcffx64_version", "r") as file:
+                    first_line = file.readline()
+                    version_match = False
+                    for version in versions:
+                        if first_line in version:
+                            version_match = True
+            else:
+                version_match = False
+
+            # 1. Download amdxcffx64 library
+            if not file_exists(g_proton.lib_dir + "wine/amdprop/amdxcffx64.dll", follow_symlinks=False) or not version_match:
+                self.download_file("https://download.amd.com/dir/bin/amdxcffx64.dll/" + versions[1] + "/amdxcffx64.dll", g_proton.lib_dir + "wine/amdprop/amdxcffx64.dll")
+
+            # 2. Update stored version
+            if file_exists(g_proton.lib_dir + "wine/amdprop/amdxcffx64.dll", follow_symlinks=False):
+                g_compatdata.setup_fsr4()
+                if not version_match:
+                    with open(g_proton.lib_dir + "wine/amdprop/amdxcffx64_version", "w") as file:
+                        file.write(versions[1] + "\n")
+
+        if "hdr" in self.compat_config:
+            self.env["DXVK_HDR"] = "1"
+
+        # igdext is loaded either using the LoadLibraryExW hack on 1.3 or lower
+        # or using the INTC_ALT_DRIVER_EXTENSIONS_PATH on 2.0 or newer
+        # TODO: Load it through driver store data like it is on windows
+        # TODO: D3D11 has a different loading mechanism because why not
+        self.env["INTC_ALT_DRIVER_EXTENSIONS_PATH"] = "C:\\Windows\\System32"
 
         # NVIDIA software may check for the "DriverStore" by querying the
         # NGXCore\NGXPath registry key via `D3DDDI_QUERYREGISTRY_SERVICEKEY` for
@@ -2026,6 +2095,12 @@ class Session:
                     if var in self.env:
                         self.log_file.write("Effective " + var + ": " + self.env[var] + "\n")
 
+                if "fsr4" in self.compat_config:
+                    if file_exists(g_proton.lib_dir + "wine/amdprop/amdxcffx64.dll", follow_symlinks=False):
+                        self.log_file.write("INFO: Automatic FSR4 upgrade enabled!\n")
+                    else:
+                        self.log_file.write("ERROR: Failed to download amdxcffx64.dll!\n")
+
                 # check for low fd limit
                 _soft_limit, hard_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
                 if hard_limit < 524288:
@@ -2065,6 +2140,24 @@ class Session:
 
         if "disablenvapi" not in self.compat_config or "forcenvapi" in self.compat_config:
             self.env["DXVK_ENABLE_NVAPI"] = "1"
+
+        if "wayland" in self.compat_config:
+            if "WAYLAND_DISPLAY" in self.env:
+                self.dlloverrides["winex11.drv"] = "d"
+                self.dlloverrides["winewayland.drv"] = "b"
+                self.env["WINE_WAYLAND_HACKS"] = "1"
+                """
+                    It is not possible for winewayland to support xalia since
+                    there is no way to position toplevel surfaces dynamically in wayland
+                """
+                self.env["PROTON_USE_XALIA"] = "0"
+                # Steam input does not work on wayland
+                self.env["PROTON_NO_STEAMINPUT"] = "1"
+                # Make sure SDL will still work with the controllers, steam sets this for some dumb reason
+                if "SDL_GAMECONTROLLER_IGNORE_DEVICES" in self.env:
+                    del self.env["SDL_GAMECONTROLLER_IGNORE_DEVICES"]
+                # Always prefer SDL when no steaminput is available, better for non-xbox controllers
+                self.env["PROTON_PREFER_SDL"] = "1"
 
         if "forcenvapi" in self.compat_config:
             self.env["DXVK_NVAPI_ALLOW_OTHER_DRIVERS"] = "1"
@@ -2150,9 +2243,6 @@ if __name__ == "__main__":
 
     g_session.init_wine()
 
-    # This is needed for protonfixes
-    os.environ["PROTON_DLL_COPY"] = "*"
-
     if g_proton.missing_default_prefix():
         g_proton.make_default_prefix()
 
@@ -2160,25 +2250,8 @@ if __name__ == "__main__":
 
     import protonfixes
     protonfixes.setup(g_session.env, "PATH", ld_path_var, prepend_to_env_str)
-
-    # Allow umu clients to run winetricks verbs and be the frontend for them
-    if (
-        g_session.env.get("UMU_ID")
-        and g_session.env.get("EXE", "").endswith("winetricks")
-        and g_session.env.get("PROTON_VERB") == "waitforexitandrun"
-    ):
-        wt_verbs = " ".join(sys.argv[2:][2:])
-        g_session.env["WINE"] = g_proton.wine_bin
-        g_session.env["WINELOADER"] = g_proton.wine_bin
-        g_session.env["WINESERVER"] = g_proton.wineserver_bin
-        g_session.env["WINETRICKS_LATEST_VERSION_CHECK"] = "disabled"
-        g_session.env["LD_PRELOAD"] = ""
-
-        log(f"Running winetricks verbs in prefix: {wt_verbs}")
-        rc = subprocess.run(sys.argv[2:], check=False, env=g_session.env).returncode
-
-        sys.exit(rc)
-
+    protonfixes.setup_mount_drives(setup_dir_drive)
+    protonfixes.winetricks(g_session.env, g_proton.wine_bin, g_proton.wineserver_bin)
     protonfixes.execute()
 
     #determine mode
