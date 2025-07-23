@@ -15,29 +15,21 @@ jobs:
     name: Release ${{ github.ref_name }}
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - name: Download ${{ github.ref_name }}.tar.gz artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{ github.ref_name }}.tar.gz
 
     - name: Download ${{ github.ref_name }}.sha512sum artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{ github.ref_name }}.sha512sum
 
-    - name: Upload ${{ github.ref_name }}.tar.gz to release
-      uses: svenstaro/upload-release-action@2.5.0
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ github.ref_name }}
-        file: ${{ github.ref_name }}.tar.gz
-        overwrite: false
-
-    - name: Upload ${{ github.ref_name }}.sha512sum to release
-      uses: svenstaro/upload-release-action@2.5.0
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ github.ref_name }}
-        file: ${{ github.ref_name }}.sha512sum
-        overwrite: false
+    - name: Upload ${{ github.ref_name }}.{tar.gz,sha512sum} to release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run:
+        gh -R ${{ github.repositoryUrl }} release upload ${{ github.ref_name }} ${{ github.ref_name }}.{tar.gz,sha512sum}
