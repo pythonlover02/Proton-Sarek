@@ -1723,14 +1723,14 @@ class Session:
             proton_fixes = {
                 # Doesnt make sense to have it disabled when it helps a lot with moding.
                 "PROTON_SET_GAME_DRIVE": "1",
-                # Helps with the wined3d stutters, tough it might hurt opengl games performance.
-                "__GL_THREADED_OPTIMIZATIONS": "1",
-                "mesa_glthread": "true",
                 # Makes sense to disable it here to avoid changing the file to much from upstream
                 "PROTON_DISABLE_NVAPI": "1", 
             }
 
             old_gpu_fixes = {
+                # Helps with the wined3d stutters, tough it might hurt opengl games performance.
+                "__GL_THREADED_OPTIMIZATIONS": "1",
+                "mesa_glthread": "true",
                 # Might fix some issues or make some games at least open on some old GPUs, those games being playable its another history...
                 "__GL_SHADER_DISK_CACHE": "1",
                 "__GL_SHADER_DISK_CACHE_SIZE": "2147483648",
