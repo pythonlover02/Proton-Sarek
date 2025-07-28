@@ -1692,10 +1692,10 @@ class Session:
 
         # Software Rendering Parameter:
         if "PROTON_SOFTWARE_RENDER" in self.env and nonzero(self.env["PROTON_SOFTWARE_RENDER"]):
-            self.env.setdefault("LIBGL_ALWAYS_SOFTWARE", "1")
-            self.env.setdefault("__GLX_VENDOR_LIBRARY_NAME", "mesa")
-            self.env.setdefault("DXVK_FILTER_DEVICE_NAME", "llvmpipe")
-            self.env.setdefault("VK_DRIVER_FILES", "/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json")
+            self.env["__GLX_VENDOR_LIBRARY_NAME"] = "mesa"
+            self.env["LIBGL_ALWAYS_SOFTWARE"] = "1"
+            self.env["MESA_VK_DEVICE_SELECT"] = "10005!"
+            self.env["DXVK_FILTER_DEVICE_NAME"] = "llvmpipe"
 
         # OpenGL Threaded Optimizations Parameter:
         if "DISABLE_OGL_THREAD" in self.env and nonzero(self.env["DISABLE_OGL_THREAD"]):
