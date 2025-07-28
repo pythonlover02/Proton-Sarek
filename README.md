@@ -248,8 +248,8 @@ Follow these steps to add to your Proton Build the Sarek patches:
 
 - **Option 2:** Download a precompiled Proton build (GE-Proton or Valve's Stable releases are the only ones officially supported).
 
-### 2. Get the Sarek Patches
-- Clone or download the Sarek-Patches dir from this repository. 
+### 2. Get the Sarek Repo
+- Clone or download the repo. 
 
 ### 3. Rename the Proton Executable (if necessary)
 - If you're using **GE-Proton**, no need to rename anything, as the default `proton` file works out of the box.

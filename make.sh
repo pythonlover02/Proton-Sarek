@@ -27,27 +27,27 @@ if [ -z "$version_number" ]; then
   exit 1
 fi
 
-# Create the full version name with async suffix
-FULL_VERSION="Proton-Sarek$version_number-async"
+# Create the full version name
+FULL_VERSION="Proton-Sarek$version_number"
 echo "Using version: $FULL_VERSION"
 
-# Copy the dxvk-async files
-echo "Copying dxvk-async 32-bit files..."
-cp -r "$SCRIPT_DIR/dxvk-async/x32/"* "$protondir/files/lib/wine/dxvk/i386-windows/" || { echo "Failed to copy 32-bit dxvk files."; exit 1; }
+# Copy the dxvk files
+echo "Copying dxvk 32-bit files..."
+cp -r "$SCRIPT_DIR/patches/dxvk/x32/"* "$protondir/files/lib/wine/dxvk/i386-windows/" || { echo "Failed to copy 32-bit dxvk files."; exit 1; }
 
-echo "Copying dxvk-async 64-bit files..."
-cp -r "$SCRIPT_DIR/dxvk-async/x64/"* "$protondir/files/lib/wine/dxvk/x86_64-windows/" || { echo "Failed to copy 64-bit dxvk files."; exit 1; }
+echo "Copying dxvk 64-bit files..."
+cp -r "$SCRIPT_DIR/patches/dxvk/x64/"* "$protondir/files/lib/wine/dxvk/x86_64-windows/" || { echo "Failed to copy 64-bit dxvk files."; exit 1; }
 
 # Copy the vkd3d-proton-2.6 files
 echo "Copying vkd3d-proton-2.6 32-bit files..."
-cp -r "$SCRIPT_DIR/vkd3d-proton-2.6/x86/"* "$protondir/files/lib/vkd3d/i386-windows/" || { echo "Failed to copy 32-bit vkd3d-proton files."; exit 1; }
+cp -r "$SCRIPT_DIR/patches/vkd3d-proton-2.6/x86/"* "$protondir/files/lib/vkd3d/i386-windows/" || { echo "Failed to copy 32-bit vkd3d-proton files."; exit 1; }
 
 echo "Copying vkd3d-proton-2.6 64-bit files..."
-cp -r "$SCRIPT_DIR/vkd3d-proton-2.6/x64/"* "$protondir/files/lib/vkd3d/x86_64-windows/" || { echo "Failed to copy 64-bit vkd3d-proton files."; exit 1; }
+cp -r "$SCRIPT_DIR/patches/vkd3d-proton-2.6/x64/"* "$protondir/files/lib/vkd3d/x86_64-windows/" || { echo "Failed to copy 64-bit vkd3d-proton files."; exit 1; }
 
 # Update the proton file with the new version
 echo "Updating proton file with version $FULL_VERSION..."
-sed "s/CURRENT_PREFIX_VERSION=\"Proton-Sarek\"/CURRENT_PREFIX_VERSION=\"$FULL_VERSION\"/" "$SCRIPT_DIR/proton" > "$protondir/proton" || { echo "Failed to update proton file."; exit 1; }
+sed "s/CURRENT_PREFIX_VERSION=\"Proton-Sarek\"/CURRENT_PREFIX_VERSION=\"$FULL_VERSION\"/" "$SCRIPT_DIR/patches/proton" > "$protondir/proton" || { echo "Failed to update proton file."; exit 1; }
 
 # Make the proton file executable
 chmod +x "$protondir/proton" || { echo "Failed to make proton file executable."; exit 1; }
@@ -59,7 +59,7 @@ echo "$TIMESTAMP $FULL_VERSION" > "$protondir/version" || { echo "Failed to crea
 
 # Update the compatibilitytool.vdf file with the new version
 echo "Updating compatibilitytool.vdf..."
-sed -e "s/\"Proton-Sarek\"/\"$FULL_VERSION\"/g" "$SCRIPT_DIR/compatibilitytool.vdf" > "$protondir/compatibilitytool.vdf" || { echo "Failed to update compatibilitytool.vdf."; exit 1; }
+sed -e "s/\"Proton-Sarek\"/\"$FULL_VERSION\"/g" "$SCRIPT_DIR/patches/compatibilitytool.vdf" > "$protondir/compatibilitytool.vdf" || { echo "Failed to update compatibilitytool.vdf."; exit 1; }
 
 echo "All files copied and updated successfully."
 echo "Version: $FULL_VERSION"
