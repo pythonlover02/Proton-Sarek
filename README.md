@@ -235,7 +235,7 @@ Documentation used:
 
    Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options. 
 
-   As an example here its my current [MangoHud.conf](https://github.com/pythonlover02/Proton-Sarek/blob/onlyfixes/Extras/MangoHud.conf) file.
+   As an example here its my current [MangoHud.conf](https://github.com/pythonlover02/Proton-Sarek/blob/onlyfixes/extras/MangoHud.conf) file.
 
 5. Check the [Gaming](https://wiki.archlinux.org/title/Gaming) and [Improving performance](https://wiki.archlinux.org/title/Improving_performance) Arch Wiki pages for more tips.
 
