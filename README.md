@@ -190,9 +190,6 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   **Mesa:**
   - Disable vertical synchronization (vsync)
 
-  **Extras:**
-  - Use Esync for the agg mode instead of Fsync, even if Fsync its an all rounder, working well on some very specific games where Esync doesnt, it stills in my experience being a little worse performance wise than Esync.
-
 > [!NOTE]
 > The agg profile is intended to be used on PCs with weak GPUs or when software rendering its being used, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
 
