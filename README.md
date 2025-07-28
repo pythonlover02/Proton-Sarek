@@ -124,7 +124,8 @@ selectable devices:
   GPU 1: 10005:0 "llvmpipe (LLVM 20.1.8, 256 bits)" CPU 0000:00:00.0
  ```
 
-If the output its not like the above that means that your Distro doesnt install the `vulkan mesa layer` by default and you will need to install additional packages
+If the output its not like the above that means that your Distro doesnt install the `vulkan mesa layer` by default and you will need to install additional packages.
+
 If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution. 
 
 
