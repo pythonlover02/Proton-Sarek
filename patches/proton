@@ -40,6 +40,8 @@ from filelock import FileLock
 from random import randrange
 from pathlib import Path
 
+import protonfixes
+
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
 
@@ -1317,8 +1319,10 @@ def default_compat_config():
                 #affected by CW bug 20240
                 "1331440", #FUSER
 
-                #CW bug 24913
-                "2620730",
+                #affected by Unity race
+                "2620730", #DEVIATOR - CW bug 24913
+                "2882920", #SSR Wives: The Murder Of My Winter Crush Demo - CW bug 25730
+                "2712910", #Spark & Kling - CW bug 25778
                 ]:
             ret.add("nomfdxgiman")
 
@@ -1413,6 +1417,8 @@ def default_compat_config():
                 "2531310", #The Last of Us Part II Remastered
                 "2564460", #Banter
                 "2680010", #The First Berserker: Khazan
+                "3438330", #Firefly Village Demo
+                "3393740", #Firefly Village
                 ]:
             ret.add("gamedrive")
 
@@ -1479,6 +1485,11 @@ def default_compat_config():
                 "368500", #Assassin's Creed Syndicate
                 ]:
             ret.add("disablenvapi")
+
+        if appid in [
+                "2698940", #The Crew Motorfest
+                ]:
+            ret.add("hidenvgpu")
 
         if appid in [
                 "2395210" #Tony Hawk's Pro Skater 1 + 2
@@ -1577,6 +1588,11 @@ class Session:
             self.env["WINE_CPU_TOPOLOGY"] = self.env["PROTON_CPU_TOPOLOGY"]
         elif appid in default_cpu_limit:
             self.env["WINE_CPU_TOPOLOGY"] = str(default_cpu_limit[appid])
+
+        if "WINE_HIDE_AMD_GPU" not in self.env and appid in [
+                    "1282690",
+                ]:
+            self.env["WINE_HIDE_AMD_GPU"] = "1"
 
     def init_wine(self):
         if "HOST_LC_ALL" in self.env and len(self.env["HOST_LC_ALL"]) > 0:
@@ -2006,35 +2022,6 @@ class Session:
             if "SDL_GAMECONTROLLER_IGNORE_DEVICES" in self.env:
                 del self.env["SDL_GAMECONTROLLER_IGNORE_DEVICES"]
 
-        if "fsr4" in self.compat_config:
-            self.env["FSR4_UPGRADE"] = "1"
-            versions = ["67D435F7d97000", "67A4D2BC10ad000"]
-            version_match = True
-
-            # TODO: make the following code more efficent
-
-            # 0. Check downloaded version
-            if file_exists(g_proton.lib_dir + "wine/amdprop/amdxcffx64_version", follow_symlinks=False):
-                with open(g_proton.lib_dir + "wine/amdprop/amdxcffx64_version", "r") as file:
-                    first_line = file.readline()
-                    version_match = False
-                    for version in versions:
-                        if first_line in version:
-                            version_match = True
-            else:
-                version_match = False
-
-            # 1. Download amdxcffx64 library
-            if not file_exists(g_proton.lib_dir + "wine/amdprop/amdxcffx64.dll", follow_symlinks=False) or not version_match:
-                self.download_file("https://download.amd.com/dir/bin/amdxcffx64.dll/" + versions[1] + "/amdxcffx64.dll", g_proton.lib_dir + "wine/amdprop/amdxcffx64.dll")
-
-            # 2. Update stored version
-            if file_exists(g_proton.lib_dir + "wine/amdprop/amdxcffx64.dll", follow_symlinks=False):
-                g_compatdata.setup_fsr4()
-                if not version_match:
-                    with open(g_proton.lib_dir + "wine/amdprop/amdxcffx64_version", "w") as file:
-                        file.write(versions[1] + "\n")
-
         if "hdr" in self.compat_config:
             self.env["DXVK_HDR"] = "1"
 
@@ -2117,6 +2104,35 @@ class Session:
 
         if update_prefix_files:
             g_compatdata.setup_prefix()
+
+        if "fsr4" in self.compat_config:
+            self.env["FSR4_UPGRADE"] = "1"
+            versions = ["67D435F7d97000", "67A4D2BC10ad000"]
+            version_match = True
+
+            # TODO: make the following code more efficent
+
+            # 0. Check downloaded version
+            if file_exists(g_proton.lib_dir + "wine/amdprop/amdxcffx64_version", follow_symlinks=False):
+                with open(g_proton.lib_dir + "wine/amdprop/amdxcffx64_version", "r") as file:
+                    first_line = file.readline()
+                    version_match = False
+                    for version in versions:
+                        if first_line in version:
+                            version_match = True
+            else:
+                version_match = False
+
+            # 1. Download amdxcffx64 library
+            if not file_exists(g_proton.lib_dir + "wine/amdprop/amdxcffx64.dll", follow_symlinks=False) or not version_match:
+                self.download_file("https://download.amd.com/dir/bin/amdxcffx64.dll/" + versions[1] + "/amdxcffx64.dll", g_proton.lib_dir + "wine/amdprop/amdxcffx64.dll")
+
+            # 2. Update stored version
+            if file_exists(g_proton.lib_dir + "wine/amdprop/amdxcffx64.dll", follow_symlinks=False):
+                g_compatdata.setup_fsr4()
+                if not version_match:
+                    with open(g_proton.lib_dir + "wine/amdprop/amdxcffx64_version", "w") as file:
+                        file.write(versions[1] + "\n")
 
         if "nod3d11" in self.compat_config:
             self.dlloverrides["d3d11"] = ""
@@ -2241,7 +2257,6 @@ if __name__ == "__main__":
 
     g_session.init_session(sys.argv[1] != "runinprefix")
 
-    import protonfixes
     protonfixes.setup(g_session.env, "PATH", ld_path_var, prepend_to_env_str)
     protonfixes.setup_mount_drives(setup_dir_drive)
     protonfixes.winetricks(g_session.env, g_proton.wine_bin, g_proton.wineserver_bin)
