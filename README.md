@@ -113,18 +113,20 @@ Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, ensure your system 
 On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
 
 ```
-vulkaninfo --summary | grep -i "llvmpipe"
+MESA_VK_DEVICE_SELECT=list vulkaninfo
 ```
 
 The output should be something similar to this:
 
 ```	
-	deviceName         = llvmpipe (LLVM 19.1.7, 256 bits)
-	driverID           = DRIVER_ID_MESA_LLVMPIPE
-	driverName         = llvmpipe
+selectable devices:
+  GPU 0: 10de:128b "NVIDIA GeForce GT 710" discrete GPU 0000:01:00.0
+  GPU 1: 10005:0 "llvmpipe (LLVM 20.1.8, 256 bits)" CPU 0000:00:00.0
  ```
 
-If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
+If the output its not like the above that means that your Distro doesnt install the `vulkan mesa layer` by default and you will need to install additional packages.
+
+If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution. 
 
 
 ##### Note 2: 
@@ -166,14 +168,12 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   - Forces rendering textures under performance settings instead of the default quality settings.
   - Forces no Full-Screen Anti-Aliasing (FSAA) and FXAA.
   - Prevents the usage of anisotropic filtering.
-  - Disables Variable Refresh Rate (VRR).
 
   **Mesa:**
   - Forces no Vsync.
   - Disables error checking within the API to avoid CPU performance losses.
   - Disables dithering.
-  - Forces no Full-Screen Anti-Aliasing (FSAA) 
-  - Prevents the usage of anisotropic filtering
+  - Disables MSAA 
   
   **DXVK:**
 
@@ -192,23 +192,19 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   **Mesa:**
   - Disable vertical synchronization (vsync)
 
-  **Extras:**
-  - Use Esync for the agg mode instead of Fsync, even if Fsync its an all rounder, working well on some very specific games where Esync doesnt, it stills in my experience being a little worse performance wise than Esync.
-
 > [!NOTE]
 > The agg profile is intended to be used on PCs with weak GPUs or when software rendering its being used, trying to help with stuttering and some extra fps, visual glitches are expected, so please do not report them if you cannot replicate the problem without using the agg profile.
 
-**Sources for the Code of The Sarek Profiles:**
+## Technical References:
 
-[OpenGL Extensions Documentation](https://registry.khronos.org/OpenGL/extensions/EXT/)
+Documentation used:
 
-[Mesa Documentation](https://docs.mesa3d.org/envvars.html#environment-variables)
-
-[NVIDIA 470 Drivers Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/470.256.02/README/openglenvvariables.html)
-
-[NVIDIA 390 Drivers Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/390.157/README/openglenvvariables.html)
-
-[DXVK-Sarek Config Documentation](https://github.com/pythonlover02/DXVK-Sarek/blob/1.10.x-Proton-Sarek/dxvk.conf)
+- [OpenGL Extensions Documentation](https://registry.khronos.org/OpenGL/extensions/EXT/)
+- [Mesa Documentation - Environment Variables](https://docs.mesa3d.org/envvars.html#environment-variables)
+- [FreeDesktop - Dri Configuration Options](https://dri.freedesktop.org/wiki/ConfigurationOptions/)
+- [NVIDIA 470 Drivers - Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/470.256.02/README/openglenvvariables.html)
+- [NVIDIA 390 Drivers - Documentation](https://download.nvidia.com/XFree86/Linux-x86_64/390.157/README/openglenvvariables.html)
+- [DXVK-Sarek Config Documentation](https://github.com/pythonlover02/DXVK-Sarek/blob/1.10.x-Proton-Sarek/dxvk.conf)
 
 ### Additional Tips:
 
@@ -239,7 +235,7 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
 
    Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options. 
 
-   As an example here its my current [MangoHud.conf](https://github.com/pythonlover02/Proton-Sarek/blob/onlyfixes/Extras/MangoHud.conf) file.
+   As an example here its my current [MangoHud.conf](https://github.com/pythonlover02/Proton-Sarek/blob/onlyfixes/extras/MangoHud.conf) file.
 
 5. Check the [Gaming](https://wiki.archlinux.org/title/Gaming) and [Improving performance](https://wiki.archlinux.org/title/Improving_performance) Arch Wiki pages for more tips.
 
@@ -252,8 +248,8 @@ Follow these steps to add to your Proton Build the Sarek patches:
 
 - **Option 2:** Download a precompiled Proton build (GE-Proton or Valve's Stable releases are the only ones officially supported).
 
-### 2. Get the Sarek Patches
-- Clone or download the Sarek-Patches dir from this repository. 
+### 2. Get the Sarek Repo
+- Clone or download the repo. 
 
 ### 3. Rename the Proton Executable (if necessary)
 - If you're using **GE-Proton**, no need to rename anything, as the default `proton` file works out of the box.
