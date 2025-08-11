@@ -85,7 +85,7 @@ def file_is_wine_builtin_dll(path):
                     '/lib/wine/i386-unix',
                     '/lib/wine/i386-windows',
                     '/lib/wine/x86_64-unix',
-                    '/lib/wine/x86_64-windows'
+                    '/lib/wine/x86_64-windows',
                     # old paths
                     '/lib/wine',
                     '/lib/wine/fakedlls',
@@ -1051,6 +1051,19 @@ class CompatData:
                     if os.path.isfile(srcfile):
                         try_copy(srcfile, steam_dir + tgt, prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
+                # CW Bug 19152. IL-2 Sturmovik: Cliffs of Dover Blitz Edition needs user's localconfig.vdf
+                if os.environ.get("SteamGameId", 0) == "754530":
+                    srcdir = os.path.join(steamdir, 'userdata')
+                    dstdir = os.path.join(self.prefix_dir, steam_dir, 'userdata')
+                    # figuring out the current user is hard, so copy the config for all users
+                    for userid in os.listdir(srcdir):
+                        srcvdf = os.path.join(srcdir, userid, 'config', 'localconfig.vdf')
+                        dstvdf = os.path.join(dstdir, userid, 'config', 'localconfig.vdf')
+                        if not os.path.exists(srcvdf):
+                            continue
+                        os.makedirs(os.path.dirname(dstvdf), exist_ok=True)
+                        shutil.copyfile(srcvdf, dstvdf)
+
                 #copy openvr files into place
                 makedirs(self.prefix_dir + "/drive_c/vrclient/bin")
                 try_copy(g_proton.lib_dir + "wine/i386-windows/vrclient.dll", "drive_c/vrclient/bin",
@@ -1278,6 +1291,11 @@ def default_compat_config():
                 "3314070", #The Sims 2 Legacy Collection
                 "2709570", #Supermarket Together
                 "2623190", #The Elder Scrolls IV: Oblivion Remastered
+                "2139460", #Once Human
+                "632360", #Risk of Rain 2
+                "2531310", #The Last of Us Part II Remastered
+                "2564460", #Banter
+                "2680010", #The First Berserker: Khazan
                 ]:
             ret.add("gamedrive")
 
@@ -1334,7 +1352,6 @@ def default_compat_config():
                 "2067160", #Simulakros
                 "2621010", #Simulakros Demo
                 "368500", #Assassin's Creed Syndicate
-                "2531310",
                 ]:
             ret.add("disablenvapi")
 
@@ -1351,32 +1368,11 @@ def default_compat_config():
     #options to also be enabled for prerequisite setup steps
     if "STEAM_COMPAT_APP_ID" in os.environ:
         appid = os.environ["STEAM_COMPAT_APP_ID"]
+
         if appid in [
-                "7000", # Tomb Raider: Legend
-                "7200", # Trackmania United Forever
-                "8000", # Tomb Raider: Anniversary
-                "11020", # TrackMania Nations Forever
-                "11450", # Overlord
-                "15750", # Oddworld: Stranger's Wrath HD
-                "22300", # Fallout 3
-                "22370", # Fallout 3: Game of the Year Edition
-                "22380", # Fallout: New Vegas
-                "72850", # The Elder Scrolls V: Skyrim
-                "377160", # Fallout 4
-                "397950", # Clustertruck
-                "489830", # The Elder Scrolls V: Skyrim Special Edition
-                "610190", # WARRIORS ALL-STARS
-                "712180", # Mugsters
-                "1818750", # MultiVersus
-                # Unity3D launchers:
-                "418620", # The TakeOver
-                "480450", # Floppy Heroes
-                "890930", # Whiskered Away
-                "931690", # Himno
-                "1050680", # Survirus
-                "3143980", # The Adventure of Ninomae Ina'nis
+                "3513350", #Wuthering Waves
                 ]:
-            ret.add("xalia")
+            ret.add("noxalia")
 
         if appid in [
                 "255960", #Bad Mojo Redux
@@ -1416,11 +1412,15 @@ class Session:
                 "dotnetfx35setup.exe": "b",
                 "beclient.dll": "b,n",
                 "beclient_x64.dll": "b,n",
+                "winebth.sys": "d", #disable winebth.sys as it crashes winedevice.exe
         }
 
         # CW Bug 21737. Locoland executable happens to be steam.exe.
         if os.environ.get("SteamGameId", 0) == "352130":
             del self.dlloverrides["steam.exe"]
+
+        if os.environ.get("SteamGameId", 0) not in ["2767030"]:
+            self.dlloverrides["opencl"] = "n,d"
 
         self.compat_config = default_compat_config()
         self.cmdlineappend = []
@@ -1697,6 +1697,65 @@ class Session:
             #nvidia override
             self.env["__GL_ExtensionStringVersion"] = "17700"
 
+        if os.environ.get("SteamGameId", 0) in [
+                "661920", #Claybook
+                "558260", #Gravel
+                "386360", #SMITE
+                "487720", #Agony
+                "649950", #Ashen
+                "1150080", #Azur Lane: Crosswave
+                "463150", #BARRIER X
+                "420290", #Blackwake
+                "1092660", #Blair Witch
+                "1052070", #Burning Daylight
+                "399810", #Call of Cthulhu
+                "967390", #Chronos: Before the Ashes
+                "968870", #Close to the Sun
+                "544920", #Darwin Project
+                "1055610", #Deep Space Battle Simulator
+                "682990", #Drug Dealer Simulator
+                "551770", #ECHO
+                "392110", #ENDLESS Space 2
+                "447020", #Farming Simulator 17
+                "834280", #Fishing Sim World: Pro Tour
+                "890880", #FROSTBITE: Deadly Climate
+                "433530", #Heliborne - Enhanced Edition
+                "521890", #Hello Neighbor
+                "783170", #INSOMNIA: The Ark
+                "1195460", #Last Year
+                "1029890", #Layers of Fear 2 (2019)
+                "535850", #Micro Machines World Series
+                "711750", #Monster Energy Supercross - The Official Videogame
+                "882020", #Monster Energy Supercross - The Official Videogame 2
+                "824280", #Monster Jam Steel Titans
+                "775900", #MotoGP18
+                "415200", #Motorsport Manager
+                "748360", #MY HERO ONE'S JUSTICE
+                "1058450", #MY HERO ONE'S JUSTICE 2
+                "556180", #Mysterium: A Psychic Clue Game
+                "561600", #MXGP3 - The Official Motocross Videogame
+                "798290", #MXGP PRO
+                "366870", #Narcosis
+                "485030", #PLANET ALPHA
+                "469610", #Rick and Morty: Virtual Rick-ality
+                "759740", #RIDE 3
+                "1342260", #SAMURAI SHODOWN
+                "425670", #Seraph
+                "1096570", #SONG OF HORROR COMPLETE EDITION
+                "492230", #Space Hulk: Tactics
+                "996580", #Spyro Reignited Trilogy
+                "437630", #State of Mind
+                "442780", #STRAFE: Gold Edition
+                "433100", #The Town of Light
+                "406970", #The Uncertain: Last Quiet Day
+                "451520", #theBlu: Season 1
+                "1237970", #Titanfall® 2
+                "1051200", #Trover Saves the Universe
+                "285190", #Warhammer 40,000: Dawn of War III
+                "1133320", #Westworld Awakening
+                ]:
+            self.env["OPENSSL_ia32cap"] = "~0x20000000"
+
         if os.environ.get("SteamGameId", 0) == "500810":
             self.dlloverrides["ddraw"] = "n,b"
 
@@ -1758,8 +1817,13 @@ class Session:
         if "noopwr" in self.compat_config:
             self.env["WINE_DISABLE_VULKAN_OPWR"] = "1"
 
-        if "xalia" in self.compat_config and "PROTON_USE_XALIA" not in self.env:
-            self.env["PROTON_USE_XALIA"] = "1"
+        if "PROTON_USE_XALIA" not in self.env:
+            if "noxalia" in self.compat_config:
+                self.env["PROTON_USE_XALIA"] = "0"
+            else:
+                self.env["PROTON_USE_XALIA"] = "1"
+                if "xalia" not in self.compat_config:
+                    self.env["XALIA_SUPPORTED_ONLY"] = "1"
 
         if "nohardwarescheduling" in self.compat_config and "WINE_DISABLE_HARDWARE_SCHEDULING" not in self.env:
             self.env["WINE_DISABLE_HARDWARE_SCHEDULING"] = "1"
