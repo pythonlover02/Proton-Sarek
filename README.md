@@ -8,6 +8,12 @@ Because there are still users with GPUs that support Vulkan 1.1+ but not Vulkan 
 
 Please be aware that this is a custom build of Proton and is **not** affiliated with Valve's Proton. If you encounter any issues specific to my Proton build from this repository that do not occur with Valve's version, kindly refrain from submitting a bug report to Valve's bug GitHub. Instead, please report the issue directly on this GitHub. Thank you for your understanding!
 
+One additional note its that DXVK-Sarek its also supported on [proton-cachyos](https://github.com/CachyOS/proton-cachyos), for using it you must add this env var to your launch options:
+
+```
+PROTON_DXVK_SAREK=1
+```
+
 ----
 
 ![Badge Language](https://img.shields.io/github/languages/top/pythonlover02/Proton-Sarek)
@@ -40,19 +46,19 @@ Please be aware that this is a custom build of Proton and is **not** affiliated 
 2. Create a `~/.steam/root/compatibilitytools.d` directory if it does not exist.
 
 3. Extract the release inside
- 
+
 4. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
 
 5. Restart and thats it!!! Enjoy :P
- 
+
 ### Flatpak:
 
 1. Download a release from the release [page](https://github.com/pythonlover02/Proton-Sarek/releases)
- 
+
 2. Create a `~/.var/app/com.valvesoftware.Steam/data/Steam/compatibilitytools.d/` directory if it does not exist.
 
 3. Extract the release inside
- 
+
 4. Log in inside Steam and go to the option menu, then compatibility and check Enable "Enable Steam Play for all other titles", instead of the default proton, choose the one that you downloaded.
 
 5. Restart and thats it!!! Enjoy :P
@@ -110,7 +116,7 @@ Before trying to use the `PROTON_SOFTWARE_RENDER` parameter, ensure your system 
 - **CPU**: Multi-core recommended for better performance
 
 #### Lavapipe Important Notes:
-##### Note 1: 
+##### Note 1:
 On some Linux distributions, the Vulkan software rasterizer (Lavapipe) is available in separate packages and not bundled directly with Mesa. Here its an easy way to check if its included in your distributions Mesa installation:
 
 ```
@@ -119,7 +125,7 @@ MESA_VK_DEVICE_SELECT=list vulkaninfo
 
 The output should be something similar to this:
 
-```	
+```
 selectable devices:
   GPU 0: 10de:128b "NVIDIA GeForce GT 710" discrete GPU 0000:01:00.0
   GPU 1: 10005:0 "llvmpipe (LLVM 20.1.8, 256 bits)" CPU 0000:00:00.0
@@ -127,19 +133,19 @@ selectable devices:
 
 If the output its not like the above that means that your Distro doesnt install the `vulkan mesa layer` by default and you will need to install additional packages.
 
-If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution. 
+If there its no entry that mentions `llvmpipe`, you need to install additional packages specific to your distribution.
 
 
-##### Note 2: 
+##### Note 2:
 For DXVK games you can just add `PROTON_SOFTWARE_RENDER=1` to the launch options.
 
-##### Note 3: 
-For Vulkan and D3D12 games, you may need to manually set the `VK_DRIVER_FILES` to the Lavapipe icd.json file (usually a variation of lvp_icd.json) if the default target is incorrect, uses an incorrect path or if the system is preventing Proton-Sarek from changing the environment variable. 
+##### Note 3:
+For Vulkan and D3D12 games, you may need to manually set the `VK_DRIVER_FILES` to the Lavapipe icd.json file (usually a variation of lvp_icd.json) if the default target is incorrect, uses an incorrect path or if the system is preventing Proton-Sarek from changing the environment variable.
 
-Try using the following command: 
+Try using the following command:
 ```
 PROTON_SOFTWARE_RENDER=1 VK_DRIVER_FILES="/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json"
-``` 
+```
 
 In other cases, you might need to modify the value of `VK_DRIVER_FILES` to correctly point to the multiple lvp_icd.json in your system.
 
@@ -161,7 +167,7 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
 
 - **"agg":**
   - Represents an aggressive performance mode, with all features from the default configuration, plus the next:
-  
+
   **OpenGL/WineD3D:**
 
   **NVIDIA:**
@@ -174,8 +180,8 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   - Forces no Vsync.
   - Disables error checking within the API to avoid CPU performance losses.
   - Disables dithering.
-  - Disables MSAA 
-  
+  - Disables MSAA
+
   **DXVK:**
 
   **NVIDIA && Mesa:**
@@ -187,9 +193,9 @@ The profiles can be changed using the `PROTON_SAREK_PROFILE` parameter, which ac
   - Disable the declaration of vertex positions as invariant in D3D, which may reduce a small performance cost (at the potential risk of increased Z-fighting).
   - Enables fast (but less precise) floating point quirk emulation in D3D9, which can speed up computations in games that rely on these operations.
   - Set `DXVK_ALL_CORES=1` to use all the CPU cores for shader compilation.
- 
+
   **Vulkan:**
-  
+
   **Mesa:**
   - Disable vertical synchronization (vsync)
 
@@ -234,7 +240,7 @@ Documentation used:
    ```
    You can remove the `no_display` option (which hides the MangoHud HUD), change the `fps_limit` value to any number you like, and change the `fps_limit_method` to `early` (for smoother frametimes) or `late` (for the lowest latency).
 
-   Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options. 
+   Check out the [MangoHud GitHub repository](https://github.com/flightlessmango/MangoHud) for more information and configuration options.
 
    As an example here its my current [MangoHud.conf](https://github.com/pythonlover02/Proton-Sarek/blob/onlyfixes/extras/MangoHud.conf) file.
 
@@ -250,7 +256,7 @@ Follow these steps to add to your Proton Build the Sarek patches:
 - **Option 2:** Download a precompiled Proton build (GE-Proton or Valve's Stable releases are the only ones officially supported).
 
 ### 2. Get the Sarek Repo
-- Clone or download the repo. 
+- Clone or download the repo.
 
 ### 3. Rename the Proton Executable (if necessary)
 - If you're using **GE-Proton**, no need to rename anything, as the default `proton` file works out of the box.
@@ -285,7 +291,7 @@ https://github.com/ValveSoftware/Proton && https://github.com/ValveSoftware/wine
 
 First of all, we extend our sincere thanks to Valve for their incredible contributions to the Linux gaming community through the creation of Proton, which has made gaming on Linux more accessible and enjoyable for everyone. As such, we sometimes use Valve's Proton builds as a base for our internal or public releases, or for comparison with those based on Proton-GE.
 
-### GloriousEggroll: 
+### GloriousEggroll:
 https://github.com/GloriousEggroll/proton-ge-custom && https://github.com/GloriousEggroll/wine-ge-custom
 
 We would like to extend our gratitude to GloriousEggroll for the creation of both Proton-GE and Wine-GE, which have greatly enhanced gaming on Linux. Most of the time, the releases of this project are based on Proton-GE.
@@ -295,12 +301,12 @@ https://github.com/doitsujin/dxvk
 
 This project benefits from the incredible work of Philip Rebohle (doitsujin) and his creation of DXVK, which plays a key role in Linux gaming, making Windows games run smoothly on Linux through Vulkan. We deeply appreciate his contributions and proudly use DXVK in this project.
 
-### Sporif: 
+### Sporif:
 https://github.com/Sporif/dxvk-async
 
 This project incorporates work from Sporif's DXVK Async, which provides patched versions of DXVK that enable asynchronous pipeline compilation. This allows shaders to be compiled in the background, reducing stuttering caused by synchronous shader compilation, and enhancing performance in certain scenarios. We would like to thank Sporif for their valuable contributions, and we are pleased to integrate DXVK Async into this project.
 
-### HansKristian-Work: 
+### HansKristian-Work:
 https://github.com/HansKristian-Work/vkd3d-proton
 
 This project benefits from the incredible work of HansKristian-Work and his creation of VKD3D-proton, which plays a key role in Linux gaming, making Windows DX12 games run smoothly on Linux through Vulkan. We deeply appreciate his contributions and use VKD3D-proton in this project.
@@ -321,8 +327,8 @@ This project benefits from the incredible work of HansKristian-Work and his crea
 
 	turdas
 
-	AlienOverlordXenu 
+	AlienOverlordXenu
 
 ### And the Great Redditor that came with the name ❤️:
-	
+
  	Meshuggah333
