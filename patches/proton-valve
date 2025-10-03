@@ -653,6 +653,8 @@ class CompatData:
                 path = self.prefix_dir + "/drive_c/Program Files (x86)/Ubisoft/Ubisoft Game Launcher/version.txt"
                 if file_exists(path, follow_symlinks=False) and os.path.isfile(path):
                     os.remove(path)
+                if file_exists(self.creation_sync_guard, follow_symlinks=False):
+                    os.remove(self.creation_sync_guard)
                 return
 
             if old_proton_ver == "3.7" and old_prefix_ver == "1":
@@ -1086,7 +1088,7 @@ class CompatData:
                     wined3dfiles = ["d3d12", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 else:
                     dxvkfiles = ["d3d11", "d3d10core", "d3d9"]
-                    vkd3d_protonfiles = ["d3d12"]
+                    vkd3d_protonfiles = ["d3d12", "d3d12core"]
                     wined3dfiles = []
 
                 if use_dxvk_dxgi:
@@ -1588,7 +1590,7 @@ class Session:
                 # Doesnt make sense to have it disabled when it helps a lot with moding.
                 "PROTON_SET_GAME_DRIVE": "1",
                 # Makes sense to disable it here to avoid changing the file to much from upstream
-                "PROTON_DISABLE_NVAPI": "1", 
+                "PROTON_DISABLE_NVAPI": "1",
             }
 
             old_gpu_fixes = {

@@ -735,9 +735,6 @@ class CompatData:
             #How can this happen??
             log("Prefix has an invalid version?! You may want to back up user files and delete this prefix.")
             #If it does, just let the Wine upgrade happen and hope it works...
-            with open(self.creation_sync_guard, "w"):
-                pass
-            os.sync()
             return
 
         try:
@@ -758,6 +755,8 @@ class CompatData:
                 path = self.prefix_dir + "/drive_c/Program Files (x86)/Ubisoft/Ubisoft Game Launcher/version.txt"
                 if file_exists(path, follow_symlinks=False) and os.path.isfile(path):
                     os.remove(path)
+                if file_exists(self.creation_sync_guard, follow_symlinks=False):
+                    os.remove(self.creation_sync_guard)
                 return
 
             if old_proton_ver == "3.7" and old_prefix_ver == "1":
@@ -1205,7 +1204,7 @@ class CompatData:
                     wined3dfiles = ["d3d12", "d3d11", "d3d10", "d3d10core", "d3d10_1", "d3d9"]
                 else:
                     dxvkfiles = ["d3d11", "d3d10core", "d3d9"]
-                    vkd3d_protonfiles = ["d3d12"]
+                    vkd3d_protonfiles = ["d3d12", "d3d12core"]
                     wined3dfiles = []
 
                 if use_dxvk_dxgi:
@@ -1369,7 +1368,10 @@ def default_compat_config():
                 ]:
             ret.add("noopwr")
 
-        if appid == "1621680":
+        if appid in [
+                "2710",     #Act of War: Direct Action
+                "1621680",  #Sword and Fairy 4
+                ]:
             ret.add("noforcelgadd")
 
         if appid in [
@@ -1420,6 +1422,8 @@ def default_compat_config():
                 "3438330", #Firefly Village Demo
                 "3393740", #Firefly Village
                 "2840770", #Avatar: Frontiers of Pandora
+                "429660", #Tales of Berseria
+                "1286220", #Sea Power
                 ]:
             ret.add("gamedrive")
 
@@ -1493,7 +1497,8 @@ def default_compat_config():
             ret.add("hidenvgpu")
 
         if appid in [
-                "2395210" #Tony Hawk's Pro Skater 1 + 2
+                "2395210", #Tony Hawk's Pro Skater 1 + 2
+                "1577120", #The Quarry
                 ]:
             ret.add("forcenvapi")
 
@@ -1529,6 +1534,11 @@ def default_compat_config():
                 ]:
             ret.add("nohardwarescheduling")
 
+    if "STORE" in os.environ:
+        store = os.environ["STORE"]
+        if 'battlenet' in store:
+            ret.add("writecopy")
+
     # hack to force gamedrive compat_config always for umu
     if os.environ.get('UMU_ID', ''):
         ret.add("gamedrive")
@@ -1548,6 +1558,12 @@ default_cpu_limit = {
     "618970"    :  4,   # Outcast - Second Contact
     "10150"     :  8,   # Prototype
     "2229830"   :  1,   # Command & Conquer and The Covert Operations
+    "259170"    :  8,   # Alone in the Dark (2008)
+    "11440"     :  4,   # DiRT
+    "316260"    :  16,  # Disney Universe
+    "286810"    :  30,  # Hard Truck Apocalypse: Rise of Clans / Ex Machina: Meridian 113
+    "70000"     :  28,  # Dino D-Day
+    "115320"    :  8,   # Prototype 2
 }
 
 class Session:
@@ -1567,7 +1583,7 @@ class Session:
         if os.environ.get("SteamGameId", 0) == "352130":
             del self.dlloverrides["steam.exe"]
 
-        if os.environ.get("SteamGameId", 0) not in ["2767030"]:
+        if os.environ.get("SteamGameId", 0) not in ["2767030", "2274200"]:
             self.dlloverrides["opencl"] = "n,d"
 
         self.compat_config = default_compat_config()
@@ -1627,7 +1643,7 @@ class Session:
 
         self.env["GST_PLUGIN_SYSTEM_PATH_1_0"] = g_proton.lib_dir + "x86_64-linux-gnu/gstreamer-1.0" + ":" + g_proton.lib_dir + "i386-linux-gnu/gstreamer-1.0"
         self.env["WINE_GST_REGISTRY_DIR"] = g_compatdata.path("gstreamer-1.0/")
-        self.env["GST_GL_WINDOW"] = "surfaceless"
+        self.env["GST_GL_WINDOW"] = "x11"
 
         if "STEAM_COMPAT_MEDIA_PATH" in os.environ:
             old_audiofoz_path = os.environ["STEAM_COMPAT_MEDIA_PATH"] + "/audio.foz"
@@ -1749,7 +1765,7 @@ class Session:
                 # Doesnt make sense to have it disabled when it helps a lot with moding.
                 "PROTON_SET_GAME_DRIVE": "1",
                 # Makes sense to disable it here to avoid changing the file to much from upstream
-                "PROTON_DISABLE_NVAPI": "1", 
+                "PROTON_DISABLE_NVAPI": "1",
             }
 
             old_gpu_fixes = {
@@ -1888,6 +1904,7 @@ class Session:
                 "558260", #Gravel
                 "386360", #SMITE
                 "487720", #Agony
+                "879420", #Agony UNRATED
                 "649950", #Ashen
                 "1150080", #Azur Lane: Crosswave
                 "463150", #BARRIER X
@@ -2022,11 +2039,19 @@ class Session:
         if "nohardwarescheduling" in self.compat_config and "WINE_DISABLE_HARDWARE_SCHEDULING" not in self.env:
             self.env["WINE_DISABLE_HARDWARE_SCHEDULING"] = "1"
 
+        if "writecopy" in self.compat_config:
+            self.env["WINE_SIMULATE_WRITECOPY"] = "1"
+
         if "PROTON_CRASH_REPORT_DIR" in self.env:
             self.env["WINE_CRASH_REPORT_DIR"] = self.env["PROTON_CRASH_REPORT_DIR"]
 
         if "fnad3d11" in self.compat_config and "FNA3D_FORCE_DRIVER" not in self.env:
             self.env["FNA3D_FORCE_DRIVER"] = "D3D11"
+
+        if (os.environ.get("SteamGameId", 0) == "2322010" and    # God of War: Ragnarok
+            os.environ.get("SteamDeck", 0) == "1"):
+            # Disable hidraw for Sony DualShock and DualSense controllers.
+            self.env["PROTON_DISABLE_HIDRAW"] = "0x054C/0x05C4,0x054C/0x09CC,0x054C/0x0BA0,0x054C/0x0CE6,0x054C/0x0DF2"
 
         if "sdlinput" in self.compat_config:
             self.env["PROTON_DISABLE_HIDRAW"] = "1"
